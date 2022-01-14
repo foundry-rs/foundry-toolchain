@@ -1,0 +1,13 @@
+name: 'foundry-toolchain'
+description: 'Install Foundry'
+author: ''
+branding:
+  icon: play-circle
+  color: black
+inputs:
+  version:
+    description: Foundry version.
+
+runs:
+  using: node16
+  main: src/index.js
