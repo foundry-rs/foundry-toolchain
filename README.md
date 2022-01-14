@@ -1,4 +1,4 @@
-## `forge-toolchain` Action
+## `foundry-toolchain` Action
 
 This GitHub action installs [Foundry](https://github.com/gakonst/foundry).
 
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Foundry
-        uses: onbjerg/foundry-toolkit@v1
+        uses: onbjerg/foundry-toolchain@v1
         with:
           version: 1.0.0
       - name: Run tests
