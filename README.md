@@ -15,10 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
       - name: Install Foundry
         uses: onbjerg/foundry-toolchain@v1
         with:
-          version: 1.0.0
+          version: nightly
+
       - name: Run tests
         run: forge test -vvv
 ```
