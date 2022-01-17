@@ -7,7 +7,7 @@ This GitHub action installs [Foundry](https://github.com/gakonst/foundry).
 ```yml
 on: [push]
 
-name: build
+name: test
 
 jobs:
   check:
