@@ -32,3 +32,4 @@ jobs:
 | **Name**  | **Required** | **Description**                                                                                               | **Type** |
 |-----------|--------------|---------------------------------------------------------------------------------------------------------------|----------|
 | `version` | Yes          | Version to install, e.g. `nightly` or `1.0.0`.  **Note:** Foundry only has nightly builds for the time being. | string   |
+| `token`   | No           | Authorized GitHub token. Defaults to `${{ github.token }}`                                                    | string   |
