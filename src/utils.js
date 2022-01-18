@@ -18,11 +18,11 @@ async function getLatestForReleaseChannel (channel) {
 }
 
 async function getVersion (version) {
-  if (version === 'nightly' || version === 'stable') {
+  if (version === 'nightly') {
     const sha = await getLatestForReleaseChannel(version)
     return {
       tag: `${version}-${sha}`,
-      version
+      version: 'nightly'
     }
   } else if (!version.startsWith('v')) {
     return {
