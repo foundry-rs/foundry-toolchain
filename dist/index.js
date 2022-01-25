@@ -12157,7 +12157,7 @@ const core = __nccwpck_require__(2186)
 const tc = __nccwpck_require__(7784)
 const github = __nccwpck_require__(5438)
 const path = __nccwpck_require__(1017)
-const { getDownloadObject, getVersion } = __nccwpck_require__(1608)
+const { getDownloadObject } = __nccwpck_require__(1608)
 
 async function setup() {
   try {
