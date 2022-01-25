@@ -12199,7 +12199,7 @@ const os = __nccwpck_require__(2037)
 const path = __nccwpck_require__(1017)
 
 async function getLatestForReleaseChannel (channel) {
-  const octokit = github.getOctoKit(
+  const octokit = github.getOctokit(
     core.getInput('token')
   )
 

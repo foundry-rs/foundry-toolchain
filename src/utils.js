@@ -4,7 +4,7 @@ const os = require('os')
 const path = require('path')
 
 async function getLatestForReleaseChannel (channel) {
-  const octokit = github.getOctoKit(
+  const octokit = github.getOctokit(
     core.getInput('token')
   )
 
