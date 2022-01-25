@@ -2,7 +2,7 @@ const core = require('@actions/core')
 const tc = require('@actions/tool-cache')
 const github = require('@actions/github')
 const path = require('path')
-const { getDownloadObject } = require('./utils')
+const { getDownloadObject, getVersion } = require('./utils')
 
 async function setup() {
   try {
