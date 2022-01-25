@@ -11,6 +11,13 @@ inputs:
 
       This version number has to match a released version of Foundry.
       Alternatively you can also specify `nightly` for the latest nightly build.
+  token:
+    description: |
+      Authorized GitHub token.
+
+      Defaults to `github.token`.
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: node16
