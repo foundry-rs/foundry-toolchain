@@ -1,6 +1,6 @@
 ## `foundry-toolchain` Action
 
-This GitHub action installs [Foundry](https://github.com/gakonst/foundry).
+This GitHub action installs [Foundry](https://github.com/foundry-rs/foundry).
 
 ### Example workflow
 
@@ -19,7 +19,7 @@ jobs:
           submodules: recursive
 
       - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
 
