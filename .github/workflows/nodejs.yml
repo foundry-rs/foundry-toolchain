@@ -1,0 +1,32 @@
+name: nodejs
+
+on: 
+  push:
+     paths:
+      - "**/**"
+      - "!**/*.md/**"
+jobs:
+  pipeline:
+    name: Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['16.x']
+        os: ['ubuntu-latest']
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+        id: install
+
+      - name: Build project
+        run: npm run build
+        id: production
