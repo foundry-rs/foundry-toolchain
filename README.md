@@ -1,6 +1,6 @@
-## `foundry-toolchain` Action
+## [`foundry-toolchain`](https://github.com/foundry-rs/foundry-toolchain/edit/master/README.md)
 
-This GitHub action installs [Foundry](https://github.com/foundry-rs/foundry).
+This GitHub Action installs [Foundry](https://github.com/foundry-rs/foundry).
 
 ### Example workflow
 
@@ -25,6 +25,9 @@ jobs:
 
       - name: Run tests
         run: forge test -vvv
+
+      - name: Run snapshot
+        run: forge snapshot >> $GITHUB_STEP_SUMMARY
 ```
 
 ### Inputs
@@ -32,3 +35,13 @@ jobs:
 | **Name**  | **Required** | **Description**                                                                                               | **Type** |
 |-----------|--------------|---------------------------------------------------------------------------------------------------------------|----------|
 | `version` | Yes          | Version to install, e.g. `nightly` or `1.0.0`.  **Note:** Foundry only has nightly builds for the time being. | string   |
+
+
+### Outputs
+
+> [see the offical GitHub docs for more information](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary)
+
+| **Name**              	| **Required** 	| **Description**                                         	| **Example**                                	|
+|-----------------------	|--------------	|---------------------------------------------------------	|--------------------------------------------	|
+| `GITHUB_STEP_SUMMARY` 	|      No      	|  Outputs unique input for each job	| `forge snapshot >> $GITHUB_STEP_SUMMARY` 	|
+
