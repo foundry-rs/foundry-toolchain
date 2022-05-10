@@ -1,4 +1,4 @@
-## [`foundry-toolchain`](https://github.com/foundry-rs/foundry-toolchain/edit/master/README.md)
+## `foundry-toolchain` Action
 
 This GitHub Action installs [Foundry](https://github.com/foundry-rs/foundry).
 
