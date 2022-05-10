@@ -2,6 +2,8 @@ name: nodejs
 
 on: 
   pull_request:
+    branches:
+      - master
     paths-ignore:
       - '**.md'
   push:
