@@ -45,7 +45,7 @@ For example, to add the output of `forge snapshot` to a summary, you would chang
 
 ```yml
 - name: Run snapshot
-  run: forge snapshot >> $GITHUB_STEP_SUMMARY
+  run: NO_COLOR=1 forge snapshot >> $GITHUB_STEP_SUMMARY
 ```
 
 See the offical [GitHub docs](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary) for more information.
