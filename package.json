@@ -3,15 +3,27 @@
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
-  "keywords": ["foundry", "ethereum", "solidity", "evm", "forge", "cast", "dapp", "dapptools"],
-   "scripts": {
-    "build": "ncc build src/index.js -o dist --source-map"
+  "keywords": [
+    "foundry",
+    "ethereum",
+    "solidity",
+    "evm",
+    "forge",
+    "cast",
+    "dapp",
+    "dapptools"
+  ],
+  "scripts": {
+    "build": "ncc build src/index.js -o dist --source-map && ncc build src/save.js -o dist/save --source-map"
   },
   "dependencies": {
+    "@actions/cache": "^3.1.2",
     "@actions/core": "^1.8.0",
+    "@actions/github": "^5.1.1",
     "@actions/tool-cache": "^1.7.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.33.1"
+    "@vercel/ncc": "^0.33.1",
+    "prettier": "^2.8.2"
   }
 }

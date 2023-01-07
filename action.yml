@@ -1,10 +1,10 @@
 name: "foundry-toolchain"
 description: "Install Foundry"
-author: "Oliver Nordbjerg"
+author: "Foundry"
 branding:
   color: "gray-dark"
   icon: "play-circle"
-  
+
 inputs:
   version:
     default: "nightly"
@@ -18,3 +18,5 @@ inputs:
 runs:
   using: "node16"
   main: "dist/index.js"
+  post: "dist/save/index.js"
+  post-if: "success()"
