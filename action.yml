@@ -1,17 +1,20 @@
-name: 'foundry-toolchain'
-description: 'Install Foundry'
-author: 'Oliver Nordbjerg'
+name: "foundry-toolchain"
+description: "Install Foundry"
+author: "Oliver Nordbjerg"
 branding:
-  icon: play-circle
-  color: gray-dark
+  color: "gray-dark"
+  icon: "play-circle"
+  
 inputs:
   version:
+    default: "nightly"
     description: |
       Foundry version.
 
       This version number has to match a released version of Foundry.
       Alternatively you can also specify `nightly` for the latest nightly build.
+    required: false
 
 runs:
-  using: node16
-  main: dist/index.js
+  using: "node16"
+  main: "dist/index.js"
