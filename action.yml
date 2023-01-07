@@ -3,7 +3,7 @@ description: 'Install Foundry'
 author: 'Oliver Nordbjerg'
 branding:
   icon: play-circle
-  color: black
+  color: gray-dark
 inputs:
   version:
     description: |
