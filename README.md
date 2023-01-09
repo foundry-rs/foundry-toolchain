@@ -42,8 +42,9 @@ speed up the tests and avoid hitting the rate limit of your RPC provider.
 The logic of the caching is as follows:
 
 - Always load the latest valid cache, and always create a new one with the updated cache.
-- When there are no changes to the fork tests, the cache does not change but the restore key does, since the key is based on the commit hash.
-- When the fork tests are changed, both the cache and the store key are updated.
+- When there are no changes to the fork tests, the cache does not change but the key does, since the key is based on the
+  commit hash.
+- When the fork tests are changed, both the cache and the key are updated.
 
 #### Fuzzing
 
