@@ -1,6 +1,6 @@
 ## `foundry-toolchain` Action
 
-This GitHub Action installs [Foundry](https://github.com/foundry-rs/foundry).
+This GitHub Action installs [Foundry](https://github.com/foundry-rs/foundry), the blazing fast, portable and modular toolkit for Ethereum application development.
 
 ### Example workflow
 
@@ -20,8 +20,6 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - name: Run tests
         run: forge test -vvv
@@ -32,10 +30,27 @@ jobs:
 
 ### Inputs
 
-| **Name**  | **Required** | **Description**                                                                                               | **Type** |
-|-----------|--------------|---------------------------------------------------------------------------------------------------------------|----------|
-| `version` | Yes          | Version to install, e.g. `nightly` or `1.0.0`.  **Note:** Foundry only has nightly builds for the time being. | string   |
+| **Name**  | **Required** | **Default** | **Description**                                                                                              | **Type** |
+| --------- | ------------ | ----------- | ------------------------------------------------------------------------------------------------------------ | -------- |
+| `version` | No           | `nightly`   | Version to install, e.g. `nightly` or `1.0.0`. **Note:** Foundry only has nightly builds for the time being. | string   |
 
+### RPC Caching
+
+This action matches Forge's behavior and caches all RPC responses in the `~/.foundry/cache/rpc` directory. This is done to
+speed up the tests and avoid hitting the rate limit of your RPC provider.
+
+The logic of the caching is as follows:
+
+- Always load the latest valid cache, and always create a new one with the updated cache.
+- When there are no changes to the fork tests, the cache does not change but the key does, since the key is based on the
+  commit hash.
+- When the fork tests are changed, both the cache and the key are updated.
+
+#### Fuzzing
+
+Note that if you are fuzzing in your fork tests, the RPC cache strategy above will not work unless you set a
+[fuzz seed](https://book.getfoundry.sh/reference/config/testing#seed). You might also want to reduce your number
+of RPC calls by using [Multicall](https://github.com/mds1/multicall).
 
 ### Summaries
 
@@ -48,4 +63,4 @@ For example, to add the output of `forge snapshot` to a summary, you would chang
   run: NO_COLOR=1 forge snapshot >> $GITHUB_STEP_SUMMARY
 ```
 
-See the offical [GitHub docs](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary) for more information.
+See the official [GitHub docs](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary) for more information.
