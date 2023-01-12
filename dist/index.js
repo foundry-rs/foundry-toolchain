@@ -68341,6 +68341,7 @@ function wrappy (fn, cb) {
 
 const cache = __nccwpck_require__(7799);
 const github = __nccwpck_require__(5438);
+const fs = __nccwpck_require__(7147);
 const os = __nccwpck_require__(2037);
 
 const CACHE_PATHS = ["~/.foundry/cache/rpc"];
@@ -68355,7 +68356,9 @@ async function restoreRPCCache() {
 async function saveCache() {
   const platform = os.platform();
   const key = platform + "-foundry-chain-fork-" + github.context.sha;
-  await cache.saveCache(CACHE_PATHS, key);
+  if (fs.existsSync(CACHE_PATHS[0])) {
+    await cache.saveCache(CACHE_PATHS, key);
+  }
 }
 
 module.exports = {

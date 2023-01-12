@@ -1,5 +1,6 @@
 const cache = require("@actions/cache");
 const github = require("@actions/github");
+const fs = require("fs");
 const os = require("os");
 
 const CACHE_PATHS = ["~/.foundry/cache/rpc"];
@@ -14,7 +15,9 @@ async function restoreRPCCache() {
 async function saveCache() {
   const platform = os.platform();
   const key = platform + "-foundry-chain-fork-" + github.context.sha;
-  await cache.saveCache(CACHE_PATHS, key);
+  if (fs.existsSync(CACHE_PATHS[0])) {
+    await cache.saveCache(CACHE_PATHS, key);
+  }
 }
 
 module.exports = {
