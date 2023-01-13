@@ -1,6 +1,6 @@
 {
-  "name": "foundry-toolchain",
-  "private": true,
+  "name": "@foundry-rs/foundry-toolchain",
+  "version": "0.0.1",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
   "keywords": [
