@@ -68343,19 +68343,20 @@ const cache = __nccwpck_require__(7799);
 const github = __nccwpck_require__(5438);
 const fs = __nccwpck_require__(7147);
 const os = __nccwpck_require__(2037);
+const path = __nccwpck_require__(1017);
 
-const CACHE_PATHS = ["~/.foundry/cache/rpc"];
+const HOME = os.homedir();
+const PLATFORM = os.platform();
+const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 
 async function restoreRPCCache() {
-  const platform = os.platform();
-  const key = platform + "-foundry-chain-fork-" + github.context.sha;
-  const restoreKeys = [platform + "-foundry-chain-fork-"];
+  const key = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
+  const restoreKeys = [PLATFORM + "-foundry-chain-fork-"];
   await cache.restoreCache(CACHE_PATHS, key, restoreKeys);
 }
 
 async function saveCache() {
-  const platform = os.platform();
-  const key = platform + "-foundry-chain-fork-" + github.context.sha;
+  const key = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
   if (fs.existsSync(CACHE_PATHS[0])) {
     await cache.saveCache(CACHE_PATHS, key);
   }
