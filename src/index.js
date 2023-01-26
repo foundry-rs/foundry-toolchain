@@ -7,7 +7,7 @@ const { getDownloadObject } = require("./utils");
 
 async function main() {
   try {
-    // Get version
+    // Get version input
     const version = core.getInput("version");
 
     // Download tarball
@@ -21,8 +21,13 @@ async function main() {
     // Expose the tool
     core.addPath(path.join(pathToCLI, download.binPath));
 
-    // Restore the RPC cache, if any.
-    restoreRPCCache();
+    // Get cache input
+    const cache = core.getInput("cache");
+
+    if (cache) {
+      // Restore the RPC cache, if any.
+      restoreRPCCache();
+    }
   } catch (err) {
     core.setFailed(err);
   }
