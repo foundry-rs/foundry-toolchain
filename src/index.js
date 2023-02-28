@@ -10,13 +10,15 @@ async function main() {
     // Get version input
     const version = core.getInput("version");
 
-    // Download tarball
+    // Download the archive containing the binaries
     const download = getDownloadObject(version);
-    const pathToTarBall = await toolCache.downloadTool(download.url);
+    console.log(`Downloading Foundry '${version}' from: ${download.url}`);
+    const pathToArchive = await toolCache.downloadTool(download.url);
 
-    // Extract the tarball onto host runner
+    // Extract the archive onto host runner
+    console.log(`Extracting ${pathToArchive}`);
     const extract = download.url.endsWith(".zip") ? toolCache.extractZip : toolCache.extractTar;
-    const pathToCLI = await extract(pathToTarBall);
+    const pathToCLI = await extract(pathToArchive);
 
     // Expose the tool
     core.addPath(path.join(pathToCLI, download.binPath));
