@@ -93,3 +93,14 @@ For example, to add the output of `forge snapshot` to a summary, you would chang
 See the official
 [GitHub docs](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary)
 for more information.
+
+### Building
+
+When opening a PR, you must build the action exactly following the below steps for CI to pass:
+
+```console
+$ npm ci
+$ npm run build
+```
+
+You **have** to use Node.js 16.x.
