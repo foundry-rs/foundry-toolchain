@@ -6,17 +6,24 @@ branding:
   icon: "play-circle"
 
 inputs:
+  cache:
+    default: "true"
+    description: |
+      Whether to cache RPC responses or not.
+
+      Caching is activated by default.
+    required: false
   version:
     default: "nightly"
     description: |
       Foundry version.
 
       This version number has to match a released version of Foundry.
-      Alternatively you can also specify `nightly` for the latest nightly build.
+      The default value is `nightly`, which will pull the latest nightly build.
     required: false
 
 runs:
   using: "node16"
   main: "dist/index.js"
   post: "dist/save/index.js"
-  post-if: "success()"
+  post-if: "github.event.inputs.cache && success()"
