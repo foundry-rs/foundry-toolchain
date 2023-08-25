@@ -68384,9 +68384,11 @@ async function main() {
   try {
     // Get version input
     const version = core.getInput("version");
+    // Get artifact repository input
+    const repository = core.getInput("repository");
 
     // Download the archive containing the binaries
-    const download = getDownloadObject(version);
+    const download = getDownloadObject(repository, version);
     core.info(`Downloading Foundry '${version}' from: ${download.url}`);
     const pathToArchive = await toolCache.downloadTool(download.url);
 
@@ -68437,11 +68439,11 @@ function mapArch(arch) {
   return mappings[arch] || arch;
 }
 
-function getDownloadObject(version) {
+function getDownloadObject(repository, version) {
   const platform = os.platform();
   const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
   const extension = platform === "win32" ? "zip" : "tar.gz";
-  const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
+  const url = `${repository}/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
 
   return {
     url,

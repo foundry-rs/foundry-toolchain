@@ -35,6 +35,7 @@ jobs:
 | --------- | ------------ | ----------- | ------------------------------------------------------------------------------------------------------------ | -------- |
 | `cache`   | No           | `true`      | Whether to cache RPC responses or not.                                                                       | bool     |
 | `version` | No           | `nightly`   | Version to install, e.g. `nightly` or `1.0.0`. **Note:** Foundry only has nightly builds for the time being. | string   |
+| `repository` | No           | `https://github.com`   | Artifact repository url prefix to download Foundry binaries from. It needs to be compliant with Github's path. | string   |
 
 ### RPC Caching
 

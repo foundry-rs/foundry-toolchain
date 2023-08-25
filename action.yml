@@ -21,6 +21,15 @@ inputs:
       This version number has to match a released version of Foundry.
       The default value is `nightly`, which will pull the latest nightly build.
     required: false
+  repository:
+    default: "https://github.com"
+    description: |
+      Artifact repository URL prefix.
+
+      Artifact repository from which to download the foundry artifact from. 
+      The repo artifact path has to conform to the url format of github, like `${repository}/foundry-rs/foundry/releases/download/${version}/${fullFileName}`
+      The default value is `https://github.com`.
+    required: false
 
 runs:
   using: "node16"

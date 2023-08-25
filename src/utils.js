@@ -13,11 +13,11 @@ function mapArch(arch) {
   return mappings[arch] || arch;
 }
 
-function getDownloadObject(version) {
+function getDownloadObject(repository, version) {
   const platform = os.platform();
   const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
   const extension = platform === "win32" ? "zip" : "tar.gz";
-  const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
+  const url = `${repository}/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
 
   return {
     url,
