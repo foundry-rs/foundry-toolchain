@@ -9,11 +9,14 @@ async function main() {
   try {
     // Get version input
     const version = core.getInput("version");
+    // Get artifact repository input
+    const repository = core.getInput("repository");
+    const repositoryAuth = core.getInput("repository-auth");
 
     // Download the archive containing the binaries
-    const download = getDownloadObject(version);
+    const download = getDownloadObject(repository, version);
     core.info(`Downloading Foundry '${version}' from: ${download.url}`);
-    const pathToArchive = await toolCache.downloadTool(download.url);
+    const pathToArchive = await toolCache.downloadTool(download.url, '', repositoryAuth);
 
     // Extract the archive onto host runner
     core.debug(`Extracting ${pathToArchive}`);
