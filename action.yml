@@ -30,6 +30,13 @@ inputs:
       The repo artifact path has to conform to the url format of github, like `${repository}/foundry-rs/foundry/releases/download/${version}/${fullFileName}`
       The default value is `https://github.com`.
     required: false
+  repository-auth:
+    default: ""
+    description: |
+      HTTP Authorization header for the above repository. Not required for Github.
+
+      Left empty by default.
+    required: false
 
 runs:
   using: "node16"
