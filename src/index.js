@@ -12,11 +12,11 @@ async function main() {
 
     // Download the archive containing the binaries
     const download = getDownloadObject(version);
-    console.log(`Downloading Foundry '${version}' from: ${download.url}`);
+    core.info(`Downloading Foundry '${version}' from: ${download.url}`);
     const pathToArchive = await toolCache.downloadTool(download.url);
 
     // Extract the archive onto host runner
-    console.log(`Extracting ${pathToArchive}`);
+    core.debug(`Extracting ${pathToArchive}`);
     const extract = download.url.endsWith(".zip") ? toolCache.extractZip : toolCache.extractTar;
     const pathToCLI = await extract(pathToArchive);
 
@@ -28,7 +28,7 @@ async function main() {
 
     if (cache) {
       // Restore the RPC cache, if any.
-      restoreRPCCache();
+      await restoreRPCCache();
     }
   } catch (err) {
     core.setFailed(err);
