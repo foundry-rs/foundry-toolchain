@@ -84665,6 +84665,7 @@ function wrappy (fn, cb) {
 /***/ 2121:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const core = __nccwpck_require__(2186);
 const cache = __nccwpck_require__(7799);
 const github = __nccwpck_require__(5438);
 const fs = __nccwpck_require__(7147);
@@ -84676,40 +84677,33 @@ const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 
 async function restoreRPCCache() {
-  const key = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
+  const primaryKey = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
   const restoreKeys = [PLATFORM + "-foundry-chain-fork-"];
-  await cache.restoreCache(CACHE_PATHS, key, restoreKeys);
+  const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+  if (!cacheKey) {
+    core.info("Cache not found");
+    return;
+  }
+  core.info(`Cache restored from key: ${cacheKey}`);
 }
 
 async function saveCache() {
-  const key = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
-  if (fs.existsSync(CACHE_PATHS[0])) {
-    await cache.saveCache(CACHE_PATHS, key);
+  const primaryKey = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
+  if (!fs.existsSync(CACHE_PATHS[0])) {
+    core.info(`Cache path does not exist, not saving cache : ${CACHE_PATHS[0]}`);
+    return;
   }
+  const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+  if (cacheId === -1) {
+    return;
+  }
+  core.info(`Cache saved with the key: ${primaryKey}`);
 }
 
 module.exports = {
   restoreRPCCache,
   saveCache,
 };
-
-
-/***/ }),
-
-/***/ 5209:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const { saveCache } = __nccwpck_require__(2121);
-
-async function save() {
-  await saveCache();
-}
-
-module.exports = save;
-
-if (require.main === require.cache[eval('__filename')]) {
-  save();
-}
 
 
 /***/ }),
@@ -85024,13 +85018,54 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(5209);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+const { saveCache } = __nccwpck_require__(2121);
+const core = __nccwpck_require__(2186);
+
+// Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
+// @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
+// throw an uncaught exception.  Instead of failing this action, just warn.
+process.on("uncaughtException", (e) => {
+  const warningPrefix = "[warning]";
+  core.info(`${warningPrefix}${e.message}`);
+});
+
+// Added early exit to resolve issue with slow post action step:
+// - https://github.com/actions/setup-node/issues/878
+// https://github.com/actions/cache/pull/1217
+async function run(earlyExit) {
+  try {
+    const cacheInput = core.getBooleanInput("cache");
+    if (cacheInput) {
+      await saveCache();
+    } else {
+      core.info("Cache not requested, not saving cache");
+    }
+
+    if (earlyExit) {
+      process.exit(0);
+    }
+  } catch (error) {
+    let message = "Unknown error!";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    if (typeof error === "string") {
+      message = error;
+    }
+    core.warning(message);
+  }
+}
+
+if (require.main === require.cache[eval('__filename')]) {
+  run(true);
+}
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

@@ -24,12 +24,16 @@ async function main() {
     core.addPath(path.join(pathToCLI, download.binPath));
 
     // Get cache input
-    const cache = core.getInput("cache");
+    const cache = core.getBooleanInput("cache");
 
-    if (cache) {
-      // Restore the RPC cache, if any.
-      await restoreRPCCache();
+    // If cache input is false, skip restoring cache
+    if (!cache) {
+      core.info("Cache not requested, not restoring cache");
+      return;
     }
+
+    // Restore the RPC cache
+    await restoreRPCCache();
   } catch (err) {
     core.setFailed(err);
   }
