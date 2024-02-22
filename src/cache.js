@@ -23,13 +23,13 @@ async function restoreRPCCache() {
     .filter((input) => input !== "")
     .map((input) => `${prefix}${input}`);
   const restoreKeys = customRestoreKeyInput.concat(defaultRestoreKeys);
-  const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
-  if (!cacheKey) {
+  const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+  if (!matchedKey) {
     core.info("Cache not found");
     return;
   }
-  core.saveState(State.CacheMatchedKey, cacheKey);
-  core.info(`Cache restored from key: ${cacheKey}`);
+  core.saveState(State.CacheMatchedKey, matchedKey);
+  core.info(`Cache restored from key: ${matchedKey}`);
 }
 
 async function saveCache() {
