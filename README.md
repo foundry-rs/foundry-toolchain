@@ -62,11 +62,13 @@ the `cache` input to `false`, like this:
 
 ### Custom Cache Keys
 
-You can also set custom cache keys using the `cache-key` and `cache-restore-keys` inputs. This is useful if you want to
-customize how the cache may be shared between jobs. Note that cache-key must be unique for each run to successfully save
-without conflicts.
+You have the ability to define custom cache keys by utilizing the `cache-key` and `cache-restore-keys` inputs. This
+feature is particularly beneficial when you aim to tailor the cache-sharing strategy across multiple jobs. It is
+important to ensure that the `cache-key` is unique for each execution to prevent conflicts and guarantee successful
+cache saving.
 
-For example, to share the cache across two different jobs, you could do something like this:
+For instance, if you wish to utilize a shared cache between two distinct jobs, the following configuration can be
+applied:
 
 ```yml
 - name: Install Foundry
@@ -85,10 +87,6 @@ For example, to share the cache across two different jobs, you could do somethin
       custom-seed-coverage-
       custom-seed-
 ```
-
-This will create two different caches, one for each job, but they will share the same cache key prefix. This means that
-when restoring the cache in the second job, it will look for caches with keys that start with `custom-seed-` as well.
-This allows you to share the cache across different jobs, or across different workflows if desired.
 
 #### Deleting Caches
 

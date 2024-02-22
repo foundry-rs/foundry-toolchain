@@ -20,7 +20,8 @@ async function restoreRPCCache() {
     .getInput("cache-restore-keys")
     .split(/[\r\n]/)
     .map((input) => input.trim())
-    .filter((input) => input !== "");
+    .filter((input) => input !== "")
+    .map((input) => `${prefix}${input}`);
   const restoreKeys = customRestoreKeyInput.concat(defaultRestoreKeys);
   const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
   if (!cacheKey) {
