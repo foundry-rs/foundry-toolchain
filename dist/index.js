@@ -86185,12 +86185,17 @@ const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 
 async function restoreRPCCache() {
-  const customKeyInput = core.getInput("cache-key");
-  const customRestoreKeyInput = core.getInput("cache-restore-key");
   const prefix = `${PLATFORM}-foundry-chain-fork-`;
+  const customKeyInput = core.getInput("cache-key");
   const primaryKey = `${prefix}${customKeyInput}`;
-  const restoreKeys = [`${prefix}${customRestoreKeyInput}`, prefix];
   core.saveState(State.CachePrimaryKey, primaryKey);
+  const defaultRestoreKeys = [prefix];
+  const customRestoreKeyInput = core
+    .getInput("cache-restore-keys")
+    .split(/[\r\n]/)
+    .map((input) => input.trim())
+    .filter((input) => input !== "");
+  const restoreKeys = customRestoreKeyInput.concat(defaultRestoreKeys);
   const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
   if (!cacheKey) {
     core.info("Cache not found");
