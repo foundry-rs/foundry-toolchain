@@ -86185,10 +86185,12 @@ const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 
 async function restoreRPCCache() {
-  const primaryKey = PLATFORM + "-foundry-chain-fork-" + github.context.job + "-" + github.context.sha;
+  const customKeyInput = core.getInput("cache-key");
+  const customRestoreKeyInput = core.getInput("cache-restore-key");
+  const prefix = `${PLATFORM}-foundry-chain-fork-`;
+  const primaryKey = `${prefix}${customKeyInput}`;
+  const restoreKeys = [`${prefix}${customRestoreKeyInput}`, prefix];
   core.saveState(State.CachePrimaryKey, primaryKey);
-
-  const restoreKeys = [PLATFORM + "-foundry-chain-fork-" + github.context.job + "-", PLATFORM + "-foundry-chain-fork-"];
   const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
   if (!cacheKey) {
     core.info("Cache not found");
@@ -86221,7 +86223,8 @@ async function saveCache() {
   }
 
   const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
-  // If the cacheId is -1, the saveCache failed with an error message
+
+  // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
   if (cacheId === -1) {
     return;
   }
