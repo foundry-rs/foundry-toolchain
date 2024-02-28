@@ -81757,9 +81757,7 @@ function getRestoreKeys(customRestoreKeysInput) {
 }
 
 /**
- * Attempts to restore the RPC cache using the provided keys.
- * If successful, logs the restored key and saves it to the state.
- * If not, logs that the cache was not found.
+ * Restores the RPC cache using the provided keys.
  */
 async function restoreRPCCache() {
   const customKeyInput = core.getInput("cache-key");
@@ -81780,8 +81778,7 @@ async function restoreRPCCache() {
 }
 
 /**
- * Saves the RPC cache if it has not been saved already.
- * Checks for the existence of the cache path and the generation of the primary key.
+ * Saves the RPC cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
 async function saveCache() {
