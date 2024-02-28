@@ -1,5 +1,6 @@
 const core = require("@actions/core");
 const cache = require("@actions/cache");
+const github = require("@actions/github");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -18,7 +19,7 @@ const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
  */
 function getPrimaryKey(customKeyInput) {
   if (!customKeyInput) {
-    return CACHE_PREFIX;
+    return `${CACHE_PREFIX}${github.context.sha}`;
   }
   return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
