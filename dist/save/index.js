@@ -84671,38 +84671,121 @@ const github = __nccwpck_require__(5438);
 const fs = __nccwpck_require__(7147);
 const os = __nccwpck_require__(2037);
 const path = __nccwpck_require__(1017);
+const { State } = __nccwpck_require__(4438);
 
+// Define constants for cache paths and prefix
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
+const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 
+/**
+ * Constructs the primary key for the cache using a custom key input.
+ * @param {string} customKeyInput - The custom part of the key provided by the user.
+ * @returns {string} The complete primary key for the cache.
+ */
+function getPrimaryKey(customKeyInput) {
+  if (!customKeyInput) {
+    return `${CACHE_PREFIX}${github.context.sha}`;
+  }
+  return `${CACHE_PREFIX}${customKeyInput.trim()}`;
+}
+
+/**
+ * Constructs an array of restore keys based on user input and a default prefix.
+ * @param {string} customRestoreKeysInput - Newline-separated string of custom restore keys.
+ * @returns {string[]} An array of restore keys for the cache.
+ */
+function getRestoreKeys(customRestoreKeysInput) {
+  const defaultRestoreKeys = [CACHE_PREFIX];
+  if (!customRestoreKeysInput) {
+    return defaultRestoreKeys;
+  }
+  const restoreKeys = customRestoreKeysInput
+    .split(/[\r\n]/)
+    .map((input) => input.trim())
+    .filter((input) => input !== "")
+    .map((input) => `${CACHE_PREFIX}${input}`);
+  return [...restoreKeys, ...defaultRestoreKeys];
+}
+
+/**
+ * Restores the RPC cache using the provided keys.
+ */
 async function restoreRPCCache() {
-  const primaryKey = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
-  const restoreKeys = [PLATFORM + "-foundry-chain-fork-"];
-  const cacheKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
-  if (!cacheKey) {
+  const customKeyInput = core.getInput("cache-key");
+  const primaryKey = getPrimaryKey(customKeyInput);
+  core.saveState(State.CachePrimaryKey, primaryKey);
+
+  const customRestoreKeysInput = core.getInput("cache-restore-keys");
+  const restoreKeys = getRestoreKeys(customRestoreKeysInput);
+  const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+
+  if (!matchedKey) {
     core.info("Cache not found");
     return;
   }
-  core.info(`Cache restored from key: ${cacheKey}`);
+
+  core.saveState(State.CacheMatchedKey, matchedKey);
+  core.info(`Cache restored from key: ${matchedKey}`);
 }
 
+/**
+ * Saves the RPC cache using the primary key saved in the state.
+ * If the cache was already saved with the primary key, it will not save it again.
+ */
 async function saveCache() {
-  const primaryKey = PLATFORM + "-foundry-chain-fork-" + github.context.sha;
+  const primaryKey = core.getState(State.CachePrimaryKey);
+  const matchedKey = core.getState(State.CacheMatchedKey);
+
+  // If the cache path does not exist, do not save the cache
   if (!fs.existsSync(CACHE_PATHS[0])) {
-    core.info(`Cache path does not exist, not saving cache : ${CACHE_PATHS[0]}`);
+    core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
     return;
   }
+
+  // If the primary key is not generated, do not save the cache
+  if (!primaryKey) {
+    core.info("Primary key was not generated. Please check the log messages above for more errors or information");
+    return;
+  }
+
+  // If the primary key and the matched key are the same, this means the cache was already saved
+  if (primaryKey === matchedKey) {
+    core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
+    return;
+  }
+
   const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+
+  // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
   if (cacheId === -1) {
     return;
   }
+
   core.info(`Cache saved with the key: ${primaryKey}`);
 }
 
 module.exports = {
   restoreRPCCache,
   saveCache,
+};
+
+
+/***/ }),
+
+/***/ 4438:
+/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "State": () => (/* binding */ State)
+/* harmony export */ });
+// Enum for the cache primary key and result key.
+const State = {
+  CachePrimaryKey: "CACHE_KEY",
+  CacheMatchedKey: "CACHE_RESULT",
 };
 
 
@@ -85013,6 +85096,34 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";

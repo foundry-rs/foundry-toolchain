@@ -31,10 +31,12 @@ jobs:
 
 ### Inputs
 
-| **Name**  | **Required** | **Default** | **Description**                                                                                              | **Type** |
-| --------- | ------------ | ----------- | ------------------------------------------------------------------------------------------------------------ | -------- |
-| `cache`   | No           | `true`      | Whether to cache RPC responses or not.                                                                       | bool     |
-| `version` | No           | `nightly`   | Version to install, e.g. `nightly` or `1.0.0`. **Note:** Foundry only has nightly builds for the time being. | string   |
+| **Name**             | **Required** | **Default**                           | **Description**                                                                                              | **Type** |
+| -------------------- | ------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------- |
+| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                                                                       | bool     |
+| `version`            | No           | `nightly`                             | Version to install, e.g. `nightly` or `1.0.0`. **Note:** Foundry only has nightly builds for the time being. | string   |
+| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                            | string   |
+| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                               | string[] |
 
 ### RPC Caching
 
@@ -56,6 +58,34 @@ the `cache` input to `false`, like this:
   uses: foundry-rs/foundry-toolchain@v1
   with:
     cache: false
+```
+
+### Custom Cache Keys
+
+You have the ability to define custom cache keys by utilizing the `cache-key` and `cache-restore-keys` inputs. This
+feature is particularly beneficial when you aim to tailor the cache-sharing strategy across multiple jobs. It is
+important to ensure that the `cache-key` is unique for each execution to prevent conflicts and guarantee successful
+cache saving.
+
+For instance, if you wish to utilize a shared cache between two distinct jobs, the following configuration can be
+applied:
+
+```yml
+- name: Install Foundry
+  uses: foundry-rs/foundry-toolchain@v1
+  with:
+    cache-key: custom-seed-test-${{ github.sha }}
+    cache-restore-keys: |-
+      custom-seed-test-
+      custom-seed-
+---
+- name: Install Foundry
+  uses: foundry-rs/foundry-toolchain@v1
+  with:
+    cache-key: custom-seed-coverage-${{ github.sha }}
+    cache-restore-keys: |-
+      custom-seed-coverage-
+      custom-seed-
 ```
 
 #### Deleting Caches
