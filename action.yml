@@ -13,6 +13,21 @@ inputs:
 
       Caching is activated by default.
     required: false
+  cache-key:
+    default: "${{ github.job }}-${{ github.sha }}"
+    description: |
+      A custom cache key to use.
+
+      This key is used to identify the cache. If not provided, a default key consisting of the job id and the commit hash is used.
+    required: false
+  cache-restore-keys:
+    default: |-
+      ${{ github.job }}-
+    description: |
+      Custom cache restore keys to use.
+
+      This key is used to identify the cache to restore. If not provided, a default key consisting of the job id is used.
+    required: false
   version:
     default: "nightly"
     description: |
@@ -23,7 +38,7 @@ inputs:
     required: false
 
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
   post: "dist/save/index.js"
-  post-if: "github.event.inputs.cache && success()"
+  post-if: success()
