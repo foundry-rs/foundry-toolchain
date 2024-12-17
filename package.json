@@ -1,6 +1,6 @@
 {
   "name": "@foundry-rs/foundry-toolchain",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
   "keywords": [
@@ -17,13 +17,13 @@
     "build": "ncc build src/index.js -o dist --source-map && ncc build src/save.js -o dist/save --source-map"
   },
   "dependencies": {
-    "@actions/cache": "^3.1.2",
-    "@actions/core": "^1.8.0",
-    "@actions/github": "^5.1.1",
-    "@actions/tool-cache": "^1.7.1"
+    "@actions/cache": "^4.0.0",
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.33.1",
-    "prettier": "^2.8.2"
+    "@vercel/ncc": "^0.38.3",
+    "prettier": "^3.4.2"
   }
 }
