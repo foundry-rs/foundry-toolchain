@@ -29,12 +29,12 @@ inputs:
       This key is used to identify the cache to restore. If not provided, a default key consisting of the job id is used.
     required: false
   version:
-    default: "nightly"
+    default: "stable"
     description: |
       Foundry version.
 
       This version number has to match a released version of Foundry.
-      The default value is `nightly`, which will pull the latest nightly build.
+      The default value is `stable`, which will pull the latest stable build.
     required: false
 
 runs:
