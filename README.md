@@ -15,7 +15,7 @@ jobs:
     name: Foundry project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -133,4 +133,4 @@ $ npm ci
 $ npm run build
 ```
 
-You **have** to use Node.js 20.x.
+You **have** to use Node.js 23.x.
