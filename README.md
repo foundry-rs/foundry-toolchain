@@ -133,4 +133,4 @@ $ npm ci
 $ npm run build
 ```
 
-You **have** to use Node.js 23.x.
+You **have** to use Node.js 20.x.
