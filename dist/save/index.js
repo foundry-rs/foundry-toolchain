@@ -60147,6 +60147,14 @@ const { isUint8Array, isArrayBuffer } = __nccwpck_require__(8253)
 const { File: UndiciFile } = __nccwpck_require__(3041)
 const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(4322)
 
+let random
+try {
+  const crypto = __nccwpck_require__(7598)
+  random = (max) => crypto.randomInt(0, max)
+} catch {
+  random = (max) => Math.floor(Math.random(max))
+}
+
 let ReadableStream = globalThis.ReadableStream
 
 /** @type {globalThis['File']} */
@@ -60232,7 +60240,7 @@ function extractBody (object, keepalive = false) {
     // Set source to a copy of the bytes held by object.
     source = new Uint8Array(object.buffer.slice(object.byteOffset, object.byteOffset + object.byteLength))
   } else if (util.isFormDataLike(object)) {
-    const boundary = `----formdata-undici-0${`${Math.floor(Math.random() * 1e11)}`.padStart(11, '0')}`
+    const boundary = `----formdata-undici-0${`${random(1e11)}`.padStart(11, '0')}`
     const prefix = `--${boundary}\r\nContent-Disposition: form-data`
 
     /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
@@ -74554,6 +74562,14 @@ module.exports = require("net");
 
 /***/ }),
 
+/***/ 7598:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:crypto");
+
+/***/ }),
+
 /***/ 8474:
 /***/ ((module) => {
 
@@ -79377,7 +79393,7 @@ exports.buildCreatePoller = buildCreatePoller;
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DEFAULT_RETRY_POLICY_COUNT = exports.SDK_VERSION = void 0;
-exports.SDK_VERSION = "1.18.1";
+exports.SDK_VERSION = "1.18.2";
 exports.DEFAULT_RETRY_POLICY_COUNT = 3;
 //# sourceMappingURL=constants.js.map
 
@@ -81364,7 +81380,6 @@ function retryPolicy(strategies, options = { maxRetries: constants_js_1.DEFAULT_
             let response;
             let responseError;
             let retryCount = -1;
-            // eslint-disable-next-line no-constant-condition
             retryRequest: while (true) {
                 retryCount += 1;
                 response = undefined;
@@ -81721,9 +81736,14 @@ function tryProcessResponse(span, response) {
         if (serviceRequestId) {
             span.setAttribute("serviceRequestId", serviceRequestId);
         }
-        span.setStatus({
-            status: "success",
-        });
+        // Per semantic conventions, only set the status to error if the status code is 4xx or 5xx.
+        // Otherwise, the status MUST remain unset.
+        // https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
+        if (response.status >= 400) {
+            span.setStatus({
+                status: "error",
+            });
+        }
         span.end();
     }
     catch (e) {
@@ -82111,6 +82131,9 @@ const core_util_1 = __nccwpck_require__(7779);
 const typeGuards_js_1 = __nccwpck_require__(2621);
 const unimplementedMethods = {
     arrayBuffer: () => {
+        throw new Error("Not implemented");
+    },
+    bytes: () => {
         throw new Error("Not implemented");
     },
     slice: () => {
