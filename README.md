@@ -31,12 +31,12 @@ jobs:
 
 ### Inputs
 
-| **Name**             | **Required** | **Default**                           | **Description**                                          | **Type** |
-| -------------------- | ------------ | ------------------------------------- | -------------------------------------------------------- | -------- |
-| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                   | bool     |
-| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `nightly` or `0.3.0`. | string   |
-| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                        | string   |
-| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.           | string[] |
+| **Name**             | **Required** | **Default**                           | **Description**                                           | **Type** |
+| -------------------- | ------------ | ------------------------------------- | --------------------------------------------------------- | -------- |
+| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                    | bool     |
+| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `nightly` or `v0.3.0`. | string   |
+| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                         | string   |
+| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.            | string[] |
 
 ### RPC Caching
 
