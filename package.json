@@ -17,10 +17,10 @@
     "build": "ncc build src/index.js -o dist --source-map && ncc build src/save.js -o dist/save --source-map"
   },
   "dependencies": {
-    "@actions/cache": "^4.0.0",
+    "@actions/cache": "^4.0.3",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.3",
