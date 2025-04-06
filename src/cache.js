@@ -39,7 +39,7 @@ function getRestoreKeys(customRestoreKeysInput) {
     .map((input) => input.trim())
     .filter((input) => input !== "")
     .map((input) => `${CACHE_PREFIX}${input}`);
-  return [...restoreKeys, ...defaultRestoreKeys];
+  return restoreKeys;
 }
 
 /**
@@ -48,10 +48,12 @@ function getRestoreKeys(customRestoreKeysInput) {
 async function restoreRPCCache() {
   const customKeyInput = core.getInput("cache-key");
   const primaryKey = getPrimaryKey(customKeyInput);
+  core.info(`Primary key: ${primaryKey}`);
   core.saveState(State.CachePrimaryKey, primaryKey);
 
   const customRestoreKeysInput = core.getInput("cache-restore-keys");
   const restoreKeys = getRestoreKeys(customRestoreKeysInput);
+  core.info(`Restore keys: ${restoreKeys.join(", ")}`);
   const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
 
   if (!matchedKey) {
