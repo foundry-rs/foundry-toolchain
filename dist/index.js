@@ -8861,8 +8861,8 @@ class BaseRequestPolicy {
 
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-const SDK_VERSION = "12.26.0";
-const SERVICE_VERSION = "2025-01-05";
+const SDK_VERSION = "12.27.0";
+const SERVICE_VERSION = "2025-05-05";
 const BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024; // 256MB
 const BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4000 * 1024 * 1024; // 4000MB
 const BLOCK_BLOB_MAX_BLOCKS = 50000;
@@ -8877,22 +8877,15 @@ const StorageOAuthScopes = "https://storage.azure.com/.default";
 const URLConstants = {
     Parameters: {
         FORCE_BROWSER_NO_CACHE: "_",
-        SIGNATURE: "sig",
         SNAPSHOT: "snapshot",
         VERSIONID: "versionid",
         TIMEOUT: "timeout",
     },
 };
 const HTTPURLConnection = {
-    HTTP_ACCEPTED: 202,
-    HTTP_CONFLICT: 409,
-    HTTP_NOT_FOUND: 404,
-    HTTP_PRECON_FAILED: 412,
-    HTTP_RANGE_NOT_SATISFIABLE: 416,
-};
+    HTTP_ACCEPTED: 202};
 const HeaderConstants = {
     AUTHORIZATION: "Authorization",
-    AUTHORIZATION_SCHEME: "Bearer",
     CONTENT_ENCODING: "Content-Encoding",
     CONTENT_ID: "Content-ID",
     CONTENT_LANGUAGE: "Content-Language",
@@ -8908,14 +8901,9 @@ const HeaderConstants = {
     IF_UNMODIFIED_SINCE: "if-unmodified-since",
     PREFIX_FOR_STORAGE: "x-ms-",
     RANGE: "Range",
-    USER_AGENT: "User-Agent",
-    X_MS_CLIENT_REQUEST_ID: "x-ms-client-request-id",
-    X_MS_COPY_SOURCE: "x-ms-copy-source",
     X_MS_DATE: "x-ms-date",
     X_MS_ERROR_CODE: "x-ms-error-code",
-    X_MS_VERSION: "x-ms-version",
-    X_MS_CopySourceErrorCode: "x-ms-copy-source-error-code",
-};
+    X_MS_VERSION: "x-ms-version"};
 const ETagNone = "";
 const ETagAny = "*";
 const SIZE_1_MB = 1 * 1024 * 1024;
@@ -9134,8 +9122,8 @@ const PathStylePorts = [
  *
  * We will apply strategy one, and call encodeURIComponent for these parameters like blobName. Because what customers passes in is a plain name instead of a URL.
  *
- * @see https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
- * @see https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-shares--directories--files--and-metadata
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-shares--directories--files--and-metadata
  *
  * @param url -
  */
@@ -9149,7 +9137,7 @@ function escapeURLPath(url) {
 }
 function getProxyUriFromDevConnString(connectionString) {
     // Development Connection String
-    // https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#connect-to-the-emulator-account-using-the-well-known-account-name-and-key
+    // https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#connect-to-the-emulator-account-using-the-well-known-account-name-and-key
     let proxyUri = "";
     if (connectionString.search("DevelopmentStorageProxyUri=") !== -1) {
         // CONNECTION_STRING=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://myProxyUri
@@ -10190,7 +10178,7 @@ class StorageSharedKeyCredentialPolicy extends CredentialPolicy {
     }
     /**
      * Retrieve header value according to shared key sign rules.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
      *
      * @param request -
      * @param headerName -
@@ -10202,7 +10190,7 @@ class StorageSharedKeyCredentialPolicy extends CredentialPolicy {
         }
         // When using version 2015-02-21 or later, if Content-Length is zero, then
         // set the Content-Length part of the StringToSign to an empty string.
-        // https://docs.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
         if (headerName === HeaderConstants.CONTENT_LENGTH && value === "0") {
             return "";
         }
@@ -10623,7 +10611,7 @@ function storageSharedKeyCredentialPolicy(options) {
     }
     /**
      * Retrieve header value according to shared key sign rules.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
      */
     function getHeaderValueToSign(request, headerName) {
         const value = request.headers.get(headerName);
@@ -10632,7 +10620,7 @@ function storageSharedKeyCredentialPolicy(options) {
         }
         // When using version 2015-02-21 or later, if Content-Length is zero, then
         // set the Content-Length part of the StringToSign to an empty string.
-        // https://docs.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/authenticate-with-shared-key
         if (headerName === HeaderConstants.CONTENT_LENGTH && value === "0") {
             return "";
         }
@@ -19524,7 +19512,7 @@ const timeoutInSeconds = {
 const version = {
     parameterPath: "version",
     mapper: {
-        defaultValue: "2025-01-05",
+        defaultValue: "2025-05-05",
         isConstant: true,
         serializedName: "x-ms-version",
         type: {
@@ -24156,7 +24144,7 @@ let StorageClient$1 = class StorageClient extends coreHttpCompat__namespace.Exte
         const defaults = {
             requestContentType: "application/json; charset=utf-8",
         };
-        const packageDetails = `azsdk-js-azure-storage-blob/12.26.0`;
+        const packageDetails = `azsdk-js-azure-storage-blob/12.27.0`;
         const userAgentPrefix = options.userAgentOptions && options.userAgentOptions.userAgentPrefix
             ? `${options.userAgentOptions.userAgentPrefix} ${packageDetails}`
             : `${packageDetails}`;
@@ -24167,7 +24155,7 @@ let StorageClient$1 = class StorageClient extends coreHttpCompat__namespace.Exte
         // Parameter assignments
         this.url = url;
         // Assigning values to Constant parameters
-        this.version = options.version || "2025-01-05";
+        this.version = options.version || "2025-05-05";
         this.service = new ServiceImpl(this);
         this.container = new ContainerImpl(this);
         this.blob = new BlobImpl(this);
@@ -24599,7 +24587,7 @@ class ContainerSASPermissions {
      * order accepted by the service.
      *
      * The order of the characters should be as specified here to ensure correctness.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      */
     toString() {
@@ -24653,7 +24641,7 @@ class ContainerSASPermissions {
  * ONLY AVAILABLE IN NODE.JS RUNTIME.
  *
  * UserDelegationKeyCredential is only used for generation of user delegation SAS.
- * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-user-delegation-sas
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-user-delegation-sas
  */
 class UserDelegationKeyCredential {
     /**
@@ -24950,7 +24938,7 @@ function generateBlobSASQueryParametersInternal(blobSASSignatureValues, sharedKe
     }
     // Version 2019-12-12 adds support for the blob tags permission.
     // Version 2018-11-09 adds support for the signed resource and signed blob snapshot time fields.
-    // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas#constructing-the-signature-string
+    // https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas#constructing-the-signature-string
     if (version >= "2018-11-09") {
         if (sharedKeyCredential !== undefined) {
             return generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential);
@@ -25537,9 +25525,9 @@ class BlobLeaseClient {
      * Establishes and manages a lock on a container for delete operations, or on a blob
      * for write and delete operations.
      * The lock duration can be 15 to 60 seconds, or can be infinite.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-container
      * and
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-blob
      *
      * @param duration - Must be between 15 to 60 seconds, or infinite (-1)
      * @param options - option to configure lease management operations.
@@ -25566,9 +25554,9 @@ class BlobLeaseClient {
     }
     /**
      * To change the ID of the lease.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-container
      * and
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-blob
      *
      * @param proposedLeaseId - the proposed new lease Id.
      * @param options - option to configure lease management operations.
@@ -25596,9 +25584,9 @@ class BlobLeaseClient {
     /**
      * To free the lease if it is no longer needed so that another client may
      * immediately acquire a lease against the container or the blob.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-container
      * and
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-blob
      *
      * @param options - option to configure lease management operations.
      * @returns Response data for release lease operation.
@@ -25622,9 +25610,9 @@ class BlobLeaseClient {
     }
     /**
      * To renew the lease.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-container
      * and
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-blob
      *
      * @param options - Optional option to configure lease management operations.
      * @returns Response data for renew lease operation.
@@ -25649,9 +25637,9 @@ class BlobLeaseClient {
     /**
      * To end the lease but ensure that another client cannot acquire a new lease
      * until the current lease period has expired.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-container
      * and
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/lease-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/lease-blob
      *
      * @param breakPeriod - Break period
      * @param options - Optional options to configure lease management operations.
@@ -27261,7 +27249,7 @@ class BlobQueryResponse {
 // Licensed under the MIT License.
 /**
  * Represents the access tier on a blob.
- * For detailed information about block blob level tiering see {@link https://docs.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers|Hot, cool and archive storage tiers.}
+ * For detailed information about block blob level tiering see {@link https://learn.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers|Hot, cool and archive storage tiers.}
  */
 exports.BlockBlobTier = void 0;
 (function (BlockBlobTier) {
@@ -27285,7 +27273,7 @@ exports.BlockBlobTier = void 0;
 })(exports.BlockBlobTier || (exports.BlockBlobTier = {}));
 /**
  * Specifies the page blob tier to set the blob to. This is only applicable to page blobs on premium storage accounts.
- * Please see {@link https://docs.microsoft.com/azure/storage/storage-premium-storage#scalability-and-performance-targets|here}
+ * Please see {@link https://learn.microsoft.com/azure/storage/storage-premium-storage#scalability-and-performance-targets|here}
  * for detailed information on the corresponding IOPS and throughput per PageBlobTier.
  */
 exports.PremiumPageBlobTier = void 0;
@@ -28328,7 +28316,7 @@ class BlobClient extends StorageClient {
      * * In Node.js, data returns in a Readable stream readableStreamBody
      * * In browsers, data returns in a promise blobBody
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob
      *
      * @param offset - From which position of the blob to download, greater than or equal to 0
      * @param count - How much data to be downloaded, greater than 0. Will download to the end when undefined
@@ -28344,16 +28332,16 @@ class BlobClient extends StorageClient {
      * console.log("Downloaded blob content:", downloaded.toString());
      *
      * async function streamToBuffer(readableStream) {
-     * return new Promise((resolve, reject) => {
-     * const chunks = [];
-     * readableStream.on("data", (data) => {
-     * chunks.push(data instanceof Buffer ? data : Buffer.from(data));
-     * });
-     * readableStream.on("end", () => {
-     * resolve(Buffer.concat(chunks));
-     * });
-     * readableStream.on("error", reject);
-     * });
+     *   return new Promise((resolve, reject) => {
+     *     const chunks = [];
+     *     readableStream.on("data", (data) => {
+     *       chunks.push(typeof data === "string" ? Buffer.from(data) : data);
+     *     });
+     *     readableStream.on("end", () => {
+     *       resolve(Buffer.concat(chunks));
+     *     });
+     *     readableStream.on("error", reject);
+     *   });
      * }
      * ```
      *
@@ -28492,7 +28480,7 @@ class BlobClient extends StorageClient {
     /**
      * Returns all user-defined metadata, standard HTTP properties, and system properties
      * for the blob. It does not return the content of the blob.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-properties
      *
      * WARNING: The `metadata` object returned in the response will have its keys in lowercase, even if
      * they originally contained uppercase characters. This differs from the metadata keys returned by
@@ -28521,7 +28509,7 @@ class BlobClient extends StorageClient {
      * during garbage collection. Note that in order to delete a blob, you must delete
      * all of its snapshots. You can delete both at the same time with the Delete
      * Blob operation.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/delete-blob
      *
      * @param options - Optional options to Blob Delete operation.
      */
@@ -28543,7 +28531,7 @@ class BlobClient extends StorageClient {
      * during garbage collection. Note that in order to delete a blob, you must delete
      * all of its snapshots. You can delete both at the same time with the Delete
      * Blob operation.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/delete-blob
      *
      * @param options - Optional options to Blob Delete operation.
      */
@@ -28566,7 +28554,7 @@ class BlobClient extends StorageClient {
      * Restores the contents and metadata of soft deleted blob and any associated
      * soft deleted snapshots. Undelete Blob is supported only on version 2017-07-29
      * or later.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/undelete-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/undelete-blob
      *
      * @param options - Optional options to Blob Undelete operation.
      */
@@ -28583,7 +28571,7 @@ class BlobClient extends StorageClient {
      *
      * If no value provided, or no value provided for the specified blob HTTP headers,
      * these blob HTTP headers without a value will be cleared.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-properties
      *
      * @param blobHTTPHeaders - If no value provided, or no value provided for
      *                                                   the specified blob HTTP headers, these blob HTTP
@@ -28613,7 +28601,7 @@ class BlobClient extends StorageClient {
      *
      * If no option provided, or no metadata defined in the parameter, the blob
      * metadata will be removed.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-metadata
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-metadata
      *
      * @param metadata - Replace existing metadata with this value.
      *                               If no value provided the existing metadata will be removed.
@@ -28685,7 +28673,7 @@ class BlobClient extends StorageClient {
     }
     /**
      * Creates a read-only snapshot of a blob.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/snapshot-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/snapshot-blob
      *
      * @param options - Optional options to the Blob Create Snapshot operation.
      */
@@ -28719,7 +28707,7 @@ class BlobClient extends StorageClient {
      * an Azure file in any Azure storage account.
      * Only storage accounts created on or after June 7th, 2012 allow the Copy Blob
      * operation to copy from another storage account.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/copy-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/copy-blob
      *
      * Example using automatic polling:
      *
@@ -28799,7 +28787,7 @@ class BlobClient extends StorageClient {
     /**
      * Aborts a pending asynchronous Copy Blob operation, and leaves a destination blob with zero
      * length and full metadata. Version 2012-02-12 and newer.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/abort-copy-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/abort-copy-blob
      *
      * @param copyId - Id of the Copy From URL operation.
      * @param options - Optional options to the Blob Abort Copy From URL operation.
@@ -28816,7 +28804,7 @@ class BlobClient extends StorageClient {
     /**
      * The synchronous Copy From URL operation copies a blob or an internet resource to a new blob. It will not
      * return a response until the copy is complete.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/copy-blob-from-url
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/copy-blob-from-url
      *
      * @param copySource - The source URL to copy from, Shared Access Signature(SAS) maybe needed for authentication
      * @param options -
@@ -28856,7 +28844,7 @@ class BlobClient extends StorageClient {
      * storage only). A premium page blob's tier determines the allowed size, IOPS,
      * and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive
      * storage type. This operation does not update the blob's ETag.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-tier
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-tier
      *
      * @param tier - The tier to be set on the blob. Valid values are Hot, Cool, or Archive.
      * @param options - Optional options to the Blob Set Tier operation.
@@ -29041,7 +29029,7 @@ class BlobClient extends StorageClient {
      * an Azure file in any Azure storage account.
      * Only storage accounts created on or after June 7th, 2012 allow the Copy Blob
      * operation to copy from another storage account.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/copy-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/copy-blob
      *
      * @param copySource - url to the source Azure Blob/File.
      * @param options - Optional options to the Blob Start Copy From URL operation.
@@ -29080,7 +29068,7 @@ class BlobClient extends StorageClient {
      * Generates a Blob Service Shared Access Signature (SAS) URI based on the client properties
      * and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @returns The SAS URI consisting of the URI to the resource represented by this client, followed by the generated SAS token.
@@ -29100,7 +29088,7 @@ class BlobClient extends StorageClient {
      * Generates string to sign for a Blob Service Shared Access Signature (SAS) URI based on
      * the client properties and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @returns The SAS URI consisting of the URI to the resource represented by this client, followed by the generated SAS token.
@@ -29117,7 +29105,7 @@ class BlobClient extends StorageClient {
      * Generates a Blob Service Shared Access Signature (SAS) URI based on
      * the client properties and parameters passed in. The SAS is signed by the input user delegation key.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @param userDelegationKey -  Return value of `blobServiceClient.getUserDelegationKey()`
@@ -29135,7 +29123,7 @@ class BlobClient extends StorageClient {
      * Generates string to sign for a Blob Service Shared Access Signature (SAS) URI based on
      * the client properties and parameters passed in. The SAS is signed by the input user delegation key.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @param userDelegationKey -  Return value of `blobServiceClient.getUserDelegationKey()`
@@ -29187,7 +29175,7 @@ class BlobClient extends StorageClient {
      * for the specified account.
      * The Get Account Information operation is available on service versions beginning
      * with version 2018-03-28.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-account-information
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-account-information
      *
      * @param options - Options to the Service Get Account Info operation.
      * @returns Response data for the Service Get Account Info operation.
@@ -29285,7 +29273,7 @@ class AppendBlobClient extends BlobClient {
     }
     /**
      * Creates a 0-length append blob. Call AppendBlock to append data to an append blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param options - Options to the Append Block Create operation.
      *
@@ -29321,7 +29309,7 @@ class AppendBlobClient extends BlobClient {
     /**
      * Creates a 0-length append blob. Call AppendBlock to append data to an append blob.
      * If the blob with the same name already exists, the content of the existing blob will remain unchanged.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param options -
      */
@@ -29361,7 +29349,7 @@ class AppendBlobClient extends BlobClient {
     }
     /**
      * Commits a new block of data to the end of the existing append blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/append-block
+     * @see https://learn.microsoft.com/rest/api/storageservices/append-block
      *
      * @param body - Data to be appended.
      * @param contentLength - Length of the body in bytes.
@@ -29407,7 +29395,7 @@ class AppendBlobClient extends BlobClient {
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob
      * where the contents are read from a source url.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/append-block-from-url
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/append-block-from-url
      *
      * @param sourceURL -
      *                 The url to the blob that will be the source of the copy. A source blob in the same storage account can
@@ -29549,7 +29537,7 @@ class BlockBlobClient extends BlobClient {
      *   return new Promise((resolve, reject) => {
      *     const chunks = [];
      *     readableStream.on("data", (data) => {
-     *       chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+     *       chunks.push(typeof data === "string" ? Buffer.from(data) : data);
      *     });
      *     readableStream.on("end", () => {
      *       resolve(Buffer.concat(chunks));
@@ -29600,7 +29588,7 @@ class BlockBlobClient extends BlobClient {
      * {@link uploadStream} or {@link uploadBrowserData} for better performance
      * with concurrency uploading.
      *
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param body - Blob, string, ArrayBuffer, ArrayBufferView or a function
      *                               which returns a new Readable stream whose offset is from data source beginning.
@@ -29676,7 +29664,7 @@ class BlockBlobClient extends BlobClient {
     /**
      * Uploads the specified block to the block blob's "staging area" to be later
      * committed by a call to commitBlockList.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-block
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-block
      *
      * @param blockId - A 64-byte value that is base64-encoded
      * @param body - Data to upload to the staging area.
@@ -29705,7 +29693,7 @@ class BlockBlobClient extends BlobClient {
      * The Stage Block From URL operation creates a new block to be committed as part
      * of a blob where the contents are read from a URL.
      * This API is available starting in version 2018-03-28.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-block-from-url
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/put-block-from-url
      *
      * @param blockId - A 64-byte value that is base64-encoded
      * @param sourceURL - Specifies the URL of the blob. The value
@@ -29744,7 +29732,7 @@ class BlockBlobClient extends BlobClient {
      * to the server in a prior {@link stageBlock} operation. You can call {@link commitBlockList} to
      * update a blob by uploading only those blocks that have changed, then committing the new and existing
      * blocks together. Any blocks not specified in the block list and permanently deleted.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-block-list
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-block-list
      *
      * @param blocks -  Array of 64-byte value that is base64-encoded
      * @param options - Options to the Block Blob Commit Block List operation.
@@ -29775,7 +29763,7 @@ class BlockBlobClient extends BlobClient {
     /**
      * Returns the list of blocks that have been uploaded as part of a block blob
      * using the specified block list filter.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-block-list
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-block-list
      *
      * @param listType - Specifies whether to return the list of committed blocks,
      *                                        the list of uncommitted blocks, or both lists together.
@@ -30109,7 +30097,7 @@ class PageBlobClient extends BlobClient {
     /**
      * Creates a page blob of the specified length. Call uploadPages to upload data
      * data to a page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param size - size of the page blob.
      * @param options - Options to the Page Blob Create operation.
@@ -30142,7 +30130,7 @@ class PageBlobClient extends BlobClient {
      * Creates a page blob of the specified length. Call uploadPages to upload data
      * data to a page blob. If the blob with the same name already exists, the content
      * of the existing blob will remain unchanged.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param size - size of the page blob.
      * @param options -
@@ -30165,7 +30153,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Writes 1 or more pages to the page blob. The start and end offsets must be a multiple of 512.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-page
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-page
      *
      * @param body - Data to upload
      * @param offset - Offset of destination page blob
@@ -30198,7 +30186,7 @@ class PageBlobClient extends BlobClient {
     /**
      * The Upload Pages operation writes a range of pages to a page blob where the
      * contents are read from a URL.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-page-from-url
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/put-page-from-url
      *
      * @param sourceURL - Specify a URL to the copy source, Shared Access Signature(SAS) maybe needed for authentication
      * @param sourceOffset - The source offset to copy from. Pass 0 to copy from the beginning of source page blob
@@ -30234,7 +30222,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Frees the specified pages from the page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-page
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-page
      *
      * @param offset - Starting byte position of the pages to clear.
      * @param count - Number of bytes to clear.
@@ -30259,7 +30247,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Returns the list of valid page ranges for a page blob or snapshot of a page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      * @param offset - Starting byte position of the page ranges.
      * @param count - Number of bytes to get.
@@ -30285,7 +30273,7 @@ class PageBlobClient extends BlobClient {
      * specified Marker. Use an empty Marker to start enumeration from the beginning.
      * After getting a segment, process it, and then call getPageRangesSegment again
      * (passing the the previously-returned Marker) to get the next segment.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      * @param offset - Starting byte position of the page ranges.
      * @param count - Number of bytes to get.
@@ -30362,7 +30350,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Returns an async iterable iterator to list of page ranges for a page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      *  .byPage() returns an async iterable iterator to list of page ranges for a page blob.
      *
@@ -30458,7 +30446,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Gets the collection of page ranges that differ between a specified snapshot and this page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      * @param offset - Starting byte position of the page blob
      * @param count - Number of bytes to get ranges diff.
@@ -30487,7 +30475,7 @@ class PageBlobClient extends BlobClient {
      * Use an empty Marker to start enumeration from the beginning.
      * After getting a segment, process it, and then call getPageRangesDiffSegment again
      * (passing the the previously-returned Marker) to get the next segment.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      * @param offset - Starting byte position of the page ranges.
      * @param count - Number of bytes to get.
@@ -30572,7 +30560,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Returns an async iterable iterator to list of page ranges that differ between a specified snapshot and this page blob.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      *  .byPage() returns an async iterable iterator to list of page ranges that differ between a specified snapshot and this page blob.
      *
@@ -30669,7 +30657,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Gets the collection of page ranges that differ between a specified snapshot and this page blob for managed disks.
-     * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+     * @see https://learn.microsoft.com/rest/api/storageservices/get-page-ranges
      *
      * @param offset - Starting byte position of the page blob
      * @param count - Number of bytes to get ranges diff.
@@ -30694,7 +30682,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Resizes the page blob to the specified size (which must be a multiple of 512).
-     * @see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties
+     * @see https://learn.microsoft.com/rest/api/storageservices/set-blob-properties
      *
      * @param size - Target size
      * @param options - Options to the Page Blob Resize operation.
@@ -30715,7 +30703,7 @@ class PageBlobClient extends BlobClient {
     }
     /**
      * Sets a page blob's sequence number.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-properties
      *
      * @param sequenceNumberAction - Indicates how the service should modify the blob's sequence number.
      * @param sequenceNumber - Required if sequenceNumberAction is max or update
@@ -30740,8 +30728,8 @@ class PageBlobClient extends BlobClient {
      * The snapshot is copied such that only the differential changes between the previously
      * copied snapshot are transferred to the destination.
      * The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual.
-     * @see https://docs.microsoft.com/rest/api/storageservices/incremental-copy-blob
-     * @see https://docs.microsoft.com/en-us/azure/virtual-machines/windows/incremental-snapshots
+     * @see https://learn.microsoft.com/rest/api/storageservices/incremental-copy-blob
+     * @see https://learn.microsoft.com/en-us/azure/virtual-machines/windows/incremental-snapshots
      *
      * @param copySource - Specifies the name of the source page blob snapshot. For example,
      *                            https://myaccount.blob.core.windows.net/mycontainer/myblob?snapshot=<DateTime>
@@ -30797,7 +30785,7 @@ class BatchResponseParser {
         this.perResponsePrefix = `--${this.responseBatchBoundary}${HTTP_LINE_ENDING}`;
         this.batchResponseEnding = `--${this.responseBatchBoundary}--`;
     }
-    // For example of response, please refer to https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch#response
+    // For example of response, please refer to https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch#response
     async parseBatchResponse() {
         // When logic reach here, suppose batch request has already succeeded with 202, so we can further parse
         // sub request's response.
@@ -31092,7 +31080,7 @@ class BlobBatch {
 }
 /**
  * Inner batch request class which is responsible for assembling and serializing sub requests.
- * See https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch#request-body for how requests are assembled.
+ * See https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch#request-body for how requests are assembled.
  */
 class InnerBatchRequest {
     constructor() {
@@ -31227,7 +31215,7 @@ function batchHeaderFilterPolicy() {
 /**
  * A BlobBatchClient allows you to make batched requests to the Azure Storage Blob service.
  *
- * @see https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch
  */
 class BlobBatchClient {
     constructor(url, credentialOrPipeline, 
@@ -31322,7 +31310,7 @@ class BlobBatchClient {
      * console.log(batchResp.subResponsesSucceededCount);
      * ```
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch
      *
      * @param batchRequest - A set of Delete or SetTier operations.
      * @param options -
@@ -31429,7 +31417,7 @@ class ContainerClient extends StorageClient {
     /**
      * Creates a new container under the specified account. If the container with
      * the same name already exists, the operation fails.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-container
      * Naming rules: @see https://learn.microsoft.com/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
      *
      * @param options - Options to Container Create operation.
@@ -31451,7 +31439,7 @@ class ContainerClient extends StorageClient {
     /**
      * Creates a new container under the specified account. If the container with
      * the same name already exists, it is not changed.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-container
      * Naming rules: @see https://learn.microsoft.com/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
      *
      * @param options -
@@ -31545,7 +31533,7 @@ class ContainerClient extends StorageClient {
     /**
      * Returns all user-defined metadata and system properties for the specified
      * container. The data returned does not include the container's list of blobs.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-container-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-container-properties
      *
      * WARNING: The `metadata` object returned in the response will have its keys in lowercase, even if
      * they originally contained uppercase characters. This differs from the metadata keys returned by
@@ -31565,7 +31553,7 @@ class ContainerClient extends StorageClient {
     /**
      * Marks the specified container for deletion. The container and any blobs
      * contained within it are later deleted during garbage collection.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/delete-container
      *
      * @param options - Options to Container Delete operation.
      */
@@ -31585,7 +31573,7 @@ class ContainerClient extends StorageClient {
     /**
      * Marks the specified container for deletion if it exists. The container and any blobs
      * contained within it are later deleted during garbage collection.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-container
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/delete-container
      *
      * @param options - Options to Container Delete operation.
      */
@@ -31610,7 +31598,7 @@ class ContainerClient extends StorageClient {
      * If no option provided, or no metadata defined in the parameter, the container
      * metadata will be removed.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-container-metadata
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-container-metadata
      *
      * @param metadata - Replace existing metadata with this value.
      *                            If no value provided the existing metadata will be removed.
@@ -31640,7 +31628,7 @@ class ContainerClient extends StorageClient {
      * WARNING: JavaScript Date will potentially lose precision when parsing startsOn and expiresOn strings.
      * For example, new Date("2018-12-31T03:44:23.8827891Z").toISOString() will get "2018-12-31T03:44:23.882Z".
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-container-acl
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-container-acl
      *
      * @param options - Options to Container Get Access Policy operation.
      */
@@ -31698,7 +31686,7 @@ class ContainerClient extends StorageClient {
      * When you establish a stored access policy on a container, it may take up to 30 seconds to take effect.
      * During this interval, a shared access signature that is associated with the stored access policy will
      * fail with status code 403 (Forbidden), until the access policy becomes active.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-container-acl
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-container-acl
      *
      * @param access - The level of public access to data in the container.
      * @param containerAcl - Array of elements each having a unique Id and details of the access policy.
@@ -31753,7 +31741,7 @@ class ContainerClient extends StorageClient {
      * {@link BlockBlobClient.uploadStream} or {@link BlockBlobClient.uploadBrowserData} for better
      * performance with concurrency uploading.
      *
-     * @see https://docs.microsoft.com/rest/api/storageservices/put-blob
+     * @see https://learn.microsoft.com/rest/api/storageservices/put-blob
      *
      * @param blobName - Name of the block blob to create or update.
      * @param body - Blob, string, ArrayBuffer, ArrayBufferView or a function
@@ -31778,7 +31766,7 @@ class ContainerClient extends StorageClient {
      * during garbage collection. Note that in order to delete a blob, you must delete
      * all of its snapshots. You can delete both at the same time with the Delete
      * Blob operation.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/delete-blob
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/delete-blob
      *
      * @param blobName -
      * @param options - Options to Blob Delete operation.
@@ -31798,7 +31786,7 @@ class ContainerClient extends StorageClient {
      * specified Marker. Use an empty Marker to start enumeration from the beginning.
      * After getting a segment, process it, and then call listBlobsFlatSegment again
      * (passing the the previously-returned Marker) to get the next segment.
-     * @see https://docs.microsoft.com/rest/api/storageservices/list-blobs
+     * @see https://learn.microsoft.com/rest/api/storageservices/list-blobs
      *
      * @param marker - A string value that identifies the portion of the list to be returned with the next list operation.
      * @param options - Options to Container List Blob Flat Segment operation.
@@ -31818,7 +31806,7 @@ class ContainerClient extends StorageClient {
      * the specified Marker. Use an empty Marker to start enumeration from the
      * beginning. After getting a segment, process it, and then call listBlobsHierarchicalSegment
      * again (passing the the previously-returned Marker) to get the next segment.
-     * @see https://docs.microsoft.com/rest/api/storageservices/list-blobs
+     * @see https://learn.microsoft.com/rest/api/storageservices/list-blobs
      *
      * @param delimiter - The character or string used to define the virtual hierarchy
      * @param marker - A string value that identifies the portion of the list to be returned with the next list operation.
@@ -32420,7 +32408,7 @@ class ContainerClient extends StorageClient {
      * for the specified account.
      * The Get Account Information operation is available on service versions beginning
      * with version 2018-03-28.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-account-information
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-account-information
      *
      * @param options - Options to the Service Get Account Info operation.
      * @returns Response data for the Service Get Account Info operation.
@@ -32476,7 +32464,7 @@ class ContainerClient extends StorageClient {
      * Generates a Blob Container Service Shared Access Signature (SAS) URI based on the client properties
      * and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @returns The SAS URI consisting of the URI to the resource represented by this client, followed by the generated SAS token.
@@ -32496,7 +32484,7 @@ class ContainerClient extends StorageClient {
      * Generates string to sign for a Blob Container Service Shared Access Signature (SAS) URI
      * based on the client properties and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @returns The SAS URI consisting of the URI to the resource represented by this client, followed by the generated SAS token.
@@ -32512,7 +32500,7 @@ class ContainerClient extends StorageClient {
      * Generates a Blob Container Service Shared Access Signature (SAS) URI based on the client properties
      * and parameters passed in. The SAS is signed by the input user delegation key.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @param userDelegationKey -  Return value of `blobServiceClient.getUserDelegationKey()`
@@ -32528,7 +32516,7 @@ class ContainerClient extends StorageClient {
      * Generates string to sign for a Blob Container Service Shared Access Signature (SAS) URI
      * based on the client properties and parameters passed in. The SAS is signed by the input user delegation key.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
      *
      * @param options - Optional parameters.
      * @param userDelegationKey -  Return value of `blobServiceClient.getUserDelegationKey()`
@@ -32540,7 +32528,7 @@ class ContainerClient extends StorageClient {
     /**
      * Creates a BlobBatchClient object to conduct batch operations.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch
      *
      * @returns A new BlobBatchClient object for this container.
      */
@@ -32725,12 +32713,12 @@ class AccountSASPermissions {
      * Using this method will guarantee the resource types are in
      * an order accepted by the service.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
      *
      */
     toString() {
         // The order of the characters should be as specified here to ensure correctness:
-        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
         // Use a string array instead of string concatenating += operator for performance
         const permissions = [];
         if (this.read) {
@@ -32830,7 +32818,7 @@ class AccountSASResourceTypes {
     /**
      * Converts the given resource types to a string.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
      *
      */
     toString() {
@@ -32936,7 +32924,7 @@ class AccountSASServices {
  * Generates a {@link SASQueryParameters} object which contains all SAS query parameters needed to make an actual
  * REST request.
  *
- * @see https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
  *
  * @param accountSASSignatureValues -
  * @param sharedKeyCredential -
@@ -33101,7 +33089,7 @@ class BlobServiceClient extends StorageClient {
         return new ContainerClient(appendToURLPath(this.url, encodeURIComponent(containerName)), this.pipeline);
     }
     /**
-     * Create a Blob container. @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-container
+     * Create a Blob container. @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-container
      *
      * @param containerName - Name of the container to create.
      * @param options - Options to configure Container Create operation.
@@ -33174,7 +33162,7 @@ class BlobServiceClient extends StorageClient {
     /**
      * Gets the properties of a storage account’s Blob service, including properties
      * for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties
      *
      * @param options - Options to the Service Get Properties operation.
      * @returns Response data for the Service Get Properties operation.
@@ -33190,7 +33178,7 @@ class BlobServiceClient extends StorageClient {
     /**
      * Sets properties for a storage account’s Blob service endpoint, including properties
      * for Storage Analytics, CORS (Cross-Origin Resource Sharing) rules and soft delete settings.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties
      *
      * @param properties -
      * @param options - Options to the Service Set Properties operation.
@@ -33208,7 +33196,7 @@ class BlobServiceClient extends StorageClient {
      * Retrieves statistics related to replication for the Blob service. It is only
      * available on the secondary location endpoint when read-access geo-redundant
      * replication is enabled for the storage account.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats
      *
      * @param options - Options to the Service Get Statistics operation.
      * @returns Response data for the Service Get Statistics operation.
@@ -33226,7 +33214,7 @@ class BlobServiceClient extends StorageClient {
      * for the specified account.
      * The Get Account Information operation is available on service versions beginning
      * with version 2018-03-28.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-account-information
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-account-information
      *
      * @param options - Options to the Service Get Account Info operation.
      * @returns Response data for the Service Get Account Info operation.
@@ -33241,7 +33229,7 @@ class BlobServiceClient extends StorageClient {
     }
     /**
      * Returns a list of the containers under the specified account.
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/list-containers2
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/list-containers2
      *
      * @param marker - A string value that identifies the portion of
      *                        the list of containers to be returned with the next listing operation. The
@@ -33361,7 +33349,7 @@ class BlobServiceClient extends StorageClient {
      *
      * .byPage() returns an async iterable iterator to list the blobs in pages.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties
      *
      * Example using `for await` syntax:
      *
@@ -33629,7 +33617,7 @@ class BlobServiceClient extends StorageClient {
      * Retrieves a user delegation key for the Blob service. This is only a valid operation when using
      * bearer token authentication.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-user-delegation-key
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/get-user-delegation-key
      *
      * @param startsOn -      The start time for the user delegation SAS. Must be within 7 days of the current time
      * @param expiresOn -     The end time for the user delegation SAS. Must be within 7 days of the current time
@@ -33659,7 +33647,7 @@ class BlobServiceClient extends StorageClient {
     /**
      * Creates a BlobBatchClient object to conduct batch operations.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/blob-batch
      *
      * @returns A new BlobBatchClient object for this service.
      */
@@ -33672,7 +33660,7 @@ class BlobServiceClient extends StorageClient {
      * Generates a Blob account Shared Access Signature (SAS) URI based on the client properties
      * and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-account-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-account-sas
      *
      * @param expiresOn - Optional. The time at which the shared access signature becomes invalid. Default to an hour later if not provided.
      * @param permissions - Specifies the list of permissions to be associated with the SAS.
@@ -33699,7 +33687,7 @@ class BlobServiceClient extends StorageClient {
      * Generates string to sign for a Blob account Shared Access Signature (SAS) URI based on
      * the client properties and parameters passed in. The SAS is signed by the shared key credential of the client.
      *
-     * @see https://docs.microsoft.com/en-us/rest/api/storageservices/create-account-sas
+     * @see https://learn.microsoft.com/en-us/rest/api/storageservices/create-account-sas
      *
      * @param expiresOn - Optional. The time at which the shared access signature becomes invalid. Default to an hour later if not provided.
      * @param permissions - Specifies the list of permissions to be associated with the SAS.
@@ -33881,11 +33869,11 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
+var index_exports = {};
+__export(index_exports, {
   Octokit: () => Octokit
 });
-module.exports = __toCommonJS(dist_src_exports);
+module.exports = __toCommonJS(index_exports);
 var import_universal_user_agent = __nccwpck_require__(3843);
 var import_before_after_hook = __nccwpck_require__(2732);
 var import_request = __nccwpck_require__(1493);
@@ -33893,7 +33881,7 @@ var import_graphql = __nccwpck_require__(7);
 var import_auth_token = __nccwpck_require__(7864);
 
 // pkg/dist-src/version.js
-var VERSION = "5.2.0";
+var VERSION = "5.2.1";
 
 // pkg/dist-src/index.js
 var noop = () => {
@@ -34060,7 +34048,7 @@ module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(3843);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.5";
+var VERSION = "9.0.6";
 
 // pkg/dist-src/defaults.js
 var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
@@ -34165,9 +34153,9 @@ function addQueryParameters(url, parameters) {
 }
 
 // pkg/dist-src/util/extract-url-variable-names.js
-var urlVariableRegex = /\{[^}]+\}/g;
+var urlVariableRegex = /\{[^{}}]+\}/g;
 function removeNonChars(variableName) {
-  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+  return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
 function extractUrlVariableNames(url) {
   const matches = url.match(urlVariableRegex);
@@ -34353,7 +34341,7 @@ function parse(options) {
     }
     if (url.endsWith("/graphql")) {
       if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+        const previewsFromAcceptHeader = headers.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
         headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
           const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
           return `application/vnd.github.${preview}-preview${format}`;
@@ -34434,18 +34422,18 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
+var index_exports = {};
+__export(index_exports, {
   GraphqlResponseError: () => GraphqlResponseError,
   graphql: () => graphql2,
   withCustomRequest: () => withCustomRequest
 });
-module.exports = __toCommonJS(dist_src_exports);
+module.exports = __toCommonJS(index_exports);
 var import_request3 = __nccwpck_require__(1493);
 var import_universal_user_agent = __nccwpck_require__(3843);
 
 // pkg/dist-src/version.js
-var VERSION = "7.1.0";
+var VERSION = "7.1.1";
 
 // pkg/dist-src/with-defaults.js
 var import_request2 = __nccwpck_require__(1493);
@@ -34493,8 +34481,7 @@ function graphql(request2, query, options) {
       );
     }
     for (const key in options) {
-      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key))
-        continue;
+      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
       return Promise.reject(
         new Error(
           `[@octokit/graphql] "${key}" cannot be used as variable name`
@@ -34602,7 +34589,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "9.2.1";
+var VERSION = "9.2.2";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
@@ -34650,7 +34637,7 @@ function iterator(octokit, route, parameters) {
           const response = await requestMethod({ method, url, headers });
           const normalizedResponse = normalizePaginatedListResponse(response);
           url = ((normalizedResponse.headers.link || "").match(
-            /<([^>]+)>;\s*rel="next"/
+            /<([^<>]+)>;\s*rel="next"/
           ) || [])[1];
           return { value: normalizedResponse };
         } catch (error) {
@@ -37202,7 +37189,7 @@ var RequestError = class extends Error {
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
         authorization: options.request.headers.authorization.replace(
-          / .*$/,
+          /(?<! ) .*$/,
           " [REDACTED]"
         )
       });
@@ -37270,7 +37257,7 @@ var import_endpoint = __nccwpck_require__(4471);
 var import_universal_user_agent = __nccwpck_require__(3843);
 
 // pkg/dist-src/version.js
-var VERSION = "8.4.0";
+var VERSION = "8.4.1";
 
 // pkg/dist-src/is-plain-object.js
 function isPlainObject(value) {
@@ -37329,7 +37316,7 @@ function fetchWrapper(requestOptions) {
       headers[keyAndValue[0]] = keyAndValue[1];
     }
     if ("deprecation" in headers) {
-      const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+      const matches = headers.link && headers.link.match(/<([^<>]+)>; rel="deprecation"/);
       const deprecationLink = matches && matches.pop();
       log.warn(
         `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
@@ -44037,2042 +44024,6 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
-/***/ 9741:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const validator = __nccwpck_require__(9433);
-const XMLParser = __nccwpck_require__(9844);
-const XMLBuilder = __nccwpck_require__(659);
-
-module.exports = {
-  XMLParser: XMLParser,
-  XMLValidator: validator,
-  XMLBuilder: XMLBuilder
-}
-
-/***/ }),
-
-/***/ 812:
-/***/ ((module) => {
-
-function getIgnoreAttributesFn(ignoreAttributes) {
-    if (typeof ignoreAttributes === 'function') {
-        return ignoreAttributes
-    }
-    if (Array.isArray(ignoreAttributes)) {
-        return (attrName) => {
-            for (const pattern of ignoreAttributes) {
-                if (typeof pattern === 'string' && attrName === pattern) {
-                    return true
-                }
-                if (pattern instanceof RegExp && pattern.test(attrName)) {
-                    return true
-                }
-            }
-        }
-    }
-    return () => false
-}
-
-module.exports = getIgnoreAttributesFn
-
-/***/ }),
-
-/***/ 7019:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-const nameStartChar = ':A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD';
-const nameChar = nameStartChar + '\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040';
-const nameRegexp = '[' + nameStartChar + '][' + nameChar + ']*'
-const regexName = new RegExp('^' + nameRegexp + '$');
-
-const getAllMatches = function(string, regex) {
-  const matches = [];
-  let match = regex.exec(string);
-  while (match) {
-    const allmatches = [];
-    allmatches.startIndex = regex.lastIndex - match[0].length;
-    const len = match.length;
-    for (let index = 0; index < len; index++) {
-      allmatches.push(match[index]);
-    }
-    matches.push(allmatches);
-    match = regex.exec(string);
-  }
-  return matches;
-};
-
-const isName = function(string) {
-  const match = regexName.exec(string);
-  return !(match === null || typeof match === 'undefined');
-};
-
-exports.isExist = function(v) {
-  return typeof v !== 'undefined';
-};
-
-exports.isEmptyObject = function(obj) {
-  return Object.keys(obj).length === 0;
-};
-
-/**
- * Copy all the properties of a into b.
- * @param {*} target
- * @param {*} a
- */
-exports.merge = function(target, a, arrayMode) {
-  if (a) {
-    const keys = Object.keys(a); // will return an array of own properties
-    const len = keys.length; //don't make it inline
-    for (let i = 0; i < len; i++) {
-      if (arrayMode === 'strict') {
-        target[keys[i]] = [ a[keys[i]] ];
-      } else {
-        target[keys[i]] = a[keys[i]];
-      }
-    }
-  }
-};
-/* exports.merge =function (b,a){
-  return Object.assign(b,a);
-} */
-
-exports.getValue = function(v) {
-  if (exports.isExist(v)) {
-    return v;
-  } else {
-    return '';
-  }
-};
-
-// const fakeCall = function(a) {return a;};
-// const fakeCallNoReturn = function() {};
-
-exports.isName = isName;
-exports.getAllMatches = getAllMatches;
-exports.nameRegexp = nameRegexp;
-
-
-/***/ }),
-
-/***/ 9433:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const util = __nccwpck_require__(7019);
-
-const defaultOptions = {
-  allowBooleanAttributes: false, //A tag can have attributes without any value
-  unpairedTags: []
-};
-
-//const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
-exports.validate = function (xmlData, options) {
-  options = Object.assign({}, defaultOptions, options);
-
-  //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
-  //xmlData = xmlData.replace(/(^\s*<\?xml.*?\?>)/g,"");//Remove XML starting tag
-  //xmlData = xmlData.replace(/(<!DOCTYPE[\s\w\"\.\/\-\:]+(\[.*\])*\s*>)/g,"");//Remove DOCTYPE
-  const tags = [];
-  let tagFound = false;
-
-  //indicates that the root tag has been closed (aka. depth 0 has been reached)
-  let reachedRoot = false;
-
-  if (xmlData[0] === '\ufeff') {
-    // check for byte order mark (BOM)
-    xmlData = xmlData.substr(1);
-  }
-  
-  for (let i = 0; i < xmlData.length; i++) {
-
-    if (xmlData[i] === '<' && xmlData[i+1] === '?') {
-      i+=2;
-      i = readPI(xmlData,i);
-      if (i.err) return i;
-    }else if (xmlData[i] === '<') {
-      //starting of tag
-      //read until you reach to '>' avoiding any '>' in attribute value
-      let tagStartPos = i;
-      i++;
-      
-      if (xmlData[i] === '!') {
-        i = readCommentAndCDATA(xmlData, i);
-        continue;
-      } else {
-        let closingTag = false;
-        if (xmlData[i] === '/') {
-          //closing tag
-          closingTag = true;
-          i++;
-        }
-        //read tagname
-        let tagName = '';
-        for (; i < xmlData.length &&
-          xmlData[i] !== '>' &&
-          xmlData[i] !== ' ' &&
-          xmlData[i] !== '\t' &&
-          xmlData[i] !== '\n' &&
-          xmlData[i] !== '\r'; i++
-        ) {
-          tagName += xmlData[i];
-        }
-        tagName = tagName.trim();
-        //console.log(tagName);
-
-        if (tagName[tagName.length - 1] === '/') {
-          //self closing tag without attributes
-          tagName = tagName.substring(0, tagName.length - 1);
-          //continue;
-          i--;
-        }
-        if (!validateTagName(tagName)) {
-          let msg;
-          if (tagName.trim().length === 0) {
-            msg = "Invalid space after '<'.";
-          } else {
-            msg = "Tag '"+tagName+"' is an invalid name.";
-          }
-          return getErrorObject('InvalidTag', msg, getLineNumberForPosition(xmlData, i));
-        }
-
-        const result = readAttributeStr(xmlData, i);
-        if (result === false) {
-          return getErrorObject('InvalidAttr', "Attributes for '"+tagName+"' have open quote.", getLineNumberForPosition(xmlData, i));
-        }
-        let attrStr = result.value;
-        i = result.index;
-
-        if (attrStr[attrStr.length - 1] === '/') {
-          //self closing tag
-          const attrStrStart = i - attrStr.length;
-          attrStr = attrStr.substring(0, attrStr.length - 1);
-          const isValid = validateAttributeString(attrStr, options);
-          if (isValid === true) {
-            tagFound = true;
-            //continue; //text may presents after self closing tag
-          } else {
-            //the result from the nested function returns the position of the error within the attribute
-            //in order to get the 'true' error line, we need to calculate the position where the attribute begins (i - attrStr.length) and then add the position within the attribute
-            //this gives us the absolute index in the entire xml, which we can use to find the line at last
-            return getErrorObject(isValid.err.code, isValid.err.msg, getLineNumberForPosition(xmlData, attrStrStart + isValid.err.line));
-          }
-        } else if (closingTag) {
-          if (!result.tagClosed) {
-            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' doesn't have proper closing.", getLineNumberForPosition(xmlData, i));
-          } else if (attrStr.trim().length > 0) {
-            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' can't have attributes or invalid starting.", getLineNumberForPosition(xmlData, tagStartPos));
-          } else if (tags.length === 0) {
-            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' has not been opened.", getLineNumberForPosition(xmlData, tagStartPos));
-          } else {
-            const otg = tags.pop();
-            if (tagName !== otg.tagName) {
-              let openPos = getLineNumberForPosition(xmlData, otg.tagStartPos);
-              return getErrorObject('InvalidTag',
-                "Expected closing tag '"+otg.tagName+"' (opened in line "+openPos.line+", col "+openPos.col+") instead of closing tag '"+tagName+"'.",
-                getLineNumberForPosition(xmlData, tagStartPos));
-            }
-
-            //when there are no more tags, we reached the root level.
-            if (tags.length == 0) {
-              reachedRoot = true;
-            }
-          }
-        } else {
-          const isValid = validateAttributeString(attrStr, options);
-          if (isValid !== true) {
-            //the result from the nested function returns the position of the error within the attribute
-            //in order to get the 'true' error line, we need to calculate the position where the attribute begins (i - attrStr.length) and then add the position within the attribute
-            //this gives us the absolute index in the entire xml, which we can use to find the line at last
-            return getErrorObject(isValid.err.code, isValid.err.msg, getLineNumberForPosition(xmlData, i - attrStr.length + isValid.err.line));
-          }
-
-          //if the root level has been reached before ...
-          if (reachedRoot === true) {
-            return getErrorObject('InvalidXml', 'Multiple possible root nodes found.', getLineNumberForPosition(xmlData, i));
-          } else if(options.unpairedTags.indexOf(tagName) !== -1){
-            //don't push into stack
-          } else {
-            tags.push({tagName, tagStartPos});
-          }
-          tagFound = true;
-        }
-
-        //skip tag text value
-        //It may include comments and CDATA value
-        for (i++; i < xmlData.length; i++) {
-          if (xmlData[i] === '<') {
-            if (xmlData[i + 1] === '!') {
-              //comment or CADATA
-              i++;
-              i = readCommentAndCDATA(xmlData, i);
-              continue;
-            } else if (xmlData[i+1] === '?') {
-              i = readPI(xmlData, ++i);
-              if (i.err) return i;
-            } else{
-              break;
-            }
-          } else if (xmlData[i] === '&') {
-            const afterAmp = validateAmpersand(xmlData, i);
-            if (afterAmp == -1)
-              return getErrorObject('InvalidChar', "char '&' is not expected.", getLineNumberForPosition(xmlData, i));
-            i = afterAmp;
-          }else{
-            if (reachedRoot === true && !isWhiteSpace(xmlData[i])) {
-              return getErrorObject('InvalidXml', "Extra text at the end", getLineNumberForPosition(xmlData, i));
-            }
-          }
-        } //end of reading tag text value
-        if (xmlData[i] === '<') {
-          i--;
-        }
-      }
-    } else {
-      if ( isWhiteSpace(xmlData[i])) {
-        continue;
-      }
-      return getErrorObject('InvalidChar', "char '"+xmlData[i]+"' is not expected.", getLineNumberForPosition(xmlData, i));
-    }
-  }
-
-  if (!tagFound) {
-    return getErrorObject('InvalidXml', 'Start tag expected.', 1);
-  }else if (tags.length == 1) {
-      return getErrorObject('InvalidTag', "Unclosed tag '"+tags[0].tagName+"'.", getLineNumberForPosition(xmlData, tags[0].tagStartPos));
-  }else if (tags.length > 0) {
-      return getErrorObject('InvalidXml', "Invalid '"+
-          JSON.stringify(tags.map(t => t.tagName), null, 4).replace(/\r?\n/g, '')+
-          "' found.", {line: 1, col: 1});
-  }
-
-  return true;
-};
-
-function isWhiteSpace(char){
-  return char === ' ' || char === '\t' || char === '\n'  || char === '\r';
-}
-/**
- * Read Processing insstructions and skip
- * @param {*} xmlData
- * @param {*} i
- */
-function readPI(xmlData, i) {
-  const start = i;
-  for (; i < xmlData.length; i++) {
-    if (xmlData[i] == '?' || xmlData[i] == ' ') {
-      //tagname
-      const tagname = xmlData.substr(start, i - start);
-      if (i > 5 && tagname === 'xml') {
-        return getErrorObject('InvalidXml', 'XML declaration allowed only at the start of the document.', getLineNumberForPosition(xmlData, i));
-      } else if (xmlData[i] == '?' && xmlData[i + 1] == '>') {
-        //check if valid attribut string
-        i++;
-        break;
-      } else {
-        continue;
-      }
-    }
-  }
-  return i;
-}
-
-function readCommentAndCDATA(xmlData, i) {
-  if (xmlData.length > i + 5 && xmlData[i + 1] === '-' && xmlData[i + 2] === '-') {
-    //comment
-    for (i += 3; i < xmlData.length; i++) {
-      if (xmlData[i] === '-' && xmlData[i + 1] === '-' && xmlData[i + 2] === '>') {
-        i += 2;
-        break;
-      }
-    }
-  } else if (
-    xmlData.length > i + 8 &&
-    xmlData[i + 1] === 'D' &&
-    xmlData[i + 2] === 'O' &&
-    xmlData[i + 3] === 'C' &&
-    xmlData[i + 4] === 'T' &&
-    xmlData[i + 5] === 'Y' &&
-    xmlData[i + 6] === 'P' &&
-    xmlData[i + 7] === 'E'
-  ) {
-    let angleBracketsCount = 1;
-    for (i += 8; i < xmlData.length; i++) {
-      if (xmlData[i] === '<') {
-        angleBracketsCount++;
-      } else if (xmlData[i] === '>') {
-        angleBracketsCount--;
-        if (angleBracketsCount === 0) {
-          break;
-        }
-      }
-    }
-  } else if (
-    xmlData.length > i + 9 &&
-    xmlData[i + 1] === '[' &&
-    xmlData[i + 2] === 'C' &&
-    xmlData[i + 3] === 'D' &&
-    xmlData[i + 4] === 'A' &&
-    xmlData[i + 5] === 'T' &&
-    xmlData[i + 6] === 'A' &&
-    xmlData[i + 7] === '['
-  ) {
-    for (i += 8; i < xmlData.length; i++) {
-      if (xmlData[i] === ']' && xmlData[i + 1] === ']' && xmlData[i + 2] === '>') {
-        i += 2;
-        break;
-      }
-    }
-  }
-
-  return i;
-}
-
-const doubleQuote = '"';
-const singleQuote = "'";
-
-/**
- * Keep reading xmlData until '<' is found outside the attribute value.
- * @param {string} xmlData
- * @param {number} i
- */
-function readAttributeStr(xmlData, i) {
-  let attrStr = '';
-  let startChar = '';
-  let tagClosed = false;
-  for (; i < xmlData.length; i++) {
-    if (xmlData[i] === doubleQuote || xmlData[i] === singleQuote) {
-      if (startChar === '') {
-        startChar = xmlData[i];
-      } else if (startChar !== xmlData[i]) {
-        //if vaue is enclosed with double quote then single quotes are allowed inside the value and vice versa
-      } else {
-        startChar = '';
-      }
-    } else if (xmlData[i] === '>') {
-      if (startChar === '') {
-        tagClosed = true;
-        break;
-      }
-    }
-    attrStr += xmlData[i];
-  }
-  if (startChar !== '') {
-    return false;
-  }
-
-  return {
-    value: attrStr,
-    index: i,
-    tagClosed: tagClosed
-  };
-}
-
-/**
- * Select all the attributes whether valid or invalid.
- */
-const validAttrStrRegxp = new RegExp('(\\s*)([^\\s=]+)(\\s*=)?(\\s*([\'"])(([\\s\\S])*?)\\5)?', 'g');
-
-//attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
-
-function validateAttributeString(attrStr, options) {
-  //console.log("start:"+attrStr+":end");
-
-  //if(attrStr.trim().length === 0) return true; //empty string
-
-  const matches = util.getAllMatches(attrStr, validAttrStrRegxp);
-  const attrNames = {};
-
-  for (let i = 0; i < matches.length; i++) {
-    if (matches[i][1].length === 0) {
-      //nospace before attribute name: a="sd"b="saf"
-      return getErrorObject('InvalidAttr', "Attribute '"+matches[i][2]+"' has no space in starting.", getPositionFromMatch(matches[i]))
-    } else if (matches[i][3] !== undefined && matches[i][4] === undefined) {
-      return getErrorObject('InvalidAttr', "Attribute '"+matches[i][2]+"' is without value.", getPositionFromMatch(matches[i]));
-    } else if (matches[i][3] === undefined && !options.allowBooleanAttributes) {
-      //independent attribute: ab
-      return getErrorObject('InvalidAttr', "boolean attribute '"+matches[i][2]+"' is not allowed.", getPositionFromMatch(matches[i]));
-    }
-    /* else if(matches[i][6] === undefined){//attribute without value: ab=
-                    return { err: { code:"InvalidAttr",msg:"attribute " + matches[i][2] + " has no value assigned."}};
-                } */
-    const attrName = matches[i][2];
-    if (!validateAttrName(attrName)) {
-      return getErrorObject('InvalidAttr', "Attribute '"+attrName+"' is an invalid name.", getPositionFromMatch(matches[i]));
-    }
-    if (!attrNames.hasOwnProperty(attrName)) {
-      //check for duplicate attribute.
-      attrNames[attrName] = 1;
-    } else {
-      return getErrorObject('InvalidAttr', "Attribute '"+attrName+"' is repeated.", getPositionFromMatch(matches[i]));
-    }
-  }
-
-  return true;
-}
-
-function validateNumberAmpersand(xmlData, i) {
-  let re = /\d/;
-  if (xmlData[i] === 'x') {
-    i++;
-    re = /[\da-fA-F]/;
-  }
-  for (; i < xmlData.length; i++) {
-    if (xmlData[i] === ';')
-      return i;
-    if (!xmlData[i].match(re))
-      break;
-  }
-  return -1;
-}
-
-function validateAmpersand(xmlData, i) {
-  // https://www.w3.org/TR/xml/#dt-charref
-  i++;
-  if (xmlData[i] === ';')
-    return -1;
-  if (xmlData[i] === '#') {
-    i++;
-    return validateNumberAmpersand(xmlData, i);
-  }
-  let count = 0;
-  for (; i < xmlData.length; i++, count++) {
-    if (xmlData[i].match(/\w/) && count < 20)
-      continue;
-    if (xmlData[i] === ';')
-      break;
-    return -1;
-  }
-  return i;
-}
-
-function getErrorObject(code, message, lineNumber) {
-  return {
-    err: {
-      code: code,
-      msg: message,
-      line: lineNumber.line || lineNumber,
-      col: lineNumber.col,
-    },
-  };
-}
-
-function validateAttrName(attrName) {
-  return util.isName(attrName);
-}
-
-// const startsWithXML = /^xml/i;
-
-function validateTagName(tagname) {
-  return util.isName(tagname) /* && !tagname.match(startsWithXML) */;
-}
-
-//this function returns the line number for the character at the given index
-function getLineNumberForPosition(xmlData, index) {
-  const lines = xmlData.substring(0, index).split(/\r?\n/);
-  return {
-    line: lines.length,
-
-    // column number is last line's length + 1, because column numbering starts at 1:
-    col: lines[lines.length - 1].length + 1
-  };
-}
-
-//this function returns the position of the first character of match within attrStr
-function getPositionFromMatch(match) {
-  return match.startIndex + match[1].length;
-}
-
-
-/***/ }),
-
-/***/ 659:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-//parse Empty Node as self closing node
-const buildFromOrderedJs = __nccwpck_require__(3997);
-const getIgnoreAttributesFn = __nccwpck_require__(812)
-
-const defaultOptions = {
-  attributeNamePrefix: '@_',
-  attributesGroupName: false,
-  textNodeName: '#text',
-  ignoreAttributes: true,
-  cdataPropName: false,
-  format: false,
-  indentBy: '  ',
-  suppressEmptyNode: false,
-  suppressUnpairedNode: true,
-  suppressBooleanAttributes: true,
-  tagValueProcessor: function(key, a) {
-    return a;
-  },
-  attributeValueProcessor: function(attrName, a) {
-    return a;
-  },
-  preserveOrder: false,
-  commentPropName: false,
-  unpairedTags: [],
-  entities: [
-    { regex: new RegExp("&", "g"), val: "&amp;" },//it must be on top
-    { regex: new RegExp(">", "g"), val: "&gt;" },
-    { regex: new RegExp("<", "g"), val: "&lt;" },
-    { regex: new RegExp("\'", "g"), val: "&apos;" },
-    { regex: new RegExp("\"", "g"), val: "&quot;" }
-  ],
-  processEntities: true,
-  stopNodes: [],
-  // transformTagName: false,
-  // transformAttributeName: false,
-  oneListGroup: false
-};
-
-function Builder(options) {
-  this.options = Object.assign({}, defaultOptions, options);
-  if (this.options.ignoreAttributes === true || this.options.attributesGroupName) {
-    this.isAttribute = function(/*a*/) {
-      return false;
-    };
-  } else {
-    this.ignoreAttributesFn = getIgnoreAttributesFn(this.options.ignoreAttributes)
-    this.attrPrefixLen = this.options.attributeNamePrefix.length;
-    this.isAttribute = isAttribute;
-  }
-
-  this.processTextOrObjNode = processTextOrObjNode
-
-  if (this.options.format) {
-    this.indentate = indentate;
-    this.tagEndChar = '>\n';
-    this.newLine = '\n';
-  } else {
-    this.indentate = function() {
-      return '';
-    };
-    this.tagEndChar = '>';
-    this.newLine = '';
-  }
-}
-
-Builder.prototype.build = function(jObj) {
-  if(this.options.preserveOrder){
-    return buildFromOrderedJs(jObj, this.options);
-  }else {
-    if(Array.isArray(jObj) && this.options.arrayNodeName && this.options.arrayNodeName.length > 1){
-      jObj = {
-        [this.options.arrayNodeName] : jObj
-      }
-    }
-    return this.j2x(jObj, 0, []).val;
-  }
-};
-
-Builder.prototype.j2x = function(jObj, level, ajPath) {
-  let attrStr = '';
-  let val = '';
-  const jPath = ajPath.join('.')
-  for (let key in jObj) {
-    if(!Object.prototype.hasOwnProperty.call(jObj, key)) continue;
-    if (typeof jObj[key] === 'undefined') {
-      // supress undefined node only if it is not an attribute
-      if (this.isAttribute(key)) {
-        val += '';
-      }
-    } else if (jObj[key] === null) {
-      // null attribute should be ignored by the attribute list, but should not cause the tag closing
-      if (this.isAttribute(key)) {
-        val += '';
-      } else if (key[0] === '?') {
-        val += this.indentate(level) + '<' + key + '?' + this.tagEndChar;
-      } else {
-        val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-      }
-      // val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-    } else if (jObj[key] instanceof Date) {
-      val += this.buildTextValNode(jObj[key], key, '', level);
-    } else if (typeof jObj[key] !== 'object') {
-      //premitive type
-      const attr = this.isAttribute(key);
-      if (attr && !this.ignoreAttributesFn(attr, jPath)) {
-        attrStr += this.buildAttrPairStr(attr, '' + jObj[key]);
-      } else if (!attr) {
-        //tag value
-        if (key === this.options.textNodeName) {
-          let newval = this.options.tagValueProcessor(key, '' + jObj[key]);
-          val += this.replaceEntitiesValue(newval);
-        } else {
-          val += this.buildTextValNode(jObj[key], key, '', level);
-        }
-      }
-    } else if (Array.isArray(jObj[key])) {
-      //repeated nodes
-      const arrLen = jObj[key].length;
-      let listTagVal = "";
-      let listTagAttr = "";
-      for (let j = 0; j < arrLen; j++) {
-        const item = jObj[key][j];
-        if (typeof item === 'undefined') {
-          // supress undefined node
-        } else if (item === null) {
-          if(key[0] === "?") val += this.indentate(level) + '<' + key + '?' + this.tagEndChar;
-          else val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-          // val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-        } else if (typeof item === 'object') {
-          if(this.options.oneListGroup){
-            const result = this.j2x(item, level + 1, ajPath.concat(key));
-            listTagVal += result.val;
-            if (this.options.attributesGroupName && item.hasOwnProperty(this.options.attributesGroupName)) {
-              listTagAttr += result.attrStr
-            }
-          }else{
-            listTagVal += this.processTextOrObjNode(item, key, level, ajPath)
-          }
-        } else {
-          if (this.options.oneListGroup) {
-            let textValue = this.options.tagValueProcessor(key, item);
-            textValue = this.replaceEntitiesValue(textValue);
-            listTagVal += textValue;
-          } else {
-            listTagVal += this.buildTextValNode(item, key, '', level);
-          }
-        }
-      }
-      if(this.options.oneListGroup){
-        listTagVal = this.buildObjectNode(listTagVal, key, listTagAttr, level);
-      }
-      val += listTagVal;
-    } else {
-      //nested node
-      if (this.options.attributesGroupName && key === this.options.attributesGroupName) {
-        const Ks = Object.keys(jObj[key]);
-        const L = Ks.length;
-        for (let j = 0; j < L; j++) {
-          attrStr += this.buildAttrPairStr(Ks[j], '' + jObj[key][Ks[j]]);
-        }
-      } else {
-        val += this.processTextOrObjNode(jObj[key], key, level, ajPath)
-      }
-    }
-  }
-  return {attrStr: attrStr, val: val};
-};
-
-Builder.prototype.buildAttrPairStr = function(attrName, val){
-  val = this.options.attributeValueProcessor(attrName, '' + val);
-  val = this.replaceEntitiesValue(val);
-  if (this.options.suppressBooleanAttributes && val === "true") {
-    return ' ' + attrName;
-  } else return ' ' + attrName + '="' + val + '"';
-}
-
-function processTextOrObjNode (object, key, level, ajPath) {
-  const result = this.j2x(object, level + 1, ajPath.concat(key));
-  if (object[this.options.textNodeName] !== undefined && Object.keys(object).length === 1) {
-    return this.buildTextValNode(object[this.options.textNodeName], key, result.attrStr, level);
-  } else {
-    return this.buildObjectNode(result.val, key, result.attrStr, level);
-  }
-}
-
-Builder.prototype.buildObjectNode = function(val, key, attrStr, level) {
-  if(val === ""){
-    if(key[0] === "?") return  this.indentate(level) + '<' + key + attrStr+ '?' + this.tagEndChar;
-    else {
-      return this.indentate(level) + '<' + key + attrStr + this.closeTag(key) + this.tagEndChar;
-    }
-  }else{
-
-    let tagEndExp = '</' + key + this.tagEndChar;
-    let piClosingChar = "";
-    
-    if(key[0] === "?") {
-      piClosingChar = "?";
-      tagEndExp = "";
-    }
-  
-    // attrStr is an empty string in case the attribute came as undefined or null
-    if ((attrStr || attrStr === '') && val.indexOf('<') === -1) {
-      return ( this.indentate(level) + '<' +  key + attrStr + piClosingChar + '>' + val + tagEndExp );
-    } else if (this.options.commentPropName !== false && key === this.options.commentPropName && piClosingChar.length === 0) {
-      return this.indentate(level) + `<!--${val}-->` + this.newLine;
-    }else {
-      return (
-        this.indentate(level) + '<' + key + attrStr + piClosingChar + this.tagEndChar +
-        val +
-        this.indentate(level) + tagEndExp    );
-    }
-  }
-}
-
-Builder.prototype.closeTag = function(key){
-  let closeTag = "";
-  if(this.options.unpairedTags.indexOf(key) !== -1){ //unpaired
-    if(!this.options.suppressUnpairedNode) closeTag = "/"
-  }else if(this.options.suppressEmptyNode){ //empty
-    closeTag = "/";
-  }else{
-    closeTag = `></${key}`
-  }
-  return closeTag;
-}
-
-function buildEmptyObjNode(val, key, attrStr, level) {
-  if (val !== '') {
-    return this.buildObjectNode(val, key, attrStr, level);
-  } else {
-    if(key[0] === "?") return  this.indentate(level) + '<' + key + attrStr+ '?' + this.tagEndChar;
-    else {
-      return  this.indentate(level) + '<' + key + attrStr + '/' + this.tagEndChar;
-      // return this.buildTagStr(level,key, attrStr);
-    }
-  }
-}
-
-Builder.prototype.buildTextValNode = function(val, key, attrStr, level) {
-  if (this.options.cdataPropName !== false && key === this.options.cdataPropName) {
-    return this.indentate(level) + `<![CDATA[${val}]]>` +  this.newLine;
-  }else if (this.options.commentPropName !== false && key === this.options.commentPropName) {
-    return this.indentate(level) + `<!--${val}-->` +  this.newLine;
-  }else if(key[0] === "?") {//PI tag
-    return  this.indentate(level) + '<' + key + attrStr+ '?' + this.tagEndChar; 
-  }else{
-    let textValue = this.options.tagValueProcessor(key, val);
-    textValue = this.replaceEntitiesValue(textValue);
-  
-    if( textValue === ''){
-      return this.indentate(level) + '<' + key + attrStr + this.closeTag(key) + this.tagEndChar;
-    }else{
-      return this.indentate(level) + '<' + key + attrStr + '>' +
-         textValue +
-        '</' + key + this.tagEndChar;
-    }
-  }
-}
-
-Builder.prototype.replaceEntitiesValue = function(textValue){
-  if(textValue && textValue.length > 0 && this.options.processEntities){
-    for (let i=0; i<this.options.entities.length; i++) {
-      const entity = this.options.entities[i];
-      textValue = textValue.replace(entity.regex, entity.val);
-    }
-  }
-  return textValue;
-}
-
-function indentate(level) {
-  return this.options.indentBy.repeat(level);
-}
-
-function isAttribute(name /*, options*/) {
-  if (name.startsWith(this.options.attributeNamePrefix) && name !== this.options.textNodeName) {
-    return name.substr(this.attrPrefixLen);
-  } else {
-    return false;
-  }
-}
-
-module.exports = Builder;
-
-
-/***/ }),
-
-/***/ 3997:
-/***/ ((module) => {
-
-const EOL = "\n";
-
-/**
- * 
- * @param {array} jArray 
- * @param {any} options 
- * @returns 
- */
-function toXml(jArray, options) {
-    let indentation = "";
-    if (options.format && options.indentBy.length > 0) {
-        indentation = EOL;
-    }
-    return arrToStr(jArray, options, "", indentation);
-}
-
-function arrToStr(arr, options, jPath, indentation) {
-    let xmlStr = "";
-    let isPreviousElementTag = false;
-
-    for (let i = 0; i < arr.length; i++) {
-        const tagObj = arr[i];
-        const tagName = propName(tagObj);
-        if(tagName === undefined) continue;
-
-        let newJPath = "";
-        if (jPath.length === 0) newJPath = tagName
-        else newJPath = `${jPath}.${tagName}`;
-
-        if (tagName === options.textNodeName) {
-            let tagText = tagObj[tagName];
-            if (!isStopNode(newJPath, options)) {
-                tagText = options.tagValueProcessor(tagName, tagText);
-                tagText = replaceEntitiesValue(tagText, options);
-            }
-            if (isPreviousElementTag) {
-                xmlStr += indentation;
-            }
-            xmlStr += tagText;
-            isPreviousElementTag = false;
-            continue;
-        } else if (tagName === options.cdataPropName) {
-            if (isPreviousElementTag) {
-                xmlStr += indentation;
-            }
-            xmlStr += `<![CDATA[${tagObj[tagName][0][options.textNodeName]}]]>`;
-            isPreviousElementTag = false;
-            continue;
-        } else if (tagName === options.commentPropName) {
-            xmlStr += indentation + `<!--${tagObj[tagName][0][options.textNodeName]}-->`;
-            isPreviousElementTag = true;
-            continue;
-        } else if (tagName[0] === "?") {
-            const attStr = attr_to_str(tagObj[":@"], options);
-            const tempInd = tagName === "?xml" ? "" : indentation;
-            let piTextNodeName = tagObj[tagName][0][options.textNodeName];
-            piTextNodeName = piTextNodeName.length !== 0 ? " " + piTextNodeName : ""; //remove extra spacing
-            xmlStr += tempInd + `<${tagName}${piTextNodeName}${attStr}?>`;
-            isPreviousElementTag = true;
-            continue;
-        }
-        let newIdentation = indentation;
-        if (newIdentation !== "") {
-            newIdentation += options.indentBy;
-        }
-        const attStr = attr_to_str(tagObj[":@"], options);
-        const tagStart = indentation + `<${tagName}${attStr}`;
-        const tagValue = arrToStr(tagObj[tagName], options, newJPath, newIdentation);
-        if (options.unpairedTags.indexOf(tagName) !== -1) {
-            if (options.suppressUnpairedNode) xmlStr += tagStart + ">";
-            else xmlStr += tagStart + "/>";
-        } else if ((!tagValue || tagValue.length === 0) && options.suppressEmptyNode) {
-            xmlStr += tagStart + "/>";
-        } else if (tagValue && tagValue.endsWith(">")) {
-            xmlStr += tagStart + `>${tagValue}${indentation}</${tagName}>`;
-        } else {
-            xmlStr += tagStart + ">";
-            if (tagValue && indentation !== "" && (tagValue.includes("/>") || tagValue.includes("</"))) {
-                xmlStr += indentation + options.indentBy + tagValue + indentation;
-            } else {
-                xmlStr += tagValue;
-            }
-            xmlStr += `</${tagName}>`;
-        }
-        isPreviousElementTag = true;
-    }
-
-    return xmlStr;
-}
-
-function propName(obj) {
-    const keys = Object.keys(obj);
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        if(!obj.hasOwnProperty(key)) continue;
-        if (key !== ":@") return key;
-    }
-}
-
-function attr_to_str(attrMap, options) {
-    let attrStr = "";
-    if (attrMap && !options.ignoreAttributes) {
-        for (let attr in attrMap) {
-            if(!attrMap.hasOwnProperty(attr)) continue;
-            let attrVal = options.attributeValueProcessor(attr, attrMap[attr]);
-            attrVal = replaceEntitiesValue(attrVal, options);
-            if (attrVal === true && options.suppressBooleanAttributes) {
-                attrStr += ` ${attr.substr(options.attributeNamePrefix.length)}`;
-            } else {
-                attrStr += ` ${attr.substr(options.attributeNamePrefix.length)}="${attrVal}"`;
-            }
-        }
-    }
-    return attrStr;
-}
-
-function isStopNode(jPath, options) {
-    jPath = jPath.substr(0, jPath.length - options.textNodeName.length - 1);
-    let tagName = jPath.substr(jPath.lastIndexOf(".") + 1);
-    for (let index in options.stopNodes) {
-        if (options.stopNodes[index] === jPath || options.stopNodes[index] === "*." + tagName) return true;
-    }
-    return false;
-}
-
-function replaceEntitiesValue(textValue, options) {
-    if (textValue && textValue.length > 0 && options.processEntities) {
-        for (let i = 0; i < options.entities.length; i++) {
-            const entity = options.entities[i];
-            textValue = textValue.replace(entity.regex, entity.val);
-        }
-    }
-    return textValue;
-}
-module.exports = toXml;
-
-
-/***/ }),
-
-/***/ 151:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const util = __nccwpck_require__(7019);
-
-//TODO: handle comments
-function readDocType(xmlData, i){
-    
-    const entities = {};
-    if( xmlData[i + 3] === 'O' &&
-         xmlData[i + 4] === 'C' &&
-         xmlData[i + 5] === 'T' &&
-         xmlData[i + 6] === 'Y' &&
-         xmlData[i + 7] === 'P' &&
-         xmlData[i + 8] === 'E')
-    {    
-        i = i+9;
-        let angleBracketsCount = 1;
-        let hasBody = false, comment = false;
-        let exp = "";
-        for(;i<xmlData.length;i++){
-            if (xmlData[i] === '<' && !comment) { //Determine the tag type
-                if( hasBody && isEntity(xmlData, i)){
-                    i += 7; 
-                    let entityName, val;
-                    [entityName, val,i] = readEntityExp(xmlData,i+1);
-                    if(val.indexOf("&") === -1) //Parameter entities are not supported
-                        entities[ validateEntityName(entityName) ] = {
-                            regx : RegExp( `&${entityName};`,"g"),
-                            val: val
-                        };
-                }
-                else if( hasBody && isElement(xmlData, i))  i += 8;//Not supported
-                else if( hasBody && isAttlist(xmlData, i))  i += 8;//Not supported
-                else if( hasBody && isNotation(xmlData, i)) i += 9;//Not supported
-                else if( isComment)                         comment = true;
-                else                                        throw new Error("Invalid DOCTYPE");
-
-                angleBracketsCount++;
-                exp = "";
-            } else if (xmlData[i] === '>') { //Read tag content
-                if(comment){
-                    if( xmlData[i - 1] === "-" && xmlData[i - 2] === "-"){
-                        comment = false;
-                        angleBracketsCount--;
-                    }
-                }else{
-                    angleBracketsCount--;
-                }
-                if (angleBracketsCount === 0) {
-                  break;
-                }
-            }else if( xmlData[i] === '['){
-                hasBody = true;
-            }else{
-                exp += xmlData[i];
-            }
-        }
-        if(angleBracketsCount !== 0){
-            throw new Error(`Unclosed DOCTYPE`);
-        }
-    }else{
-        throw new Error(`Invalid Tag instead of DOCTYPE`);
-    }
-    return {entities, i};
-}
-
-function readEntityExp(xmlData,i){
-    //External entities are not supported
-    //    <!ENTITY ext SYSTEM "http://normal-website.com" >
-
-    //Parameter entities are not supported
-    //    <!ENTITY entityname "&anotherElement;">
-
-    //Internal entities are supported
-    //    <!ENTITY entityname "replacement text">
-    
-    //read EntityName
-    let entityName = "";
-    for (; i < xmlData.length && (xmlData[i] !== "'" && xmlData[i] !== '"' ); i++) {
-        // if(xmlData[i] === " ") continue;
-        // else 
-        entityName += xmlData[i];
-    }
-    entityName = entityName.trim();
-    if(entityName.indexOf(" ") !== -1) throw new Error("External entites are not supported");
-
-    //read Entity Value
-    const startChar = xmlData[i++];
-    let val = ""
-    for (; i < xmlData.length && xmlData[i] !== startChar ; i++) {
-        val += xmlData[i];
-    }
-    return [entityName, val, i];
-}
-
-function isComment(xmlData, i){
-    if(xmlData[i+1] === '!' &&
-    xmlData[i+2] === '-' &&
-    xmlData[i+3] === '-') return true
-    return false
-}
-function isEntity(xmlData, i){
-    if(xmlData[i+1] === '!' &&
-    xmlData[i+2] === 'E' &&
-    xmlData[i+3] === 'N' &&
-    xmlData[i+4] === 'T' &&
-    xmlData[i+5] === 'I' &&
-    xmlData[i+6] === 'T' &&
-    xmlData[i+7] === 'Y') return true
-    return false
-}
-function isElement(xmlData, i){
-    if(xmlData[i+1] === '!' &&
-    xmlData[i+2] === 'E' &&
-    xmlData[i+3] === 'L' &&
-    xmlData[i+4] === 'E' &&
-    xmlData[i+5] === 'M' &&
-    xmlData[i+6] === 'E' &&
-    xmlData[i+7] === 'N' &&
-    xmlData[i+8] === 'T') return true
-    return false
-}
-
-function isAttlist(xmlData, i){
-    if(xmlData[i+1] === '!' &&
-    xmlData[i+2] === 'A' &&
-    xmlData[i+3] === 'T' &&
-    xmlData[i+4] === 'T' &&
-    xmlData[i+5] === 'L' &&
-    xmlData[i+6] === 'I' &&
-    xmlData[i+7] === 'S' &&
-    xmlData[i+8] === 'T') return true
-    return false
-}
-function isNotation(xmlData, i){
-    if(xmlData[i+1] === '!' &&
-    xmlData[i+2] === 'N' &&
-    xmlData[i+3] === 'O' &&
-    xmlData[i+4] === 'T' &&
-    xmlData[i+5] === 'A' &&
-    xmlData[i+6] === 'T' &&
-    xmlData[i+7] === 'I' &&
-    xmlData[i+8] === 'O' &&
-    xmlData[i+9] === 'N') return true
-    return false
-}
-
-function validateEntityName(name){
-    if (util.isName(name))
-	return name;
-    else
-        throw new Error(`Invalid entity name ${name}`);
-}
-
-module.exports = readDocType;
-
-
-/***/ }),
-
-/***/ 4769:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-const defaultOptions = {
-    preserveOrder: false,
-    attributeNamePrefix: '@_',
-    attributesGroupName: false,
-    textNodeName: '#text',
-    ignoreAttributes: true,
-    removeNSPrefix: false, // remove NS from tag name or attribute name if true
-    allowBooleanAttributes: false, //a tag can have attributes without any value
-    //ignoreRootElement : false,
-    parseTagValue: true,
-    parseAttributeValue: false,
-    trimValues: true, //Trim string values of tag and attributes
-    cdataPropName: false,
-    numberParseOptions: {
-      hex: true,
-      leadingZeros: true,
-      eNotation: true
-    },
-    tagValueProcessor: function(tagName, val) {
-      return val;
-    },
-    attributeValueProcessor: function(attrName, val) {
-      return val;
-    },
-    stopNodes: [], //nested tags will not be parsed even for errors
-    alwaysCreateTextNode: false,
-    isArray: () => false,
-    commentPropName: false,
-    unpairedTags: [],
-    processEntities: true,
-    htmlEntities: false,
-    ignoreDeclaration: false,
-    ignorePiTags: false,
-    transformTagName: false,
-    transformAttributeName: false,
-    updateTag: function(tagName, jPath, attrs){
-      return tagName
-    },
-    // skipEmptyListItem: false
-};
-   
-const buildOptions = function(options) {
-    return Object.assign({}, defaultOptions, options);
-};
-
-exports.buildOptions = buildOptions;
-exports.defaultOptions = defaultOptions;
-
-/***/ }),
-
-/***/ 3017:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-///@ts-check
-
-const util = __nccwpck_require__(7019);
-const xmlNode = __nccwpck_require__(9307);
-const readDocType = __nccwpck_require__(151);
-const toNumber = __nccwpck_require__(6496);
-const getIgnoreAttributesFn = __nccwpck_require__(812)
-
-// const regx =
-//   '<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|((NAME:)?(NAME))([^>]*)>|((\\/)(NAME)\\s*>))([^<]*)'
-//   .replace(/NAME/g, util.nameRegexp);
-
-//const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
-//const tagsRegx = new RegExp("<(\\/?)((\\w*:)?([\\w:\\-\._]+))([^>]*)>([^<]*)("+cdataRegx+"([^<]*))*([^<]+)?","g");
-
-class OrderedObjParser{
-  constructor(options){
-    this.options = options;
-    this.currentNode = null;
-    this.tagsNodeStack = [];
-    this.docTypeEntities = {};
-    this.lastEntities = {
-      "apos" : { regex: /&(apos|#39|#x27);/g, val : "'"},
-      "gt" : { regex: /&(gt|#62|#x3E);/g, val : ">"},
-      "lt" : { regex: /&(lt|#60|#x3C);/g, val : "<"},
-      "quot" : { regex: /&(quot|#34|#x22);/g, val : "\""},
-    };
-    this.ampEntity = { regex: /&(amp|#38|#x26);/g, val : "&"};
-    this.htmlEntities = {
-      "space": { regex: /&(nbsp|#160);/g, val: " " },
-      // "lt" : { regex: /&(lt|#60);/g, val: "<" },
-      // "gt" : { regex: /&(gt|#62);/g, val: ">" },
-      // "amp" : { regex: /&(amp|#38);/g, val: "&" },
-      // "quot" : { regex: /&(quot|#34);/g, val: "\"" },
-      // "apos" : { regex: /&(apos|#39);/g, val: "'" },
-      "cent" : { regex: /&(cent|#162);/g, val: "¢" },
-      "pound" : { regex: /&(pound|#163);/g, val: "£" },
-      "yen" : { regex: /&(yen|#165);/g, val: "¥" },
-      "euro" : { regex: /&(euro|#8364);/g, val: "€" },
-      "copyright" : { regex: /&(copy|#169);/g, val: "©" },
-      "reg" : { regex: /&(reg|#174);/g, val: "®" },
-      "inr" : { regex: /&(inr|#8377);/g, val: "₹" },
-      "num_dec": { regex: /&#([0-9]{1,7});/g, val : (_, str) => String.fromCharCode(Number.parseInt(str, 10)) },
-      "num_hex": { regex: /&#x([0-9a-fA-F]{1,6});/g, val : (_, str) => String.fromCharCode(Number.parseInt(str, 16)) },
-    };
-    this.addExternalEntities = addExternalEntities;
-    this.parseXml = parseXml;
-    this.parseTextData = parseTextData;
-    this.resolveNameSpace = resolveNameSpace;
-    this.buildAttributesMap = buildAttributesMap;
-    this.isItStopNode = isItStopNode;
-    this.replaceEntitiesValue = replaceEntitiesValue;
-    this.readStopNodeData = readStopNodeData;
-    this.saveTextToParentTag = saveTextToParentTag;
-    this.addChild = addChild;
-    this.ignoreAttributesFn = getIgnoreAttributesFn(this.options.ignoreAttributes)
-  }
-
-}
-
-function addExternalEntities(externalEntities){
-  const entKeys = Object.keys(externalEntities);
-  for (let i = 0; i < entKeys.length; i++) {
-    const ent = entKeys[i];
-    this.lastEntities[ent] = {
-       regex: new RegExp("&"+ent+";","g"),
-       val : externalEntities[ent]
-    }
-  }
-}
-
-/**
- * @param {string} val
- * @param {string} tagName
- * @param {string} jPath
- * @param {boolean} dontTrim
- * @param {boolean} hasAttributes
- * @param {boolean} isLeafNode
- * @param {boolean} escapeEntities
- */
-function parseTextData(val, tagName, jPath, dontTrim, hasAttributes, isLeafNode, escapeEntities) {
-  if (val !== undefined) {
-    if (this.options.trimValues && !dontTrim) {
-      val = val.trim();
-    }
-    if(val.length > 0){
-      if(!escapeEntities) val = this.replaceEntitiesValue(val);
-      
-      const newval = this.options.tagValueProcessor(tagName, val, jPath, hasAttributes, isLeafNode);
-      if(newval === null || newval === undefined){
-        //don't parse
-        return val;
-      }else if(typeof newval !== typeof val || newval !== val){
-        //overwrite
-        return newval;
-      }else if(this.options.trimValues){
-        return parseValue(val, this.options.parseTagValue, this.options.numberParseOptions);
-      }else{
-        const trimmedVal = val.trim();
-        if(trimmedVal === val){
-          return parseValue(val, this.options.parseTagValue, this.options.numberParseOptions);
-        }else{
-          return val;
-        }
-      }
-    }
-  }
-}
-
-function resolveNameSpace(tagname) {
-  if (this.options.removeNSPrefix) {
-    const tags = tagname.split(':');
-    const prefix = tagname.charAt(0) === '/' ? '/' : '';
-    if (tags[0] === 'xmlns') {
-      return '';
-    }
-    if (tags.length === 2) {
-      tagname = prefix + tags[1];
-    }
-  }
-  return tagname;
-}
-
-//TODO: change regex to capture NS
-//const attrsRegx = new RegExp("([\\w\\-\\.\\:]+)\\s*=\\s*(['\"])((.|\n)*?)\\2","gm");
-const attrsRegx = new RegExp('([^\\s=]+)\\s*(=\\s*([\'"])([\\s\\S]*?)\\3)?', 'gm');
-
-function buildAttributesMap(attrStr, jPath, tagName) {
-  if (this.options.ignoreAttributes !== true && typeof attrStr === 'string') {
-    // attrStr = attrStr.replace(/\r?\n/g, ' ');
-    //attrStr = attrStr || attrStr.trim();
-
-    const matches = util.getAllMatches(attrStr, attrsRegx);
-    const len = matches.length; //don't make it inline
-    const attrs = {};
-    for (let i = 0; i < len; i++) {
-      const attrName = this.resolveNameSpace(matches[i][1]);
-      if (this.ignoreAttributesFn(attrName, jPath)) {
-        continue
-      }
-      let oldVal = matches[i][4];
-      let aName = this.options.attributeNamePrefix + attrName;
-      if (attrName.length) {
-        if (this.options.transformAttributeName) {
-          aName = this.options.transformAttributeName(aName);
-        }
-        if(aName === "__proto__") aName  = "#__proto__";
-        if (oldVal !== undefined) {
-          if (this.options.trimValues) {
-            oldVal = oldVal.trim();
-          }
-          oldVal = this.replaceEntitiesValue(oldVal);
-          const newVal = this.options.attributeValueProcessor(attrName, oldVal, jPath);
-          if(newVal === null || newVal === undefined){
-            //don't parse
-            attrs[aName] = oldVal;
-          }else if(typeof newVal !== typeof oldVal || newVal !== oldVal){
-            //overwrite
-            attrs[aName] = newVal;
-          }else{
-            //parse
-            attrs[aName] = parseValue(
-              oldVal,
-              this.options.parseAttributeValue,
-              this.options.numberParseOptions
-            );
-          }
-        } else if (this.options.allowBooleanAttributes) {
-          attrs[aName] = true;
-        }
-      }
-    }
-    if (!Object.keys(attrs).length) {
-      return;
-    }
-    if (this.options.attributesGroupName) {
-      const attrCollection = {};
-      attrCollection[this.options.attributesGroupName] = attrs;
-      return attrCollection;
-    }
-    return attrs
-  }
-}
-
-const parseXml = function(xmlData) {
-  xmlData = xmlData.replace(/\r\n?/g, "\n"); //TODO: remove this line
-  const xmlObj = new xmlNode('!xml');
-  let currentNode = xmlObj;
-  let textData = "";
-  let jPath = "";
-  for(let i=0; i< xmlData.length; i++){//for each char in XML data
-    const ch = xmlData[i];
-    if(ch === '<'){
-      // const nextIndex = i+1;
-      // const _2ndChar = xmlData[nextIndex];
-      if( xmlData[i+1] === '/') {//Closing Tag
-        const closeIndex = findClosingIndex(xmlData, ">", i, "Closing Tag is not closed.")
-        let tagName = xmlData.substring(i+2,closeIndex).trim();
-
-        if(this.options.removeNSPrefix){
-          const colonIndex = tagName.indexOf(":");
-          if(colonIndex !== -1){
-            tagName = tagName.substr(colonIndex+1);
-          }
-        }
-
-        if(this.options.transformTagName) {
-          tagName = this.options.transformTagName(tagName);
-        }
-
-        if(currentNode){
-          textData = this.saveTextToParentTag(textData, currentNode, jPath);
-        }
-
-        //check if last tag of nested tag was unpaired tag
-        const lastTagName = jPath.substring(jPath.lastIndexOf(".")+1);
-        if(tagName && this.options.unpairedTags.indexOf(tagName) !== -1 ){
-          throw new Error(`Unpaired tag can not be used as closing tag: </${tagName}>`);
-        }
-        let propIndex = 0
-        if(lastTagName && this.options.unpairedTags.indexOf(lastTagName) !== -1 ){
-          propIndex = jPath.lastIndexOf('.', jPath.lastIndexOf('.')-1)
-          this.tagsNodeStack.pop();
-        }else{
-          propIndex = jPath.lastIndexOf(".");
-        }
-        jPath = jPath.substring(0, propIndex);
-
-        currentNode = this.tagsNodeStack.pop();//avoid recursion, set the parent tag scope
-        textData = "";
-        i = closeIndex;
-      } else if( xmlData[i+1] === '?') {
-
-        let tagData = readTagExp(xmlData,i, false, "?>");
-        if(!tagData) throw new Error("Pi Tag is not closed.");
-
-        textData = this.saveTextToParentTag(textData, currentNode, jPath);
-        if( (this.options.ignoreDeclaration && tagData.tagName === "?xml") || this.options.ignorePiTags){
-
-        }else{
-  
-          const childNode = new xmlNode(tagData.tagName);
-          childNode.add(this.options.textNodeName, "");
-          
-          if(tagData.tagName !== tagData.tagExp && tagData.attrExpPresent){
-            childNode[":@"] = this.buildAttributesMap(tagData.tagExp, jPath, tagData.tagName);
-          }
-          this.addChild(currentNode, childNode, jPath)
-
-        }
-
-
-        i = tagData.closeIndex + 1;
-      } else if(xmlData.substr(i + 1, 3) === '!--') {
-        const endIndex = findClosingIndex(xmlData, "-->", i+4, "Comment is not closed.")
-        if(this.options.commentPropName){
-          const comment = xmlData.substring(i + 4, endIndex - 2);
-
-          textData = this.saveTextToParentTag(textData, currentNode, jPath);
-
-          currentNode.add(this.options.commentPropName, [ { [this.options.textNodeName] : comment } ]);
-        }
-        i = endIndex;
-      } else if( xmlData.substr(i + 1, 2) === '!D') {
-        const result = readDocType(xmlData, i);
-        this.docTypeEntities = result.entities;
-        i = result.i;
-      }else if(xmlData.substr(i + 1, 2) === '![') {
-        const closeIndex = findClosingIndex(xmlData, "]]>", i, "CDATA is not closed.") - 2;
-        const tagExp = xmlData.substring(i + 9,closeIndex);
-
-        textData = this.saveTextToParentTag(textData, currentNode, jPath);
-
-        let val = this.parseTextData(tagExp, currentNode.tagname, jPath, true, false, true, true);
-        if(val == undefined) val = "";
-
-        //cdata should be set even if it is 0 length string
-        if(this.options.cdataPropName){
-          currentNode.add(this.options.cdataPropName, [ { [this.options.textNodeName] : tagExp } ]);
-        }else{
-          currentNode.add(this.options.textNodeName, val);
-        }
-        
-        i = closeIndex + 2;
-      }else {//Opening tag
-        let result = readTagExp(xmlData,i, this.options.removeNSPrefix);
-        let tagName= result.tagName;
-        const rawTagName = result.rawTagName;
-        let tagExp = result.tagExp;
-        let attrExpPresent = result.attrExpPresent;
-        let closeIndex = result.closeIndex;
-
-        if (this.options.transformTagName) {
-          tagName = this.options.transformTagName(tagName);
-        }
-        
-        //save text as child node
-        if (currentNode && textData) {
-          if(currentNode.tagname !== '!xml'){
-            //when nested tag is found
-            textData = this.saveTextToParentTag(textData, currentNode, jPath, false);
-          }
-        }
-
-        //check if last tag was unpaired tag
-        const lastTag = currentNode;
-        if(lastTag && this.options.unpairedTags.indexOf(lastTag.tagname) !== -1 ){
-          currentNode = this.tagsNodeStack.pop();
-          jPath = jPath.substring(0, jPath.lastIndexOf("."));
-        }
-        if(tagName !== xmlObj.tagname){
-          jPath += jPath ? "." + tagName : tagName;
-        }
-        if (this.isItStopNode(this.options.stopNodes, jPath, tagName)) {
-          let tagContent = "";
-          //self-closing tag
-          if(tagExp.length > 0 && tagExp.lastIndexOf("/") === tagExp.length - 1){
-            if(tagName[tagName.length - 1] === "/"){ //remove trailing '/'
-              tagName = tagName.substr(0, tagName.length - 1);
-              jPath = jPath.substr(0, jPath.length - 1);
-              tagExp = tagName;
-            }else{
-              tagExp = tagExp.substr(0, tagExp.length - 1);
-            }
-            i = result.closeIndex;
-          }
-          //unpaired tag
-          else if(this.options.unpairedTags.indexOf(tagName) !== -1){
-            
-            i = result.closeIndex;
-          }
-          //normal tag
-          else{
-            //read until closing tag is found
-            const result = this.readStopNodeData(xmlData, rawTagName, closeIndex + 1);
-            if(!result) throw new Error(`Unexpected end of ${rawTagName}`);
-            i = result.i;
-            tagContent = result.tagContent;
-          }
-
-          const childNode = new xmlNode(tagName);
-          if(tagName !== tagExp && attrExpPresent){
-            childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
-          }
-          if(tagContent) {
-            tagContent = this.parseTextData(tagContent, tagName, jPath, true, attrExpPresent, true, true);
-          }
-          
-          jPath = jPath.substr(0, jPath.lastIndexOf("."));
-          childNode.add(this.options.textNodeName, tagContent);
-          
-          this.addChild(currentNode, childNode, jPath)
-        }else{
-  //selfClosing tag
-          if(tagExp.length > 0 && tagExp.lastIndexOf("/") === tagExp.length - 1){
-            if(tagName[tagName.length - 1] === "/"){ //remove trailing '/'
-              tagName = tagName.substr(0, tagName.length - 1);
-              jPath = jPath.substr(0, jPath.length - 1);
-              tagExp = tagName;
-            }else{
-              tagExp = tagExp.substr(0, tagExp.length - 1);
-            }
-            
-            if(this.options.transformTagName) {
-              tagName = this.options.transformTagName(tagName);
-            }
-
-            const childNode = new xmlNode(tagName);
-            if(tagName !== tagExp && attrExpPresent){
-              childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
-            }
-            this.addChild(currentNode, childNode, jPath)
-            jPath = jPath.substr(0, jPath.lastIndexOf("."));
-          }
-    //opening tag
-          else{
-            const childNode = new xmlNode( tagName);
-            this.tagsNodeStack.push(currentNode);
-            
-            if(tagName !== tagExp && attrExpPresent){
-              childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
-            }
-            this.addChild(currentNode, childNode, jPath)
-            currentNode = childNode;
-          }
-          textData = "";
-          i = closeIndex;
-        }
-      }
-    }else{
-      textData += xmlData[i];
-    }
-  }
-  return xmlObj.child;
-}
-
-function addChild(currentNode, childNode, jPath){
-  const result = this.options.updateTag(childNode.tagname, jPath, childNode[":@"])
-  if(result === false){
-  }else if(typeof result === "string"){
-    childNode.tagname = result
-    currentNode.addChild(childNode);
-  }else{
-    currentNode.addChild(childNode);
-  }
-}
-
-const replaceEntitiesValue = function(val){
-
-  if(this.options.processEntities){
-    for(let entityName in this.docTypeEntities){
-      const entity = this.docTypeEntities[entityName];
-      val = val.replace( entity.regx, entity.val);
-    }
-    for(let entityName in this.lastEntities){
-      const entity = this.lastEntities[entityName];
-      val = val.replace( entity.regex, entity.val);
-    }
-    if(this.options.htmlEntities){
-      for(let entityName in this.htmlEntities){
-        const entity = this.htmlEntities[entityName];
-        val = val.replace( entity.regex, entity.val);
-      }
-    }
-    val = val.replace( this.ampEntity.regex, this.ampEntity.val);
-  }
-  return val;
-}
-function saveTextToParentTag(textData, currentNode, jPath, isLeafNode) {
-  if (textData) { //store previously collected data as textNode
-    if(isLeafNode === undefined) isLeafNode = Object.keys(currentNode.child).length === 0
-    
-    textData = this.parseTextData(textData,
-      currentNode.tagname,
-      jPath,
-      false,
-      currentNode[":@"] ? Object.keys(currentNode[":@"]).length !== 0 : false,
-      isLeafNode);
-
-    if (textData !== undefined && textData !== "")
-      currentNode.add(this.options.textNodeName, textData);
-    textData = "";
-  }
-  return textData;
-}
-
-//TODO: use jPath to simplify the logic
-/**
- * 
- * @param {string[]} stopNodes 
- * @param {string} jPath
- * @param {string} currentTagName 
- */
-function isItStopNode(stopNodes, jPath, currentTagName){
-  const allNodesExp = "*." + currentTagName;
-  for (const stopNodePath in stopNodes) {
-    const stopNodeExp = stopNodes[stopNodePath];
-    if( allNodesExp === stopNodeExp || jPath === stopNodeExp  ) return true;
-  }
-  return false;
-}
-
-/**
- * Returns the tag Expression and where it is ending handling single-double quotes situation
- * @param {string} xmlData 
- * @param {number} i starting index
- * @returns 
- */
-function tagExpWithClosingIndex(xmlData, i, closingChar = ">"){
-  let attrBoundary;
-  let tagExp = "";
-  for (let index = i; index < xmlData.length; index++) {
-    let ch = xmlData[index];
-    if (attrBoundary) {
-        if (ch === attrBoundary) attrBoundary = "";//reset
-    } else if (ch === '"' || ch === "'") {
-        attrBoundary = ch;
-    } else if (ch === closingChar[0]) {
-      if(closingChar[1]){
-        if(xmlData[index + 1] === closingChar[1]){
-          return {
-            data: tagExp,
-            index: index
-          }
-        }
-      }else{
-        return {
-          data: tagExp,
-          index: index
-        }
-      }
-    } else if (ch === '\t') {
-      ch = " "
-    }
-    tagExp += ch;
-  }
-}
-
-function findClosingIndex(xmlData, str, i, errMsg){
-  const closingIndex = xmlData.indexOf(str, i);
-  if(closingIndex === -1){
-    throw new Error(errMsg)
-  }else{
-    return closingIndex + str.length - 1;
-  }
-}
-
-function readTagExp(xmlData,i, removeNSPrefix, closingChar = ">"){
-  const result = tagExpWithClosingIndex(xmlData, i+1, closingChar);
-  if(!result) return;
-  let tagExp = result.data;
-  const closeIndex = result.index;
-  const separatorIndex = tagExp.search(/\s/);
-  let tagName = tagExp;
-  let attrExpPresent = true;
-  if(separatorIndex !== -1){//separate tag name and attributes expression
-    tagName = tagExp.substring(0, separatorIndex);
-    tagExp = tagExp.substring(separatorIndex + 1).trimStart();
-  }
-
-  const rawTagName = tagName;
-  if(removeNSPrefix){
-    const colonIndex = tagName.indexOf(":");
-    if(colonIndex !== -1){
-      tagName = tagName.substr(colonIndex+1);
-      attrExpPresent = tagName !== result.data.substr(colonIndex + 1);
-    }
-  }
-
-  return {
-    tagName: tagName,
-    tagExp: tagExp,
-    closeIndex: closeIndex,
-    attrExpPresent: attrExpPresent,
-    rawTagName: rawTagName,
-  }
-}
-/**
- * find paired tag for a stop node
- * @param {string} xmlData 
- * @param {string} tagName 
- * @param {number} i 
- */
-function readStopNodeData(xmlData, tagName, i){
-  const startIndex = i;
-  // Starting at 1 since we already have an open tag
-  let openTagCount = 1;
-
-  for (; i < xmlData.length; i++) {
-    if( xmlData[i] === "<"){ 
-      if (xmlData[i+1] === "/") {//close tag
-          const closeIndex = findClosingIndex(xmlData, ">", i, `${tagName} is not closed`);
-          let closeTagName = xmlData.substring(i+2,closeIndex).trim();
-          if(closeTagName === tagName){
-            openTagCount--;
-            if (openTagCount === 0) {
-              return {
-                tagContent: xmlData.substring(startIndex, i),
-                i : closeIndex
-              }
-            }
-          }
-          i=closeIndex;
-        } else if(xmlData[i+1] === '?') { 
-          const closeIndex = findClosingIndex(xmlData, "?>", i+1, "StopNode is not closed.")
-          i=closeIndex;
-        } else if(xmlData.substr(i + 1, 3) === '!--') { 
-          const closeIndex = findClosingIndex(xmlData, "-->", i+3, "StopNode is not closed.")
-          i=closeIndex;
-        } else if(xmlData.substr(i + 1, 2) === '![') { 
-          const closeIndex = findClosingIndex(xmlData, "]]>", i, "StopNode is not closed.") - 2;
-          i=closeIndex;
-        } else {
-          const tagData = readTagExp(xmlData, i, '>')
-
-          if (tagData) {
-            const openTagName = tagData && tagData.tagName;
-            if (openTagName === tagName && tagData.tagExp[tagData.tagExp.length-1] !== "/") {
-              openTagCount++;
-            }
-            i=tagData.closeIndex;
-          }
-        }
-      }
-  }//end for loop
-}
-
-function parseValue(val, shouldParse, options) {
-  if (shouldParse && typeof val === 'string') {
-    //console.log(options)
-    const newval = val.trim();
-    if(newval === 'true' ) return true;
-    else if(newval === 'false' ) return false;
-    else return toNumber(val, options);
-  } else {
-    if (util.isExist(val)) {
-      return val;
-    } else {
-      return '';
-    }
-  }
-}
-
-
-module.exports = OrderedObjParser;
-
-
-/***/ }),
-
-/***/ 9844:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const { buildOptions} = __nccwpck_require__(4769);
-const OrderedObjParser = __nccwpck_require__(3017);
-const { prettify} = __nccwpck_require__(7594);
-const validator = __nccwpck_require__(9433);
-
-class XMLParser{
-    
-    constructor(options){
-        this.externalEntities = {};
-        this.options = buildOptions(options);
-        
-    }
-    /**
-     * Parse XML dats to JS object 
-     * @param {string|Buffer} xmlData 
-     * @param {boolean|Object} validationOption 
-     */
-    parse(xmlData,validationOption){
-        if(typeof xmlData === "string"){
-        }else if( xmlData.toString){
-            xmlData = xmlData.toString();
-        }else{
-            throw new Error("XML data is accepted in String or Bytes[] form.")
-        }
-        if( validationOption){
-            if(validationOption === true) validationOption = {}; //validate with default options
-            
-            const result = validator.validate(xmlData, validationOption);
-            if (result !== true) {
-              throw Error( `${result.err.msg}:${result.err.line}:${result.err.col}` )
-            }
-          }
-        const orderedObjParser = new OrderedObjParser(this.options);
-        orderedObjParser.addExternalEntities(this.externalEntities);
-        const orderedResult = orderedObjParser.parseXml(xmlData);
-        if(this.options.preserveOrder || orderedResult === undefined) return orderedResult;
-        else return prettify(orderedResult, this.options);
-    }
-
-    /**
-     * Add Entity which is not by default supported by this library
-     * @param {string} key 
-     * @param {string} value 
-     */
-    addEntity(key, value){
-        if(value.indexOf("&") !== -1){
-            throw new Error("Entity value can't have '&'")
-        }else if(key.indexOf("&") !== -1 || key.indexOf(";") !== -1){
-            throw new Error("An entity must be set without '&' and ';'. Eg. use '#xD' for '&#xD;'")
-        }else if(value === "&"){
-            throw new Error("An entity with value '&' is not permitted");
-        }else{
-            this.externalEntities[key] = value;
-        }
-    }
-}
-
-module.exports = XMLParser;
-
-/***/ }),
-
-/***/ 7594:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-/**
- * 
- * @param {array} node 
- * @param {any} options 
- * @returns 
- */
-function prettify(node, options){
-  return compress( node, options);
-}
-
-/**
- * 
- * @param {array} arr 
- * @param {object} options 
- * @param {string} jPath 
- * @returns object
- */
-function compress(arr, options, jPath){
-  let text;
-  const compressedObj = {};
-  for (let i = 0; i < arr.length; i++) {
-    const tagObj = arr[i];
-    const property = propName(tagObj);
-    let newJpath = "";
-    if(jPath === undefined) newJpath = property;
-    else newJpath = jPath + "." + property;
-
-    if(property === options.textNodeName){
-      if(text === undefined) text = tagObj[property];
-      else text += "" + tagObj[property];
-    }else if(property === undefined){
-      continue;
-    }else if(tagObj[property]){
-      
-      let val = compress(tagObj[property], options, newJpath);
-      const isLeaf = isLeafTag(val, options);
-
-      if(tagObj[":@"]){
-        assignAttributes( val, tagObj[":@"], newJpath, options);
-      }else if(Object.keys(val).length === 1 && val[options.textNodeName] !== undefined && !options.alwaysCreateTextNode){
-        val = val[options.textNodeName];
-      }else if(Object.keys(val).length === 0){
-        if(options.alwaysCreateTextNode) val[options.textNodeName] = "";
-        else val = "";
-      }
-
-      if(compressedObj[property] !== undefined && compressedObj.hasOwnProperty(property)) {
-        if(!Array.isArray(compressedObj[property])) {
-            compressedObj[property] = [ compressedObj[property] ];
-        }
-        compressedObj[property].push(val);
-      }else{
-        //TODO: if a node is not an array, then check if it should be an array
-        //also determine if it is a leaf node
-        if (options.isArray(property, newJpath, isLeaf )) {
-          compressedObj[property] = [val];
-        }else{
-          compressedObj[property] = val;
-        }
-      }
-    }
-    
-  }
-  // if(text && text.length > 0) compressedObj[options.textNodeName] = text;
-  if(typeof text === "string"){
-    if(text.length > 0) compressedObj[options.textNodeName] = text;
-  }else if(text !== undefined) compressedObj[options.textNodeName] = text;
-  return compressedObj;
-}
-
-function propName(obj){
-  const keys = Object.keys(obj);
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    if(key !== ":@") return key;
-  }
-}
-
-function assignAttributes(obj, attrMap, jpath, options){
-  if (attrMap) {
-    const keys = Object.keys(attrMap);
-    const len = keys.length; //don't make it inline
-    for (let i = 0; i < len; i++) {
-      const atrrName = keys[i];
-      if (options.isArray(atrrName, jpath + "." + atrrName, true, true)) {
-        obj[atrrName] = [ attrMap[atrrName] ];
-      } else {
-        obj[atrrName] = attrMap[atrrName];
-      }
-    }
-  }
-}
-
-function isLeafTag(obj, options){
-  const { textNodeName } = options;
-  const propCount = Object.keys(obj).length;
-  
-  if (propCount === 0) {
-    return true;
-  }
-
-  if (
-    propCount === 1 &&
-    (obj[textNodeName] || typeof obj[textNodeName] === "boolean" || obj[textNodeName] === 0)
-  ) {
-    return true;
-  }
-
-  return false;
-}
-exports.prettify = prettify;
-
-
-/***/ }),
-
-/***/ 9307:
-/***/ ((module) => {
-
-"use strict";
-
-
-class XmlNode{
-  constructor(tagname) {
-    this.tagname = tagname;
-    this.child = []; //nested tags, text, cdata, comments in order
-    this[":@"] = {}; //attributes map
-  }
-  add(key,val){
-    // this.child.push( {name : key, val: val, isCdata: isCdata });
-    if(key === "__proto__") key = "#__proto__";
-    this.child.push( {[key]: val });
-  }
-  addChild(node) {
-    if(node.tagname === "__proto__") node.tagname = "#__proto__";
-    if(node[":@"] && Object.keys(node[":@"]).length > 0){
-      this.child.push( { [node.tagname]: node.child, [":@"]: node[":@"] });
-    }else{
-      this.child.push( { [node.tagname]: node.child });
-    }
-  };
-};
-
-
-module.exports = XmlNode;
-
-/***/ }),
-
 /***/ 1970:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -49341,137 +47292,6 @@ function coerce (version, options) {
     '.' + (match[3] || '0') +
     '.' + (match[4] || '0'), options)
 }
-
-
-/***/ }),
-
-/***/ 6496:
-/***/ ((module) => {
-
-const hexRegex = /^[-+]?0x[a-fA-F0-9]+$/;
-const numRegex = /^([\-\+])?(0*)(\.[0-9]+([eE]\-?[0-9]+)?|[0-9]+(\.[0-9]+([eE]\-?[0-9]+)?)?)$/;
-// const octRegex = /0x[a-z0-9]+/;
-// const binRegex = /0x[a-z0-9]+/;
-
-
-//polyfill
-if (!Number.parseInt && window.parseInt) {
-    Number.parseInt = window.parseInt;
-}
-if (!Number.parseFloat && window.parseFloat) {
-    Number.parseFloat = window.parseFloat;
-}
-
-  
-const consider = {
-    hex :  true,
-    leadingZeros: true,
-    decimalPoint: "\.",
-    eNotation: true
-    //skipLike: /regex/
-};
-
-function toNumber(str, options = {}){
-    // const options = Object.assign({}, consider);
-    // if(opt.leadingZeros === false){
-    //     options.leadingZeros = false;
-    // }else if(opt.hex === false){
-    //     options.hex = false;
-    // }
-
-    options = Object.assign({}, consider, options );
-    if(!str || typeof str !== "string" ) return str;
-    
-    let trimmedStr  = str.trim();
-    // if(trimmedStr === "0.0") return 0;
-    // else if(trimmedStr === "+0.0") return 0;
-    // else if(trimmedStr === "-0.0") return -0;
-
-    if(options.skipLike !== undefined && options.skipLike.test(trimmedStr)) return str;
-    else if (options.hex && hexRegex.test(trimmedStr)) {
-        return Number.parseInt(trimmedStr, 16);
-    // } else if (options.parseOct && octRegex.test(str)) {
-    //     return Number.parseInt(val, 8);
-    // }else if (options.parseBin && binRegex.test(str)) {
-    //     return Number.parseInt(val, 2);
-    }else{
-        //separate negative sign, leading zeros, and rest number
-        const match = numRegex.exec(trimmedStr);
-        if(match){
-            const sign = match[1];
-            const leadingZeros = match[2];
-            let numTrimmedByZeros = trimZeros(match[3]); //complete num without leading zeros
-            //trim ending zeros for floating number
-            
-            const eNotation = match[4] || match[6];
-            if(!options.leadingZeros && leadingZeros.length > 0 && sign && trimmedStr[2] !== ".") return str; //-0123
-            else if(!options.leadingZeros && leadingZeros.length > 0 && !sign && trimmedStr[1] !== ".") return str; //0123
-            else{//no leading zeros or leading zeros are allowed
-                const num = Number(trimmedStr);
-                const numStr = "" + num;
-                if(numStr.search(/[eE]/) !== -1){ //given number is long and parsed to eNotation
-                    if(options.eNotation) return num;
-                    else return str;
-                }else if(eNotation){ //given number has enotation
-                    if(options.eNotation) return num;
-                    else return str;
-                }else if(trimmedStr.indexOf(".") !== -1){ //floating number
-                    // const decimalPart = match[5].substr(1);
-                    // const intPart = trimmedStr.substr(0,trimmedStr.indexOf("."));
-
-                    
-                    // const p = numStr.indexOf(".");
-                    // const givenIntPart = numStr.substr(0,p);
-                    // const givenDecPart = numStr.substr(p+1);
-                    if(numStr === "0" && (numTrimmedByZeros === "") ) return num; //0.0
-                    else if(numStr === numTrimmedByZeros) return num; //0.456. 0.79000
-                    else if( sign && numStr === "-"+numTrimmedByZeros) return num;
-                    else return str;
-                }
-                
-                if(leadingZeros){
-                    // if(numTrimmedByZeros === numStr){
-                    //     if(options.leadingZeros) return num;
-                    //     else return str;
-                    // }else return str;
-                    if(numTrimmedByZeros === numStr) return num;
-                    else if(sign+numTrimmedByZeros === numStr) return num;
-                    else return str;
-                }
-
-                if(trimmedStr === numStr) return num;
-                else if(trimmedStr === sign+numStr) return num;
-                // else{
-                //     //number with +/- sign
-                //     trimmedStr.test(/[-+][0-9]);
-
-                // }
-                return str;
-            }
-            // else if(!eNotation && trimmedStr && trimmedStr !== Number(trimmedStr) ) return str;
-            
-        }else{ //non-numeric string
-            return str;
-        }
-    }
-}
-
-/**
- * 
- * @param {string} numStr without leading zeros
- * @returns 
- */
-function trimZeros(numStr){
-    if(numStr && numStr.indexOf(".") !== -1){//float
-        numStr = numStr.replace(/0+$/, ""); //remove ending zeros
-        if(numStr === ".")  numStr = "0";
-        else if(numStr[0] === ".")  numStr = "0"+numStr;
-        else if(numStr[numStr.length-1] === ".")  numStr = numStr.substr(0,numStr.length-1);
-        return numStr;
-    }
-    return numStr;
-}
-module.exports = toNumber
 
 
 /***/ }),
@@ -55542,7 +53362,7 @@ module.exports = {
 
 
 const { parseSetCookie } = __nccwpck_require__(8915)
-const { stringify, getHeadersList } = __nccwpck_require__(3834)
+const { stringify } = __nccwpck_require__(3834)
 const { webidl } = __nccwpck_require__(4222)
 const { Headers } = __nccwpck_require__(6349)
 
@@ -55618,14 +53438,13 @@ function getSetCookies (headers) {
 
   webidl.brandCheck(headers, Headers, { strict: false })
 
-  const cookies = getHeadersList(headers).cookies
+  const cookies = headers.getSetCookie()
 
   if (!cookies) {
     return []
   }
 
-  // In older versions of undici, cookies is a list of name:value.
-  return cookies.map((pair) => parseSetCookie(Array.isArray(pair) ? pair[1] : pair))
+  return cookies.map((pair) => parseSetCookie(pair))
 }
 
 /**
@@ -56053,14 +53872,15 @@ module.exports = {
 /***/ }),
 
 /***/ 3834:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module) => {
 
 "use strict";
 
 
-const assert = __nccwpck_require__(2613)
-const { kHeadersList } = __nccwpck_require__(6443)
-
+/**
+ * @param {string} value
+ * @returns {boolean}
+ */
 function isCTLExcludingHtab (value) {
   if (value.length === 0) {
     return false
@@ -56321,31 +54141,13 @@ function stringify (cookie) {
   return out.join('; ')
 }
 
-let kHeadersListNode
-
-function getHeadersList (headers) {
-  if (headers[kHeadersList]) {
-    return headers[kHeadersList]
-  }
-
-  if (!kHeadersListNode) {
-    kHeadersListNode = Object.getOwnPropertySymbols(headers).find(
-      (symbol) => symbol.description === 'headers list'
-    )
-
-    assert(kHeadersListNode, 'Headers cannot be parsed')
-  }
-
-  const headersList = headers[kHeadersListNode]
-  assert(headersList)
-
-  return headersList
-}
-
 module.exports = {
   isCTLExcludingHtab,
-  stringify,
-  getHeadersList
+  validateCookieName,
+  validateCookiePath,
+  validateCookieValue,
+  toIMFDate,
+  stringify
 }
 
 
@@ -60349,6 +58151,7 @@ const {
   isValidHeaderName,
   isValidHeaderValue
 } = __nccwpck_require__(5523)
+const util = __nccwpck_require__(9023)
 const { webidl } = __nccwpck_require__(4222)
 const assert = __nccwpck_require__(2613)
 
@@ -60902,6 +58705,9 @@ Object.defineProperties(Headers.prototype, {
   [Symbol.toStringTag]: {
     value: 'Headers',
     configurable: true
+  },
+  [util.inspect.custom]: {
+    enumerable: false
   }
 })
 
@@ -70078,6 +67884,20 @@ class Pool extends PoolBase {
       ? { ...options.interceptors }
       : undefined
     this[kFactory] = factory
+
+    this.on('connectionError', (origin, targets, error) => {
+      // If a connection error occurs, we remove the client from the pool,
+      // and emit a connectionError event. They will not be re-used.
+      // Fixes https://github.com/nodejs/undici/issues/3895
+      for (const target of targets) {
+        // Do not use kRemoveClient here, as it will close the client,
+        // but the client cannot be closed in this state.
+        const idx = this[kClients].indexOf(target)
+        if (idx !== -1) {
+          this[kClients].splice(idx, 1)
+        }
+      }
+    })
   }
 
   [kGetDispatcher] () {
@@ -73256,9 +71076,10 @@ function isTokenCredential(credential) {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.authorizeRequestOnClaimChallenge = exports.parseCAEChallenge = void 0;
+exports.parseCAEChallenge = parseCAEChallenge;
+exports.authorizeRequestOnClaimChallenge = authorizeRequestOnClaimChallenge;
 const log_js_1 = __nccwpck_require__(9994);
 const base64_js_1 = __nccwpck_require__(741);
 /**
@@ -73276,19 +71097,21 @@ function parseCAEChallenge(challenges) {
         return keyValuePairs.reduce((a, b) => (Object.assign(Object.assign({}, a), b)), {});
     });
 }
-exports.parseCAEChallenge = parseCAEChallenge;
 /**
  * This function can be used as a callback for the `bearerTokenAuthenticationPolicy` of `@azure/core-rest-pipeline`, to support CAE challenges:
- * [Continuous Access Evaluation](https://docs.microsoft.com/azure/active-directory/conditional-access/concept-continuous-access-evaluation).
+ * [Continuous Access Evaluation](https://learn.microsoft.com/azure/active-directory/conditional-access/concept-continuous-access-evaluation).
  *
  * Call the `bearerTokenAuthenticationPolicy` with the following options:
  *
- * ```ts
+ * ```ts snippet:AuthorizeRequestOnClaimChallenge
  * import { bearerTokenAuthenticationPolicy } from "@azure/core-rest-pipeline";
  * import { authorizeRequestOnClaimChallenge } from "@azure/core-client";
  *
- * const bearerTokenAuthenticationPolicy = bearerTokenAuthenticationPolicy({
- *   authorizeRequestOnChallenge: authorizeRequestOnClaimChallenge
+ * const policy = bearerTokenAuthenticationPolicy({
+ *   challengeCallbacks: {
+ *     authorizeRequestOnChallenge: authorizeRequestOnClaimChallenge,
+ *   },
+ *   scopes: ["https://service/.default"],
  * });
  * ```
  *
@@ -73304,6 +71127,7 @@ exports.parseCAEChallenge = parseCAEChallenge;
  * ```
  */
 async function authorizeRequestOnClaimChallenge(onChallengeOptions) {
+    var _a;
     const { scopes, response } = onChallengeOptions;
     const logger = onChallengeOptions.logger || log_js_1.logger;
     const challenge = response.headers.get("WWW-Authenticate");
@@ -73323,10 +71147,9 @@ async function authorizeRequestOnClaimChallenge(onChallengeOptions) {
     if (!accessToken) {
         return false;
     }
-    onChallengeOptions.request.headers.set("Authorization", `Bearer ${accessToken.token}`);
+    onChallengeOptions.request.headers.set("Authorization", `${(_a = accessToken.tokenType) !== null && _a !== void 0 ? _a : "Bearer"} ${accessToken.token}`);
     return true;
 }
-exports.authorizeRequestOnClaimChallenge = authorizeRequestOnClaimChallenge;
 //# sourceMappingURL=authorizeRequestOnClaimChallenge.js.map
 
 /***/ }),
@@ -73337,7 +71160,7 @@ exports.authorizeRequestOnClaimChallenge = authorizeRequestOnClaimChallenge;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.authorizeRequestOnTenantChallenge = void 0;
 /**
@@ -73360,10 +71183,11 @@ function isUuid(text) {
 }
 /**
  * Defines a callback to handle auth challenge for Storage APIs.
- * This implements the bearer challenge process described here: https://docs.microsoft.com/rest/api/storageservices/authorize-with-azure-active-directory#bearer-challenge
+ * This implements the bearer challenge process described here: https://learn.microsoft.com/rest/api/storageservices/authorize-with-azure-active-directory#bearer-challenge
  * Handling has specific features for storage that departs to the general AAD challenge docs.
  **/
 const authorizeRequestOnTenantChallenge = async (challengeOptions) => {
+    var _a;
     const requestOptions = requestToOptions(challengeOptions.request);
     const challenge = getChallenge(challengeOptions.response);
     if (challenge) {
@@ -73377,7 +71201,7 @@ const authorizeRequestOnTenantChallenge = async (challengeOptions) => {
         if (!accessToken) {
             return false;
         }
-        challengeOptions.request.headers.set(Constants.HeaderConstants.AUTHORIZATION, `Bearer ${accessToken.token}`);
+        challengeOptions.request.headers.set(Constants.HeaderConstants.AUTHORIZATION, `${(_a = accessToken.tokenType) !== null && _a !== void 0 ? _a : "Bearer"} ${accessToken.token}`);
         return true;
     }
     return false;
@@ -73461,9 +71285,12 @@ function requestToOptions(request) {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.decodeStringToString = exports.decodeString = exports.encodeByteArray = exports.encodeString = void 0;
+exports.encodeString = encodeString;
+exports.encodeByteArray = encodeByteArray;
+exports.decodeString = decodeString;
+exports.decodeStringToString = decodeStringToString;
 /**
  * Encodes a string in base64 format.
  * @param value - the string to encode
@@ -73472,7 +71299,6 @@ exports.decodeStringToString = exports.decodeString = exports.encodeByteArray = 
 function encodeString(value) {
     return Buffer.from(value).toString("base64");
 }
-exports.encodeString = encodeString;
 /**
  * Encodes a byte array in base64 format.
  * @param value - the Uint8Aray to encode
@@ -73482,7 +71308,6 @@ function encodeByteArray(value) {
     const bufferValue = value instanceof Buffer ? value : Buffer.from(value.buffer);
     return bufferValue.toString("base64");
 }
-exports.encodeByteArray = encodeByteArray;
 /**
  * Decodes a base64 string into a byte array.
  * @param value - the base64 string to decode
@@ -73491,7 +71316,6 @@ exports.encodeByteArray = encodeByteArray;
 function decodeString(value) {
     return Buffer.from(value, "base64");
 }
-exports.decodeString = decodeString;
 /**
  * Decodes a base64 string into a string.
  * @param value - the base64 string to decode
@@ -73500,7 +71324,6 @@ exports.decodeString = decodeString;
 function decodeStringToString(value) {
     return Buffer.from(value, "base64").toString();
 }
-exports.decodeStringToString = decodeStringToString;
 //# sourceMappingURL=base64.js.map
 
 /***/ }),
@@ -73511,9 +71334,10 @@ exports.decodeStringToString = decodeStringToString;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.deserializationPolicy = exports.deserializationPolicyName = void 0;
+exports.deserializationPolicyName = void 0;
+exports.deserializationPolicy = deserializationPolicy;
 const interfaces_js_1 = __nccwpck_require__(6058);
 const core_rest_pipeline_1 = __nccwpck_require__(778);
 const serializer_js_1 = __nccwpck_require__(1530);
@@ -73548,7 +71372,6 @@ function deserializationPolicy(options = {}) {
         },
     };
 }
-exports.deserializationPolicy = deserializationPolicy;
 function getOperationResponseMap(parsedResponse) {
     let result;
     const request = parsedResponse.request;
@@ -73637,7 +71460,7 @@ function isOperationSpecEmpty(operationSpec) {
         (expectedStatusCodes.length === 1 && expectedStatusCodes[0] === "default"));
 }
 function handleErrorResponse(parsedResponse, operationSpec, responseSpec, options) {
-    var _a;
+    var _a, _b, _c, _d, _e;
     const isSuccessByStatus = 200 <= parsedResponse.status && parsedResponse.status < 300;
     const isExpectedStatusCode = isOperationSpecEmpty(operationSpec)
         ? isSuccessByStatus
@@ -73662,12 +71485,14 @@ function handleErrorResponse(parsedResponse, operationSpec, responseSpec, option
         response: parsedResponse,
     });
     // If the item failed but there's no error spec or default spec to deserialize the error,
+    // and the parsed body doesn't look like an error object,
     // we should fail so we just throw the parsed response
-    if (!errorResponseSpec) {
+    if (!errorResponseSpec &&
+        !(((_c = (_b = parsedResponse.parsedBody) === null || _b === void 0 ? void 0 : _b.error) === null || _c === void 0 ? void 0 : _c.code) && ((_e = (_d = parsedResponse.parsedBody) === null || _d === void 0 ? void 0 : _d.error) === null || _e === void 0 ? void 0 : _e.message))) {
         throw error;
     }
-    const defaultBodyMapper = errorResponseSpec.bodyMapper;
-    const defaultHeadersMapper = errorResponseSpec.headersMapper;
+    const defaultBodyMapper = errorResponseSpec === null || errorResponseSpec === void 0 ? void 0 : errorResponseSpec.bodyMapper;
+    const defaultHeadersMapper = errorResponseSpec === null || errorResponseSpec === void 0 ? void 0 : errorResponseSpec.headersMapper;
     try {
         // If error response has a body, try to deserialize it using default body mapper.
         // Then try to extract error code & message from it
@@ -73753,9 +71578,9 @@ async function parse(jsonContentTypes, xmlContentTypes, operationResponse, opts,
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCachedDefaultHttpClient = void 0;
+exports.getCachedDefaultHttpClient = getCachedDefaultHttpClient;
 const core_rest_pipeline_1 = __nccwpck_require__(778);
 let cachedHttpClient;
 function getCachedDefaultHttpClient() {
@@ -73764,7 +71589,6 @@ function getCachedDefaultHttpClient() {
     }
     return cachedHttpClient;
 }
-exports.getCachedDefaultHttpClient = getCachedDefaultHttpClient;
 //# sourceMappingURL=httpClientCache.js.map
 
 /***/ }),
@@ -73775,7 +71599,7 @@ exports.getCachedDefaultHttpClient = getCachedDefaultHttpClient;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.authorizeRequestOnTenantChallenge = exports.authorizeRequestOnClaimChallenge = exports.serializationPolicyName = exports.serializationPolicy = exports.deserializationPolicyName = exports.deserializationPolicy = exports.XML_CHARKEY = exports.XML_ATTRKEY = exports.createClientPipeline = exports.ServiceClient = exports.MapperTypeNames = exports.createSerializer = void 0;
 var serializer_js_1 = __nccwpck_require__(1530);
@@ -73808,9 +71632,10 @@ Object.defineProperty(exports, "authorizeRequestOnTenantChallenge", ({ enumerabl
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPathStringFromParameter = exports.getStreamingResponseStatusCodes = void 0;
+exports.getStreamingResponseStatusCodes = getStreamingResponseStatusCodes;
+exports.getPathStringFromParameter = getPathStringFromParameter;
 const serializer_js_1 = __nccwpck_require__(1530);
 /**
  * Gets the list of status codes for streaming responses.
@@ -73827,7 +71652,6 @@ function getStreamingResponseStatusCodes(operationSpec) {
     }
     return result;
 }
-exports.getStreamingResponseStatusCodes = getStreamingResponseStatusCodes;
 /**
  * Get the path to this parameter's value as a dotted string (a.b.c).
  * @param parameter - The parameter to get the path string for.
@@ -73848,7 +71672,6 @@ function getPathStringFromParameter(parameter) {
     }
     return result;
 }
-exports.getPathStringFromParameter = getPathStringFromParameter;
 //# sourceMappingURL=interfaceHelpers.js.map
 
 /***/ }),
@@ -73859,7 +71682,7 @@ exports.getPathStringFromParameter = getPathStringFromParameter;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.XML_CHARKEY = exports.XML_ATTRKEY = void 0;
 /**
@@ -73880,7 +71703,7 @@ exports.XML_CHARKEY = "_";
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.logger = void 0;
 const logger_1 = __nccwpck_require__(6515);
@@ -73895,9 +71718,10 @@ exports.logger = (0, logger_1.createClientLogger)("core-client");
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getOperationRequestInfo = exports.getOperationArgumentValueFromParameter = void 0;
+exports.getOperationArgumentValueFromParameter = getOperationArgumentValueFromParameter;
+exports.getOperationRequestInfo = getOperationRequestInfo;
 const state_js_1 = __nccwpck_require__(3345);
 /**
  * @internal
@@ -73955,7 +71779,6 @@ function getOperationArgumentValueFromParameter(operationArguments, parameter, f
     }
     return value;
 }
-exports.getOperationArgumentValueFromParameter = getOperationArgumentValueFromParameter;
 function getPropertyFromParameterPath(parent, parameterPath) {
     const result = { propertyFound: false };
     let i = 0;
@@ -73990,7 +71813,6 @@ function getOperationRequestInfo(request) {
     }
     return info;
 }
-exports.getOperationRequestInfo = getOperationRequestInfo;
 //# sourceMappingURL=operationHelpers.js.map
 
 /***/ }),
@@ -74001,9 +71823,9 @@ exports.getOperationRequestInfo = getOperationRequestInfo;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createClientPipeline = void 0;
+exports.createClientPipeline = createClientPipeline;
 const deserializationPolicy_js_1 = __nccwpck_require__(111);
 const core_rest_pipeline_1 = __nccwpck_require__(778);
 const serializationPolicy_js_1 = __nccwpck_require__(6234);
@@ -74027,7 +71849,6 @@ function createClientPipeline(options = {}) {
     });
     return pipeline;
 }
-exports.createClientPipeline = createClientPipeline;
 //# sourceMappingURL=pipeline.js.map
 
 /***/ }),
@@ -74038,9 +71859,12 @@ exports.createClientPipeline = createClientPipeline;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.serializeRequestBody = exports.serializeHeaders = exports.serializationPolicy = exports.serializationPolicyName = void 0;
+exports.serializationPolicyName = void 0;
+exports.serializationPolicy = serializationPolicy;
+exports.serializeHeaders = serializeHeaders;
+exports.serializeRequestBody = serializeRequestBody;
 const interfaces_js_1 = __nccwpck_require__(6058);
 const operationHelpers_js_1 = __nccwpck_require__(9688);
 const serializer_js_1 = __nccwpck_require__(1530);
@@ -74069,7 +71893,6 @@ function serializationPolicy(options = {}) {
         },
     };
 }
-exports.serializationPolicy = serializationPolicy;
 /**
  * @internal
  */
@@ -74100,7 +71923,6 @@ function serializeHeaders(request, operationArguments, operationSpec) {
         }
     }
 }
-exports.serializeHeaders = serializeHeaders;
 /**
  * @internal
  */
@@ -74168,7 +71990,6 @@ function serializeRequestBody(request, operationArguments, operationSpec, string
         }
     }
 }
-exports.serializeRequestBody = serializeRequestBody;
 /**
  * Adds an xml namespace to the xml serialized object if needed, otherwise it just returns the value itself
  */
@@ -74204,9 +72025,10 @@ function prepareXMLRootList(obj, elementName, xmlNamespaceKey, xmlNamespace) {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MapperTypeNames = exports.createSerializer = void 0;
+exports.MapperTypeNames = void 0;
+exports.createSerializer = createSerializer;
 const tslib_1 = __nccwpck_require__(1860);
 const base64 = tslib_1.__importStar(__nccwpck_require__(741));
 const interfaces_js_1 = __nccwpck_require__(6058);
@@ -74460,7 +72282,6 @@ class SerializerImpl {
 function createSerializer(modelMappers = {}, isXML = false) {
     return new SerializerImpl(modelMappers, isXML);
 }
-exports.createSerializer = createSerializer;
 function trimEnd(str, ch) {
     let len = str.length;
     while (len - 1 >= 0 && str[len - 1] === ch) {
@@ -75138,7 +72959,7 @@ exports.MapperTypeNames = {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServiceClient = void 0;
 const core_rest_pipeline_1 = __nccwpck_require__(778);
@@ -75155,7 +72976,6 @@ const log_js_1 = __nccwpck_require__(9994);
 class ServiceClient {
     /**
      * The ServiceClient constructor
-     * @param credential - The credentials used for authentication with the service.
      * @param options - The service client options that govern the behavior of the client.
      */
     constructor(options = {}) {
@@ -75298,7 +73118,7 @@ function getCredentialScopes(options) {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.state = void 0;
 /**
@@ -75317,9 +73137,10 @@ exports.state = {
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.appendQueryParams = exports.getRequestUrl = void 0;
+exports.getRequestUrl = getRequestUrl;
+exports.appendQueryParams = appendQueryParams;
 const operationHelpers_js_1 = __nccwpck_require__(9688);
 const interfaceHelpers_js_1 = __nccwpck_require__(2066);
 const CollectionFormatToDelimiterMap = {
@@ -75362,7 +73183,6 @@ function getRequestUrl(baseUri, operationSpec, operationArguments, fallbackObjec
     requestUrl = appendQueryParams(requestUrl, queryParams, sequenceParams, isAbsolutePath);
     return requestUrl;
 }
-exports.getRequestUrl = getRequestUrl;
 function replaceAll(input, replacements) {
     let result = input;
     for (const [searchValue, replaceValue] of replacements) {
@@ -75553,7 +73373,6 @@ function appendQueryParams(url, queryParams, sequenceParams, noOverwrite = false
     parsedUrl.search = searchPieces.length ? `?${searchPieces.join("&")}` : "";
     return parsedUrl.toString();
 }
-exports.appendQueryParams = appendQueryParams;
 //# sourceMappingURL=urlHelpers.js.map
 
 /***/ }),
@@ -75564,9 +73383,12 @@ exports.appendQueryParams = appendQueryParams;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.flattenResponse = exports.isValidUuid = exports.isDuration = exports.isPrimitiveBody = void 0;
+exports.isPrimitiveBody = isPrimitiveBody;
+exports.isDuration = isDuration;
+exports.isValidUuid = isValidUuid;
+exports.flattenResponse = flattenResponse;
 /**
  * A type guard for a primitive response body.
  * @param value - Value to test
@@ -75584,7 +73406,6 @@ function isPrimitiveBody(value, mapperTypeName) {
             value === undefined ||
             value === null));
 }
-exports.isPrimitiveBody = isPrimitiveBody;
 const validateISODuration = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
 /**
  * Returns true if the given string is in ISO 8601 format.
@@ -75594,7 +73415,6 @@ const validateISODuration = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?
 function isDuration(value) {
     return validateISODuration.test(value);
 }
-exports.isDuration = isDuration;
 const validUuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i;
 /**
  * Returns true if the provided uuid is valid.
@@ -75606,7 +73426,6 @@ const validUuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F
 function isValidUuid(uuid) {
     return validUuidRegex.test(uuid);
 }
-exports.isValidUuid = isValidUuid;
 /**
  * Maps the response as follows:
  * - wraps the response body if needed (typically if its type is primitive).
@@ -75682,7 +73501,6 @@ function flattenResponse(fullResponse, responseSpec) {
         shouldWrapBody: isPrimitiveBody(fullResponse.parsedBody, expectedBodyTypeName),
     });
 }
-exports.flattenResponse = flattenResponse;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
@@ -75693,7 +73511,7 @@ exports.flattenResponse = flattenResponse;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExtendedServiceClient = void 0;
 const disableKeepAlivePolicy_js_1 = __nccwpck_require__(2639);
@@ -75755,9 +73573,9 @@ exports.ExtendedServiceClient = ExtendedServiceClient;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.convertHttpClient = void 0;
+exports.convertHttpClient = convertHttpClient;
 const response_js_1 = __nccwpck_require__(8153);
 const util_js_1 = __nccwpck_require__(3850);
 /**
@@ -75773,7 +73591,6 @@ function convertHttpClient(requestPolicyClient) {
         },
     };
 }
-exports.convertHttpClient = convertHttpClient;
 //# sourceMappingURL=httpClientAdapter.js.map
 
 /***/ }),
@@ -75784,7 +73601,7 @@ exports.convertHttpClient = convertHttpClient;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toHttpHeadersLike = exports.convertHttpClient = exports.disableKeepAlivePolicyName = exports.HttpPipelineLogLevel = exports.createRequestPolicyFactoryPolicy = exports.requestPolicyFactoryPolicyName = exports.ExtendedServiceClient = void 0;
 /**
@@ -75814,9 +73631,11 @@ Object.defineProperty(exports, "toHttpHeadersLike", ({ enumerable: true, get: fu
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pipelineContainsDisableKeepAlivePolicy = exports.createDisableKeepAlivePolicy = exports.disableKeepAlivePolicyName = void 0;
+exports.disableKeepAlivePolicyName = void 0;
+exports.createDisableKeepAlivePolicy = createDisableKeepAlivePolicy;
+exports.pipelineContainsDisableKeepAlivePolicy = pipelineContainsDisableKeepAlivePolicy;
 exports.disableKeepAlivePolicyName = "DisableKeepAlivePolicy";
 function createDisableKeepAlivePolicy() {
     return {
@@ -75827,14 +73646,12 @@ function createDisableKeepAlivePolicy() {
         },
     };
 }
-exports.createDisableKeepAlivePolicy = createDisableKeepAlivePolicy;
 /**
  * @internal
  */
 function pipelineContainsDisableKeepAlivePolicy(pipeline) {
     return pipeline.getOrderedPolicies().some((policy) => policy.name === exports.disableKeepAlivePolicyName);
 }
-exports.pipelineContainsDisableKeepAlivePolicy = pipelineContainsDisableKeepAlivePolicy;
 //# sourceMappingURL=disableKeepAlivePolicy.js.map
 
 /***/ }),
@@ -75845,9 +73662,10 @@ exports.pipelineContainsDisableKeepAlivePolicy = pipelineContainsDisableKeepAliv
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createRequestPolicyFactoryPolicy = exports.requestPolicyFactoryPolicyName = exports.HttpPipelineLogLevel = void 0;
+exports.requestPolicyFactoryPolicyName = exports.HttpPipelineLogLevel = void 0;
+exports.createRequestPolicyFactoryPolicy = createRequestPolicyFactoryPolicy;
 const util_js_1 = __nccwpck_require__(3850);
 const response_js_1 = __nccwpck_require__(8153);
 /**
@@ -75896,7 +73714,6 @@ function createRequestPolicyFactoryPolicy(factories) {
         },
     };
 }
-exports.createRequestPolicyFactoryPolicy = createRequestPolicyFactoryPolicy;
 //# sourceMappingURL=requestPolicyFactoryPolicy.js.map
 
 /***/ }),
@@ -75907,9 +73724,10 @@ exports.createRequestPolicyFactoryPolicy = createRequestPolicyFactoryPolicy;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toPipelineResponse = exports.toCompatResponse = void 0;
+exports.toCompatResponse = toCompatResponse;
+exports.toPipelineResponse = toPipelineResponse;
 const core_rest_pipeline_1 = __nccwpck_require__(778);
 const util_js_1 = __nccwpck_require__(3850);
 const originalResponse = Symbol("Original FullOperationResponse");
@@ -75951,7 +73769,6 @@ function toCompatResponse(response, options) {
             headers });
     }
 }
-exports.toCompatResponse = toCompatResponse;
 /**
  * A helper to convert back to a PipelineResponse
  * @param compatResponse - A response compatible with `HttpOperationResponse` from core-http.
@@ -75968,7 +73785,6 @@ function toPipelineResponse(compatResponse) {
         return Object.assign(Object.assign({}, compatResponse), { headers, request: (0, util_js_1.toPipelineRequest)(compatResponse.request) });
     }
 }
-exports.toPipelineResponse = toPipelineResponse;
 //# sourceMappingURL=response.js.map
 
 /***/ }),
@@ -75979,9 +73795,12 @@ exports.toPipelineResponse = toPipelineResponse;
 "use strict";
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.HttpHeaders = exports.toHttpHeadersLike = exports.toWebResourceLike = exports.toPipelineRequest = void 0;
+exports.HttpHeaders = void 0;
+exports.toPipelineRequest = toPipelineRequest;
+exports.toWebResourceLike = toWebResourceLike;
+exports.toHttpHeadersLike = toHttpHeadersLike;
 const core_rest_pipeline_1 = __nccwpck_require__(778);
 // We use a custom symbol to cache a reference to the original request without
 // exposing it on the public interface.
@@ -76015,6 +73834,7 @@ function toPipelineRequest(webResource, options = {}) {
             onUploadProgress: webResource.onUploadProgress,
             proxySettings: webResource.proxySettings,
             streamResponseStatusCodes: webResource.streamResponseStatusCodes,
+            agent: webResource.agent,
         });
         if (options.originalRequest) {
             newRequest[originalClientRequestSymbol] =
@@ -76023,7 +73843,6 @@ function toPipelineRequest(webResource, options = {}) {
         return newRequest;
     }
 }
-exports.toPipelineRequest = toPipelineRequest;
 function toWebResourceLike(request, options) {
     var _a;
     const originalRequest = (_a = options === null || options === void 0 ? void 0 : options.originalRequest) !== null && _a !== void 0 ? _a : request;
@@ -76042,6 +73861,7 @@ function toWebResourceLike(request, options) {
         onUploadProgress: request.onUploadProgress,
         proxySettings: request.proxySettings,
         streamResponseStatusCodes: request.streamResponseStatusCodes,
+        agent: request.agent,
         clone() {
             throw new Error("Cannot clone a non-proxied WebResourceLike");
         },
@@ -76085,6 +73905,7 @@ function toWebResourceLike(request, options) {
                     "onUploadProgress",
                     "proxySettings",
                     "streamResponseStatusCodes",
+                    "agent",
                 ];
                 if (typeof prop === "string" && passThroughProps.includes(prop)) {
                     request[prop] = value;
@@ -76097,7 +73918,6 @@ function toWebResourceLike(request, options) {
         return webResource;
     }
 }
-exports.toWebResourceLike = toWebResourceLike;
 /**
  * Converts HttpHeaders from core-rest-pipeline to look like
  * HttpHeaders from core-http.
@@ -76107,7 +73927,6 @@ exports.toWebResourceLike = toWebResourceLike;
 function toHttpHeadersLike(headers) {
     return new HttpHeaders(headers.toJSON({ preserveCase: true }));
 }
-exports.toHttpHeadersLike = toHttpHeadersLike;
 /**
  * A collection of HttpHeaders that can be sent with a HTTP request.
  */
@@ -77612,7 +75431,7 @@ exports.buildCreatePoller = buildCreatePoller;
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DEFAULT_RETRY_POLICY_COUNT = exports.SDK_VERSION = void 0;
-exports.SDK_VERSION = "1.18.2";
+exports.SDK_VERSION = "1.19.1";
 exports.DEFAULT_RETRY_POLICY_COUNT = 3;
 //# sourceMappingURL=constants.js.map
 
@@ -77638,6 +75457,7 @@ const formDataPolicy_js_1 = __nccwpck_require__(5497);
 const core_util_1 = __nccwpck_require__(7779);
 const proxyPolicy_js_1 = __nccwpck_require__(2815);
 const setClientRequestIdPolicy_js_1 = __nccwpck_require__(5686);
+const agentPolicy_js_1 = __nccwpck_require__(8554);
 const tlsPolicy_js_1 = __nccwpck_require__(5798);
 const tracingPolicy_js_1 = __nccwpck_require__(3237);
 /**
@@ -77648,6 +75468,9 @@ function createPipelineFromOptions(options) {
     var _a;
     const pipeline = (0, pipeline_js_1.createEmptyPipeline)();
     if (core_util_1.isNodeLike) {
+        if (options.agent) {
+            pipeline.addPolicy((0, agentPolicy_js_1.agentPolicy)(options.agent));
+        }
         if (options.tlsOptions) {
             pipeline.addPolicy((0, tlsPolicy_js_1.tlsPolicy)(options.tlsOptions));
         }
@@ -77804,7 +75627,7 @@ function createHttpHeaders(rawHeaders) {
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createFileFromStream = exports.createFile = exports.auxiliaryAuthenticationHeaderPolicyName = exports.auxiliaryAuthenticationHeaderPolicy = exports.ndJsonPolicyName = exports.ndJsonPolicy = exports.bearerTokenAuthenticationPolicyName = exports.bearerTokenAuthenticationPolicy = exports.formDataPolicyName = exports.formDataPolicy = exports.tlsPolicyName = exports.tlsPolicy = exports.userAgentPolicyName = exports.userAgentPolicy = exports.defaultRetryPolicy = exports.tracingPolicyName = exports.tracingPolicy = exports.retryPolicy = exports.throttlingRetryPolicyName = exports.throttlingRetryPolicy = exports.systemErrorRetryPolicyName = exports.systemErrorRetryPolicy = exports.redirectPolicyName = exports.redirectPolicy = exports.getDefaultProxySettings = exports.proxyPolicyName = exports.proxyPolicy = exports.multipartPolicyName = exports.multipartPolicy = exports.logPolicyName = exports.logPolicy = exports.setClientRequestIdPolicyName = exports.setClientRequestIdPolicy = exports.exponentialRetryPolicyName = exports.exponentialRetryPolicy = exports.decompressResponsePolicyName = exports.decompressResponsePolicy = exports.isRestError = exports.RestError = exports.createPipelineRequest = exports.createHttpHeaders = exports.createDefaultHttpClient = exports.createPipelineFromOptions = exports.createEmptyPipeline = void 0;
+exports.createFileFromStream = exports.createFile = exports.agentPolicyName = exports.agentPolicy = exports.auxiliaryAuthenticationHeaderPolicyName = exports.auxiliaryAuthenticationHeaderPolicy = exports.ndJsonPolicyName = exports.ndJsonPolicy = exports.bearerTokenAuthenticationPolicyName = exports.bearerTokenAuthenticationPolicy = exports.formDataPolicyName = exports.formDataPolicy = exports.tlsPolicyName = exports.tlsPolicy = exports.userAgentPolicyName = exports.userAgentPolicy = exports.defaultRetryPolicy = exports.tracingPolicyName = exports.tracingPolicy = exports.retryPolicy = exports.throttlingRetryPolicyName = exports.throttlingRetryPolicy = exports.systemErrorRetryPolicyName = exports.systemErrorRetryPolicy = exports.redirectPolicyName = exports.redirectPolicy = exports.getDefaultProxySettings = exports.proxyPolicyName = exports.proxyPolicy = exports.multipartPolicyName = exports.multipartPolicy = exports.logPolicyName = exports.logPolicy = exports.setClientRequestIdPolicyName = exports.setClientRequestIdPolicy = exports.exponentialRetryPolicyName = exports.exponentialRetryPolicy = exports.decompressResponsePolicyName = exports.decompressResponsePolicy = exports.isRestError = exports.RestError = exports.createPipelineRequest = exports.createHttpHeaders = exports.createDefaultHttpClient = exports.createPipelineFromOptions = exports.createEmptyPipeline = void 0;
 var pipeline_js_1 = __nccwpck_require__(9590);
 Object.defineProperty(exports, "createEmptyPipeline", ({ enumerable: true, get: function () { return pipeline_js_1.createEmptyPipeline; } }));
 var createPipelineFromOptions_js_1 = __nccwpck_require__(862);
@@ -77871,6 +75694,9 @@ Object.defineProperty(exports, "ndJsonPolicyName", ({ enumerable: true, get: fun
 var auxiliaryAuthenticationHeaderPolicy_js_1 = __nccwpck_require__(2262);
 Object.defineProperty(exports, "auxiliaryAuthenticationHeaderPolicy", ({ enumerable: true, get: function () { return auxiliaryAuthenticationHeaderPolicy_js_1.auxiliaryAuthenticationHeaderPolicy; } }));
 Object.defineProperty(exports, "auxiliaryAuthenticationHeaderPolicyName", ({ enumerable: true, get: function () { return auxiliaryAuthenticationHeaderPolicy_js_1.auxiliaryAuthenticationHeaderPolicyName; } }));
+var agentPolicy_js_1 = __nccwpck_require__(8554);
+Object.defineProperty(exports, "agentPolicy", ({ enumerable: true, get: function () { return agentPolicy_js_1.agentPolicy; } }));
+Object.defineProperty(exports, "agentPolicyName", ({ enumerable: true, get: function () { return agentPolicy_js_1.agentPolicyName; } }));
 var file_js_1 = __nccwpck_require__(7073);
 Object.defineProperty(exports, "createFile", ({ enumerable: true, get: function () { return file_js_1.createFile; } }));
 Object.defineProperty(exports, "createFileFromStream", ({ enumerable: true, get: function () { return file_js_1.createFileFromStream; } }));
@@ -77912,6 +75738,7 @@ const abort_controller_1 = __nccwpck_require__(3287);
 const httpHeaders_js_1 = __nccwpck_require__(192);
 const restError_js_1 = __nccwpck_require__(8666);
 const log_js_1 = __nccwpck_require__(544);
+const sanitizer_js_1 = __nccwpck_require__(5204);
 const DEFAULT_TLS_SETTINGS = {};
 function isReadableStream(body) {
     return body && typeof body.pipe === "function";
@@ -77972,7 +75799,7 @@ class NodeHttpClient {
         let abortListener;
         if (request.abortSignal) {
             if (request.abortSignal.aborted) {
-                throw new abort_controller_1.AbortError("The operation was aborted.");
+                throw new abort_controller_1.AbortError("The operation was aborted. Request has already been canceled.");
             }
             abortListener = (event) => {
                 if (event.type === "abort") {
@@ -77981,8 +75808,11 @@ class NodeHttpClient {
             };
             request.abortSignal.addEventListener("abort", abortListener);
         }
+        let timeoutId;
         if (request.timeout > 0) {
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
+                const sanitizer = new sanitizer_js_1.Sanitizer();
+                log_js_1.logger.info(`request to '${sanitizer.sanitizeUrl(request.url)}' timed out. canceling...`);
                 abortController.abort();
             }, request.timeout);
         }
@@ -78012,6 +75842,9 @@ class NodeHttpClient {
                 body = uploadReportStream;
             }
             const res = await this.makeRequest(request, abortController, body);
+            if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+            }
             const headers = getResponseHeaders(res);
             const status = (_a = res.statusCode) !== null && _a !== void 0 ? _a : 0;
             const response = {
@@ -78096,7 +75929,7 @@ class NodeHttpClient {
                 reject(new restError_js_1.RestError(err.message, { code: (_a = err.code) !== null && _a !== void 0 ? _a : restError_js_1.RestError.REQUEST_SEND_ERROR, request }));
             });
             abortController.signal.addEventListener("abort", () => {
-                const abortError = new abort_controller_1.AbortError("The operation was aborted.");
+                const abortError = new abort_controller_1.AbortError("The operation was aborted. Rejecting from abort signal callback while making request.");
                 req.destroy(abortError);
                 reject(abortError);
             });
@@ -78550,6 +76383,8 @@ class PipelineRequestImpl {
         this.requestId = options.requestId || (0, core_util_1.randomUUID)();
         this.allowInsecureConnection = (_f = options.allowInsecureConnection) !== null && _f !== void 0 ? _f : false;
         this.enableBrowserStreams = (_g = options.enableBrowserStreams) !== null && _g !== void 0 ? _g : false;
+        this.agent = options.agent;
+        this.tlsSettings = options.tlsSettings;
     }
 }
 /**
@@ -78561,6 +76396,39 @@ function createPipelineRequest(options) {
     return new PipelineRequestImpl(options);
 }
 //# sourceMappingURL=pipelineRequest.js.map
+
+/***/ }),
+
+/***/ 8554:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.agentPolicyName = void 0;
+exports.agentPolicy = agentPolicy;
+/**
+ * Name of the Agent Policy
+ */
+exports.agentPolicyName = "agentPolicy";
+/**
+ * Gets a pipeline policy that sets http.agent
+ */
+function agentPolicy(agent) {
+    return {
+        name: exports.agentPolicyName,
+        sendRequest: async (req, next) => {
+            // Users may define an agent on the request, honor it over the client level one
+            if (!req.agent) {
+                req.agent = agent;
+            }
+            return next(req);
+        },
+    };
+}
+//# sourceMappingURL=agentPolicy.js.map
 
 /***/ }),
 
@@ -79778,9 +77646,9 @@ exports.throttlingRetryPolicyName = "throttlingRetryPolicy";
  * A policy that retries when the server sends a 429 response with a Retry-After header.
  *
  * To learn more, please refer to
- * https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-request-limits,
- * https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits and
- * https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshooting-throttling-errors
+ * https://learn.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-request-limits,
+ * https://learn.microsoft.com/en-us/azure/azure-subscription-service-limits and
+ * https://learn.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshooting-throttling-errors
  *
  * @param options - Options that configure retry logic.
  */
@@ -81862,7 +79730,7 @@ exports.XML_CHARKEY = "_";
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stringifyXML = stringifyXML;
 exports.parseXML = parseXML;
-const fast_xml_parser_1 = __nccwpck_require__(9741);
+const fast_xml_parser_1 = __nccwpck_require__(591);
 const xml_common_js_1 = __nccwpck_require__(3406);
 function getCommonOptions(options) {
     var _a;
@@ -81878,7 +79746,7 @@ function getSerializerOptions(options = {}) {
     return Object.assign(Object.assign({}, getCommonOptions(options)), { attributeNamePrefix: "@_", format: true, suppressEmptyNode: true, indentBy: "", rootNodeName: (_a = options.rootName) !== null && _a !== void 0 ? _a : "root", cdataPropName: (_b = options.cdataPropName) !== null && _b !== void 0 ? _b : "__cdata" });
 }
 function getParserOptions(options = {}) {
-    return Object.assign(Object.assign({}, getCommonOptions(options)), { parseAttributeValue: false, parseTagValue: false, attributeNamePrefix: "", stopNodes: options.stopNodes, processEntities: true });
+    return Object.assign(Object.assign({}, getCommonOptions(options)), { parseAttributeValue: false, parseTagValue: false, attributeNamePrefix: "", stopNodes: options.stopNodes, processEntities: true, trimValues: false });
 }
 /**
  * Converts given JSON object to XML string
@@ -83835,6 +81703,13 @@ function parseParams (str) {
 
 module.exports = parseParams
 
+
+/***/ }),
+
+/***/ 591:
+/***/ ((module) => {
+
+(()=>{"use strict";var t={d:(e,n)=>{for(var i in n)t.o(n,i)&&!t.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:n[i]})},o:(t,e)=>Object.prototype.hasOwnProperty.call(t,e),r:t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})}},e={};t.r(e),t.d(e,{XMLBuilder:()=>gt,XMLParser:()=>at,XMLValidator:()=>Nt});const n=":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD",i=new RegExp("^["+n+"]["+n+"\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$");function r(t,e){const n=[];let i=e.exec(t);for(;i;){const r=[];r.startIndex=e.lastIndex-i[0].length;const s=i.length;for(let t=0;t<s;t++)r.push(i[t]);n.push(r),i=e.exec(t)}return n}const s=function(t){return!(null==i.exec(t))},o={allowBooleanAttributes:!1,unpairedTags:[]};function a(t,e){e=Object.assign({},o,e);const n=[];let i=!1,r=!1;"\ufeff"===t[0]&&(t=t.substr(1));for(let o=0;o<t.length;o++)if("<"===t[o]&&"?"===t[o+1]){if(o+=2,o=u(t,o),o.err)return o}else{if("<"!==t[o]){if(l(t[o]))continue;return x("InvalidChar","char '"+t[o]+"' is not expected.",N(t,o))}{let a=o;if(o++,"!"===t[o]){o=h(t,o);continue}{let d=!1;"/"===t[o]&&(d=!0,o++);let c="";for(;o<t.length&&">"!==t[o]&&" "!==t[o]&&"\t"!==t[o]&&"\n"!==t[o]&&"\r"!==t[o];o++)c+=t[o];if(c=c.trim(),"/"===c[c.length-1]&&(c=c.substring(0,c.length-1),o--),!s(c)){let e;return e=0===c.trim().length?"Invalid space after '<'.":"Tag '"+c+"' is an invalid name.",x("InvalidTag",e,N(t,o))}const p=f(t,o);if(!1===p)return x("InvalidAttr","Attributes for '"+c+"' have open quote.",N(t,o));let b=p.value;if(o=p.index,"/"===b[b.length-1]){const n=o-b.length;b=b.substring(0,b.length-1);const r=g(b,e);if(!0!==r)return x(r.err.code,r.err.msg,N(t,n+r.err.line));i=!0}else if(d){if(!p.tagClosed)return x("InvalidTag","Closing tag '"+c+"' doesn't have proper closing.",N(t,o));if(b.trim().length>0)return x("InvalidTag","Closing tag '"+c+"' can't have attributes or invalid starting.",N(t,a));if(0===n.length)return x("InvalidTag","Closing tag '"+c+"' has not been opened.",N(t,a));{const e=n.pop();if(c!==e.tagName){let n=N(t,e.tagStartPos);return x("InvalidTag","Expected closing tag '"+e.tagName+"' (opened in line "+n.line+", col "+n.col+") instead of closing tag '"+c+"'.",N(t,a))}0==n.length&&(r=!0)}}else{const s=g(b,e);if(!0!==s)return x(s.err.code,s.err.msg,N(t,o-b.length+s.err.line));if(!0===r)return x("InvalidXml","Multiple possible root nodes found.",N(t,o));-1!==e.unpairedTags.indexOf(c)||n.push({tagName:c,tagStartPos:a}),i=!0}for(o++;o<t.length;o++)if("<"===t[o]){if("!"===t[o+1]){o++,o=h(t,o);continue}if("?"!==t[o+1])break;if(o=u(t,++o),o.err)return o}else if("&"===t[o]){const e=m(t,o);if(-1==e)return x("InvalidChar","char '&' is not expected.",N(t,o));o=e}else if(!0===r&&!l(t[o]))return x("InvalidXml","Extra text at the end",N(t,o));"<"===t[o]&&o--}}}return i?1==n.length?x("InvalidTag","Unclosed tag '"+n[0].tagName+"'.",N(t,n[0].tagStartPos)):!(n.length>0)||x("InvalidXml","Invalid '"+JSON.stringify(n.map((t=>t.tagName)),null,4).replace(/\r?\n/g,"")+"' found.",{line:1,col:1}):x("InvalidXml","Start tag expected.",1)}function l(t){return" "===t||"\t"===t||"\n"===t||"\r"===t}function u(t,e){const n=e;for(;e<t.length;e++)if("?"!=t[e]&&" "!=t[e]);else{const i=t.substr(n,e-n);if(e>5&&"xml"===i)return x("InvalidXml","XML declaration allowed only at the start of the document.",N(t,e));if("?"==t[e]&&">"==t[e+1]){e++;break}}return e}function h(t,e){if(t.length>e+5&&"-"===t[e+1]&&"-"===t[e+2]){for(e+=3;e<t.length;e++)if("-"===t[e]&&"-"===t[e+1]&&">"===t[e+2]){e+=2;break}}else if(t.length>e+8&&"D"===t[e+1]&&"O"===t[e+2]&&"C"===t[e+3]&&"T"===t[e+4]&&"Y"===t[e+5]&&"P"===t[e+6]&&"E"===t[e+7]){let n=1;for(e+=8;e<t.length;e++)if("<"===t[e])n++;else if(">"===t[e]&&(n--,0===n))break}else if(t.length>e+9&&"["===t[e+1]&&"C"===t[e+2]&&"D"===t[e+3]&&"A"===t[e+4]&&"T"===t[e+5]&&"A"===t[e+6]&&"["===t[e+7])for(e+=8;e<t.length;e++)if("]"===t[e]&&"]"===t[e+1]&&">"===t[e+2]){e+=2;break}return e}const d='"',c="'";function f(t,e){let n="",i="",r=!1;for(;e<t.length;e++){if(t[e]===d||t[e]===c)""===i?i=t[e]:i!==t[e]||(i="");else if(">"===t[e]&&""===i){r=!0;break}n+=t[e]}return""===i&&{value:n,index:e,tagClosed:r}}const p=new RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?","g");function g(t,e){const n=r(t,p),i={};for(let t=0;t<n.length;t++){if(0===n[t][1].length)return x("InvalidAttr","Attribute '"+n[t][2]+"' has no space in starting.",E(n[t]));if(void 0!==n[t][3]&&void 0===n[t][4])return x("InvalidAttr","Attribute '"+n[t][2]+"' is without value.",E(n[t]));if(void 0===n[t][3]&&!e.allowBooleanAttributes)return x("InvalidAttr","boolean attribute '"+n[t][2]+"' is not allowed.",E(n[t]));const r=n[t][2];if(!b(r))return x("InvalidAttr","Attribute '"+r+"' is an invalid name.",E(n[t]));if(i.hasOwnProperty(r))return x("InvalidAttr","Attribute '"+r+"' is repeated.",E(n[t]));i[r]=1}return!0}function m(t,e){if(";"===t[++e])return-1;if("#"===t[e])return function(t,e){let n=/\d/;for("x"===t[e]&&(e++,n=/[\da-fA-F]/);e<t.length;e++){if(";"===t[e])return e;if(!t[e].match(n))break}return-1}(t,++e);let n=0;for(;e<t.length;e++,n++)if(!(t[e].match(/\w/)&&n<20)){if(";"===t[e])break;return-1}return e}function x(t,e,n){return{err:{code:t,msg:e,line:n.line||n,col:n.col}}}function b(t){return s(t)}function N(t,e){const n=t.substring(0,e).split(/\r?\n/);return{line:n.length,col:n[n.length-1].length+1}}function E(t){return t.startIndex+t[1].length}const v={preserveOrder:!1,attributeNamePrefix:"@_",attributesGroupName:!1,textNodeName:"#text",ignoreAttributes:!0,removeNSPrefix:!1,allowBooleanAttributes:!1,parseTagValue:!0,parseAttributeValue:!1,trimValues:!0,cdataPropName:!1,numberParseOptions:{hex:!0,leadingZeros:!0,eNotation:!0},tagValueProcessor:function(t,e){return e},attributeValueProcessor:function(t,e){return e},stopNodes:[],alwaysCreateTextNode:!1,isArray:()=>!1,commentPropName:!1,unpairedTags:[],processEntities:!0,htmlEntities:!1,ignoreDeclaration:!1,ignorePiTags:!1,transformTagName:!1,transformAttributeName:!1,updateTag:function(t,e,n){return t},captureMetaData:!1};let y;y="function"!=typeof Symbol?"@@xmlMetadata":Symbol("XML Node Metadata");class T{constructor(t){this.tagname=t,this.child=[],this[":@"]={}}add(t,e){"__proto__"===t&&(t="#__proto__"),this.child.push({[t]:e})}addChild(t,e){"__proto__"===t.tagname&&(t.tagname="#__proto__"),t[":@"]&&Object.keys(t[":@"]).length>0?this.child.push({[t.tagname]:t.child,":@":t[":@"]}):this.child.push({[t.tagname]:t.child}),void 0!==e&&(this.child[this.child.length-1][y]={startIndex:e})}static getMetaDataSymbol(){return y}}function w(t,e){const n={};if("O"!==t[e+3]||"C"!==t[e+4]||"T"!==t[e+5]||"Y"!==t[e+6]||"P"!==t[e+7]||"E"!==t[e+8])throw new Error("Invalid Tag instead of DOCTYPE");{e+=9;let i=1,r=!1,s=!1,o="";for(;e<t.length;e++)if("<"!==t[e]||s)if(">"===t[e]){if(s?"-"===t[e-1]&&"-"===t[e-2]&&(s=!1,i--):i--,0===i)break}else"["===t[e]?r=!0:o+=t[e];else{if(r&&$(t,e)){let i,r;e+=7,[i,r,e]=O(t,e+1),-1===r.indexOf("&")&&(n[i]={regx:RegExp(`&${i};`,"g"),val:r})}else if(r&&j(t,e)){e+=8;const{index:n}=S(t,e+1);e=n}else if(r&&D(t,e))e+=8;else if(r&&V(t,e)){e+=9;const{index:n}=A(t,e+1);e=n}else{if(!C)throw new Error("Invalid DOCTYPE");s=!0}i++,o=""}if(0!==i)throw new Error("Unclosed DOCTYPE")}return{entities:n,i:e}}const P=(t,e)=>{for(;e<t.length&&/\s/.test(t[e]);)e++;return e};function O(t,e){e=P(t,e);let n="";for(;e<t.length&&!/\s/.test(t[e])&&'"'!==t[e]&&"'"!==t[e];)n+=t[e],e++;if(_(n),e=P(t,e),"SYSTEM"===t.substring(e,e+6).toUpperCase())throw new Error("External entities are not supported");if("%"===t[e])throw new Error("Parameter entities are not supported");let i="";return[e,i]=I(t,e,"entity"),[n,i,--e]}function A(t,e){e=P(t,e);let n="";for(;e<t.length&&!/\s/.test(t[e]);)n+=t[e],e++;_(n),e=P(t,e);const i=t.substring(e,e+6).toUpperCase();if("SYSTEM"!==i&&"PUBLIC"!==i)throw new Error(`Expected SYSTEM or PUBLIC, found "${i}"`);e+=i.length,e=P(t,e);let r=null,s=null;if("PUBLIC"===i)[e,r]=I(t,e,"publicIdentifier"),'"'!==t[e=P(t,e)]&&"'"!==t[e]||([e,s]=I(t,e,"systemIdentifier"));else if("SYSTEM"===i&&([e,s]=I(t,e,"systemIdentifier"),!s))throw new Error("Missing mandatory system identifier for SYSTEM notation");return{notationName:n,publicIdentifier:r,systemIdentifier:s,index:--e}}function I(t,e,n){let i="";const r=t[e];if('"'!==r&&"'"!==r)throw new Error(`Expected quoted string, found "${r}"`);for(e++;e<t.length&&t[e]!==r;)i+=t[e],e++;if(t[e]!==r)throw new Error(`Unterminated ${n} value`);return[++e,i]}function S(t,e){e=P(t,e);let n="";for(;e<t.length&&!/\s/.test(t[e]);)n+=t[e],e++;if(!_(n))throw new Error(`Invalid element name: "${n}"`);if("("!==t[e=P(t,e)])throw new Error(`Expected '(', found "${t[e]}"`);e++;let i="";for(;e<t.length&&")"!==t[e];)i+=t[e],e++;if(")"!==t[e])throw new Error("Unterminated content model");return{elementName:n,contentModel:i.trim(),index:e}}function C(t,e){return"!"===t[e+1]&&"-"===t[e+2]&&"-"===t[e+3]}function $(t,e){return"!"===t[e+1]&&"E"===t[e+2]&&"N"===t[e+3]&&"T"===t[e+4]&&"I"===t[e+5]&&"T"===t[e+6]&&"Y"===t[e+7]}function j(t,e){return"!"===t[e+1]&&"E"===t[e+2]&&"L"===t[e+3]&&"E"===t[e+4]&&"M"===t[e+5]&&"E"===t[e+6]&&"N"===t[e+7]&&"T"===t[e+8]}function D(t,e){return"!"===t[e+1]&&"A"===t[e+2]&&"T"===t[e+3]&&"T"===t[e+4]&&"L"===t[e+5]&&"I"===t[e+6]&&"S"===t[e+7]&&"T"===t[e+8]}function V(t,e){return"!"===t[e+1]&&"N"===t[e+2]&&"O"===t[e+3]&&"T"===t[e+4]&&"A"===t[e+5]&&"T"===t[e+6]&&"I"===t[e+7]&&"O"===t[e+8]&&"N"===t[e+9]}function _(t){if(s(t))return t;throw new Error(`Invalid entity name ${t}`)}const k=/^[-+]?0x[a-fA-F0-9]+$/,F=/^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/,M={hex:!0,leadingZeros:!0,decimalPoint:".",eNotation:!0};function L(t){return"function"==typeof t?t:Array.isArray(t)?e=>{for(const n of t){if("string"==typeof n&&e===n)return!0;if(n instanceof RegExp&&n.test(e))return!0}}:()=>!1}class B{constructor(t){this.options=t,this.currentNode=null,this.tagsNodeStack=[],this.docTypeEntities={},this.lastEntities={apos:{regex:/&(apos|#39|#x27);/g,val:"'"},gt:{regex:/&(gt|#62|#x3E);/g,val:">"},lt:{regex:/&(lt|#60|#x3C);/g,val:"<"},quot:{regex:/&(quot|#34|#x22);/g,val:'"'}},this.ampEntity={regex:/&(amp|#38|#x26);/g,val:"&"},this.htmlEntities={space:{regex:/&(nbsp|#160);/g,val:" "},cent:{regex:/&(cent|#162);/g,val:"¢"},pound:{regex:/&(pound|#163);/g,val:"£"},yen:{regex:/&(yen|#165);/g,val:"¥"},euro:{regex:/&(euro|#8364);/g,val:"€"},copyright:{regex:/&(copy|#169);/g,val:"©"},reg:{regex:/&(reg|#174);/g,val:"®"},inr:{regex:/&(inr|#8377);/g,val:"₹"},num_dec:{regex:/&#([0-9]{1,7});/g,val:(t,e)=>String.fromCodePoint(Number.parseInt(e,10))},num_hex:{regex:/&#x([0-9a-fA-F]{1,6});/g,val:(t,e)=>String.fromCodePoint(Number.parseInt(e,16))}},this.addExternalEntities=U,this.parseXml=Z,this.parseTextData=G,this.resolveNameSpace=X,this.buildAttributesMap=Y,this.isItStopNode=J,this.replaceEntitiesValue=W,this.readStopNodeData=Q,this.saveTextToParentTag=z,this.addChild=q,this.ignoreAttributesFn=L(this.options.ignoreAttributes)}}function U(t){const e=Object.keys(t);for(let n=0;n<e.length;n++){const i=e[n];this.lastEntities[i]={regex:new RegExp("&"+i+";","g"),val:t[i]}}}function G(t,e,n,i,r,s,o){if(void 0!==t&&(this.options.trimValues&&!i&&(t=t.trim()),t.length>0)){o||(t=this.replaceEntitiesValue(t));const i=this.options.tagValueProcessor(e,t,n,r,s);return null==i?t:typeof i!=typeof t||i!==t?i:this.options.trimValues||t.trim()===t?tt(t,this.options.parseTagValue,this.options.numberParseOptions):t}}function X(t){if(this.options.removeNSPrefix){const e=t.split(":"),n="/"===t.charAt(0)?"/":"";if("xmlns"===e[0])return"";2===e.length&&(t=n+e[1])}return t}const R=new RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?","gm");function Y(t,e,n){if(!0!==this.options.ignoreAttributes&&"string"==typeof t){const n=r(t,R),i=n.length,s={};for(let t=0;t<i;t++){const i=this.resolveNameSpace(n[t][1]);if(this.ignoreAttributesFn(i,e))continue;let r=n[t][4],o=this.options.attributeNamePrefix+i;if(i.length)if(this.options.transformAttributeName&&(o=this.options.transformAttributeName(o)),"__proto__"===o&&(o="#__proto__"),void 0!==r){this.options.trimValues&&(r=r.trim()),r=this.replaceEntitiesValue(r);const t=this.options.attributeValueProcessor(i,r,e);s[o]=null==t?r:typeof t!=typeof r||t!==r?t:tt(r,this.options.parseAttributeValue,this.options.numberParseOptions)}else this.options.allowBooleanAttributes&&(s[o]=!0)}if(!Object.keys(s).length)return;if(this.options.attributesGroupName){const t={};return t[this.options.attributesGroupName]=s,t}return s}}const Z=function(t){t=t.replace(/\r\n?/g,"\n");const e=new T("!xml");let n=e,i="",r="";for(let s=0;s<t.length;s++)if("<"===t[s])if("/"===t[s+1]){const e=H(t,">",s,"Closing Tag is not closed.");let o=t.substring(s+2,e).trim();if(this.options.removeNSPrefix){const t=o.indexOf(":");-1!==t&&(o=o.substr(t+1))}this.options.transformTagName&&(o=this.options.transformTagName(o)),n&&(i=this.saveTextToParentTag(i,n,r));const a=r.substring(r.lastIndexOf(".")+1);if(o&&-1!==this.options.unpairedTags.indexOf(o))throw new Error(`Unpaired tag can not be used as closing tag: </${o}>`);let l=0;a&&-1!==this.options.unpairedTags.indexOf(a)?(l=r.lastIndexOf(".",r.lastIndexOf(".")-1),this.tagsNodeStack.pop()):l=r.lastIndexOf("."),r=r.substring(0,l),n=this.tagsNodeStack.pop(),i="",s=e}else if("?"===t[s+1]){let e=K(t,s,!1,"?>");if(!e)throw new Error("Pi Tag is not closed.");if(i=this.saveTextToParentTag(i,n,r),this.options.ignoreDeclaration&&"?xml"===e.tagName||this.options.ignorePiTags);else{const t=new T(e.tagName);t.add(this.options.textNodeName,""),e.tagName!==e.tagExp&&e.attrExpPresent&&(t[":@"]=this.buildAttributesMap(e.tagExp,r,e.tagName)),this.addChild(n,t,r,s)}s=e.closeIndex+1}else if("!--"===t.substr(s+1,3)){const e=H(t,"--\x3e",s+4,"Comment is not closed.");if(this.options.commentPropName){const o=t.substring(s+4,e-2);i=this.saveTextToParentTag(i,n,r),n.add(this.options.commentPropName,[{[this.options.textNodeName]:o}])}s=e}else if("!D"===t.substr(s+1,2)){const e=w(t,s);this.docTypeEntities=e.entities,s=e.i}else if("!["===t.substr(s+1,2)){const e=H(t,"]]>",s,"CDATA is not closed.")-2,o=t.substring(s+9,e);i=this.saveTextToParentTag(i,n,r);let a=this.parseTextData(o,n.tagname,r,!0,!1,!0,!0);null==a&&(a=""),this.options.cdataPropName?n.add(this.options.cdataPropName,[{[this.options.textNodeName]:o}]):n.add(this.options.textNodeName,a),s=e+2}else{let o=K(t,s,this.options.removeNSPrefix),a=o.tagName;const l=o.rawTagName;let u=o.tagExp,h=o.attrExpPresent,d=o.closeIndex;this.options.transformTagName&&(a=this.options.transformTagName(a)),n&&i&&"!xml"!==n.tagname&&(i=this.saveTextToParentTag(i,n,r,!1));const c=n;c&&-1!==this.options.unpairedTags.indexOf(c.tagname)&&(n=this.tagsNodeStack.pop(),r=r.substring(0,r.lastIndexOf("."))),a!==e.tagname&&(r+=r?"."+a:a);const f=s;if(this.isItStopNode(this.options.stopNodes,r,a)){let e="";if(u.length>0&&u.lastIndexOf("/")===u.length-1)"/"===a[a.length-1]?(a=a.substr(0,a.length-1),r=r.substr(0,r.length-1),u=a):u=u.substr(0,u.length-1),s=o.closeIndex;else if(-1!==this.options.unpairedTags.indexOf(a))s=o.closeIndex;else{const n=this.readStopNodeData(t,l,d+1);if(!n)throw new Error(`Unexpected end of ${l}`);s=n.i,e=n.tagContent}const i=new T(a);a!==u&&h&&(i[":@"]=this.buildAttributesMap(u,r,a)),e&&(e=this.parseTextData(e,a,r,!0,h,!0,!0)),r=r.substr(0,r.lastIndexOf(".")),i.add(this.options.textNodeName,e),this.addChild(n,i,r,f)}else{if(u.length>0&&u.lastIndexOf("/")===u.length-1){"/"===a[a.length-1]?(a=a.substr(0,a.length-1),r=r.substr(0,r.length-1),u=a):u=u.substr(0,u.length-1),this.options.transformTagName&&(a=this.options.transformTagName(a));const t=new T(a);a!==u&&h&&(t[":@"]=this.buildAttributesMap(u,r,a)),this.addChild(n,t,r,f),r=r.substr(0,r.lastIndexOf("."))}else{const t=new T(a);this.tagsNodeStack.push(n),a!==u&&h&&(t[":@"]=this.buildAttributesMap(u,r,a)),this.addChild(n,t,r,f),n=t}i="",s=d}}else i+=t[s];return e.child};function q(t,e,n,i){this.options.captureMetaData||(i=void 0);const r=this.options.updateTag(e.tagname,n,e[":@"]);!1===r||("string"==typeof r?(e.tagname=r,t.addChild(e,i)):t.addChild(e,i))}const W=function(t){if(this.options.processEntities){for(let e in this.docTypeEntities){const n=this.docTypeEntities[e];t=t.replace(n.regx,n.val)}for(let e in this.lastEntities){const n=this.lastEntities[e];t=t.replace(n.regex,n.val)}if(this.options.htmlEntities)for(let e in this.htmlEntities){const n=this.htmlEntities[e];t=t.replace(n.regex,n.val)}t=t.replace(this.ampEntity.regex,this.ampEntity.val)}return t};function z(t,e,n,i){return t&&(void 0===i&&(i=0===e.child.length),void 0!==(t=this.parseTextData(t,e.tagname,n,!1,!!e[":@"]&&0!==Object.keys(e[":@"]).length,i))&&""!==t&&e.add(this.options.textNodeName,t),t=""),t}function J(t,e,n){const i="*."+n;for(const n in t){const r=t[n];if(i===r||e===r)return!0}return!1}function H(t,e,n,i){const r=t.indexOf(e,n);if(-1===r)throw new Error(i);return r+e.length-1}function K(t,e,n,i=">"){const r=function(t,e,n=">"){let i,r="";for(let s=e;s<t.length;s++){let e=t[s];if(i)e===i&&(i="");else if('"'===e||"'"===e)i=e;else if(e===n[0]){if(!n[1])return{data:r,index:s};if(t[s+1]===n[1])return{data:r,index:s}}else"\t"===e&&(e=" ");r+=e}}(t,e+1,i);if(!r)return;let s=r.data;const o=r.index,a=s.search(/\s/);let l=s,u=!0;-1!==a&&(l=s.substring(0,a),s=s.substring(a+1).trimStart());const h=l;if(n){const t=l.indexOf(":");-1!==t&&(l=l.substr(t+1),u=l!==r.data.substr(t+1))}return{tagName:l,tagExp:s,closeIndex:o,attrExpPresent:u,rawTagName:h}}function Q(t,e,n){const i=n;let r=1;for(;n<t.length;n++)if("<"===t[n])if("/"===t[n+1]){const s=H(t,">",n,`${e} is not closed`);if(t.substring(n+2,s).trim()===e&&(r--,0===r))return{tagContent:t.substring(i,n),i:s};n=s}else if("?"===t[n+1])n=H(t,"?>",n+1,"StopNode is not closed.");else if("!--"===t.substr(n+1,3))n=H(t,"--\x3e",n+3,"StopNode is not closed.");else if("!["===t.substr(n+1,2))n=H(t,"]]>",n,"StopNode is not closed.")-2;else{const i=K(t,n,">");i&&((i&&i.tagName)===e&&"/"!==i.tagExp[i.tagExp.length-1]&&r++,n=i.closeIndex)}}function tt(t,e,n){if(e&&"string"==typeof t){const e=t.trim();return"true"===e||"false"!==e&&function(t,e={}){if(e=Object.assign({},M,e),!t||"string"!=typeof t)return t;let n=t.trim();if(void 0!==e.skipLike&&e.skipLike.test(n))return t;if("0"===t)return 0;if(e.hex&&k.test(n))return function(t){if(parseInt)return parseInt(t,16);if(Number.parseInt)return Number.parseInt(t,16);if(window&&window.parseInt)return window.parseInt(t,16);throw new Error("parseInt, Number.parseInt, window.parseInt are not supported")}(n);if(-1!==n.search(/[eE]/)){const i=n.match(/^([-\+])?(0*)([0-9]*(\.[0-9]*)?[eE][-\+]?[0-9]+)$/);if(i){if(e.leadingZeros)n=(i[1]||"")+i[3];else if("0"!==i[2]||"."!==i[3][0])return t;return e.eNotation?Number(n):t}return t}{const r=F.exec(n);if(r){const s=r[1],o=r[2];let a=(i=r[3])&&-1!==i.indexOf(".")?("."===(i=i.replace(/0+$/,""))?i="0":"."===i[0]?i="0"+i:"."===i[i.length-1]&&(i=i.substr(0,i.length-1)),i):i;if(!e.leadingZeros&&o.length>0&&s&&"."!==n[2])return t;if(!e.leadingZeros&&o.length>0&&!s&&"."!==n[1])return t;if(e.leadingZeros&&o===t)return 0;{const i=Number(n),r=""+i;return-1!==r.search(/[eE]/)?e.eNotation?i:t:-1!==n.indexOf(".")?"0"===r&&""===a||r===a||s&&r==="-"+a?i:t:o?a===r||s+a===r?i:t:n===r||n===s+r?i:t}}return t}var i}(t,n)}return void 0!==t?t:""}const et=T.getMetaDataSymbol();function nt(t,e){return it(t,e)}function it(t,e,n){let i;const r={};for(let s=0;s<t.length;s++){const o=t[s],a=rt(o);let l="";if(l=void 0===n?a:n+"."+a,a===e.textNodeName)void 0===i?i=o[a]:i+=""+o[a];else{if(void 0===a)continue;if(o[a]){let t=it(o[a],e,l);const n=ot(t,e);void 0!==o[et]&&(t[et]=o[et]),o[":@"]?st(t,o[":@"],l,e):1!==Object.keys(t).length||void 0===t[e.textNodeName]||e.alwaysCreateTextNode?0===Object.keys(t).length&&(e.alwaysCreateTextNode?t[e.textNodeName]="":t=""):t=t[e.textNodeName],void 0!==r[a]&&r.hasOwnProperty(a)?(Array.isArray(r[a])||(r[a]=[r[a]]),r[a].push(t)):e.isArray(a,l,n)?r[a]=[t]:r[a]=t}}}return"string"==typeof i?i.length>0&&(r[e.textNodeName]=i):void 0!==i&&(r[e.textNodeName]=i),r}function rt(t){const e=Object.keys(t);for(let t=0;t<e.length;t++){const n=e[t];if(":@"!==n)return n}}function st(t,e,n,i){if(e){const r=Object.keys(e),s=r.length;for(let o=0;o<s;o++){const s=r[o];i.isArray(s,n+"."+s,!0,!0)?t[s]=[e[s]]:t[s]=e[s]}}}function ot(t,e){const{textNodeName:n}=e,i=Object.keys(t).length;return 0===i||!(1!==i||!t[n]&&"boolean"!=typeof t[n]&&0!==t[n])}class at{constructor(t){this.externalEntities={},this.options=function(t){return Object.assign({},v,t)}(t)}parse(t,e){if("string"==typeof t);else{if(!t.toString)throw new Error("XML data is accepted in String or Bytes[] form.");t=t.toString()}if(e){!0===e&&(e={});const n=a(t,e);if(!0!==n)throw Error(`${n.err.msg}:${n.err.line}:${n.err.col}`)}const n=new B(this.options);n.addExternalEntities(this.externalEntities);const i=n.parseXml(t);return this.options.preserveOrder||void 0===i?i:nt(i,this.options)}addEntity(t,e){if(-1!==e.indexOf("&"))throw new Error("Entity value can't have '&'");if(-1!==t.indexOf("&")||-1!==t.indexOf(";"))throw new Error("An entity must be set without '&' and ';'. Eg. use '#xD' for '&#xD;'");if("&"===e)throw new Error("An entity with value '&' is not permitted");this.externalEntities[t]=e}static getMetaDataSymbol(){return T.getMetaDataSymbol()}}function lt(t,e){let n="";return e.format&&e.indentBy.length>0&&(n="\n"),ut(t,e,"",n)}function ut(t,e,n,i){let r="",s=!1;for(let o=0;o<t.length;o++){const a=t[o],l=ht(a);if(void 0===l)continue;let u="";if(u=0===n.length?l:`${n}.${l}`,l===e.textNodeName){let t=a[l];ct(u,e)||(t=e.tagValueProcessor(l,t),t=ft(t,e)),s&&(r+=i),r+=t,s=!1;continue}if(l===e.cdataPropName){s&&(r+=i),r+=`<![CDATA[${a[l][0][e.textNodeName]}]]>`,s=!1;continue}if(l===e.commentPropName){r+=i+`\x3c!--${a[l][0][e.textNodeName]}--\x3e`,s=!0;continue}if("?"===l[0]){const t=dt(a[":@"],e),n="?xml"===l?"":i;let o=a[l][0][e.textNodeName];o=0!==o.length?" "+o:"",r+=n+`<${l}${o}${t}?>`,s=!0;continue}let h=i;""!==h&&(h+=e.indentBy);const d=i+`<${l}${dt(a[":@"],e)}`,c=ut(a[l],e,u,h);-1!==e.unpairedTags.indexOf(l)?e.suppressUnpairedNode?r+=d+">":r+=d+"/>":c&&0!==c.length||!e.suppressEmptyNode?c&&c.endsWith(">")?r+=d+`>${c}${i}</${l}>`:(r+=d+">",c&&""!==i&&(c.includes("/>")||c.includes("</"))?r+=i+e.indentBy+c+i:r+=c,r+=`</${l}>`):r+=d+"/>",s=!0}return r}function ht(t){const e=Object.keys(t);for(let n=0;n<e.length;n++){const i=e[n];if(t.hasOwnProperty(i)&&":@"!==i)return i}}function dt(t,e){let n="";if(t&&!e.ignoreAttributes)for(let i in t){if(!t.hasOwnProperty(i))continue;let r=e.attributeValueProcessor(i,t[i]);r=ft(r,e),!0===r&&e.suppressBooleanAttributes?n+=` ${i.substr(e.attributeNamePrefix.length)}`:n+=` ${i.substr(e.attributeNamePrefix.length)}="${r}"`}return n}function ct(t,e){let n=(t=t.substr(0,t.length-e.textNodeName.length-1)).substr(t.lastIndexOf(".")+1);for(let i in e.stopNodes)if(e.stopNodes[i]===t||e.stopNodes[i]==="*."+n)return!0;return!1}function ft(t,e){if(t&&t.length>0&&e.processEntities)for(let n=0;n<e.entities.length;n++){const i=e.entities[n];t=t.replace(i.regex,i.val)}return t}const pt={attributeNamePrefix:"@_",attributesGroupName:!1,textNodeName:"#text",ignoreAttributes:!0,cdataPropName:!1,format:!1,indentBy:"  ",suppressEmptyNode:!1,suppressUnpairedNode:!0,suppressBooleanAttributes:!0,tagValueProcessor:function(t,e){return e},attributeValueProcessor:function(t,e){return e},preserveOrder:!1,commentPropName:!1,unpairedTags:[],entities:[{regex:new RegExp("&","g"),val:"&amp;"},{regex:new RegExp(">","g"),val:"&gt;"},{regex:new RegExp("<","g"),val:"&lt;"},{regex:new RegExp("'","g"),val:"&apos;"},{regex:new RegExp('"',"g"),val:"&quot;"}],processEntities:!0,stopNodes:[],oneListGroup:!1};function gt(t){this.options=Object.assign({},pt,t),!0===this.options.ignoreAttributes||this.options.attributesGroupName?this.isAttribute=function(){return!1}:(this.ignoreAttributesFn=L(this.options.ignoreAttributes),this.attrPrefixLen=this.options.attributeNamePrefix.length,this.isAttribute=bt),this.processTextOrObjNode=mt,this.options.format?(this.indentate=xt,this.tagEndChar=">\n",this.newLine="\n"):(this.indentate=function(){return""},this.tagEndChar=">",this.newLine="")}function mt(t,e,n,i){const r=this.j2x(t,n+1,i.concat(e));return void 0!==t[this.options.textNodeName]&&1===Object.keys(t).length?this.buildTextValNode(t[this.options.textNodeName],e,r.attrStr,n):this.buildObjectNode(r.val,e,r.attrStr,n)}function xt(t){return this.options.indentBy.repeat(t)}function bt(t){return!(!t.startsWith(this.options.attributeNamePrefix)||t===this.options.textNodeName)&&t.substr(this.attrPrefixLen)}gt.prototype.build=function(t){return this.options.preserveOrder?lt(t,this.options):(Array.isArray(t)&&this.options.arrayNodeName&&this.options.arrayNodeName.length>1&&(t={[this.options.arrayNodeName]:t}),this.j2x(t,0,[]).val)},gt.prototype.j2x=function(t,e,n){let i="",r="";const s=n.join(".");for(let o in t)if(Object.prototype.hasOwnProperty.call(t,o))if(void 0===t[o])this.isAttribute(o)&&(r+="");else if(null===t[o])this.isAttribute(o)||o===this.options.cdataPropName?r+="":"?"===o[0]?r+=this.indentate(e)+"<"+o+"?"+this.tagEndChar:r+=this.indentate(e)+"<"+o+"/"+this.tagEndChar;else if(t[o]instanceof Date)r+=this.buildTextValNode(t[o],o,"",e);else if("object"!=typeof t[o]){const n=this.isAttribute(o);if(n&&!this.ignoreAttributesFn(n,s))i+=this.buildAttrPairStr(n,""+t[o]);else if(!n)if(o===this.options.textNodeName){let e=this.options.tagValueProcessor(o,""+t[o]);r+=this.replaceEntitiesValue(e)}else r+=this.buildTextValNode(t[o],o,"",e)}else if(Array.isArray(t[o])){const i=t[o].length;let s="",a="";for(let l=0;l<i;l++){const i=t[o][l];if(void 0===i);else if(null===i)"?"===o[0]?r+=this.indentate(e)+"<"+o+"?"+this.tagEndChar:r+=this.indentate(e)+"<"+o+"/"+this.tagEndChar;else if("object"==typeof i)if(this.options.oneListGroup){const t=this.j2x(i,e+1,n.concat(o));s+=t.val,this.options.attributesGroupName&&i.hasOwnProperty(this.options.attributesGroupName)&&(a+=t.attrStr)}else s+=this.processTextOrObjNode(i,o,e,n);else if(this.options.oneListGroup){let t=this.options.tagValueProcessor(o,i);t=this.replaceEntitiesValue(t),s+=t}else s+=this.buildTextValNode(i,o,"",e)}this.options.oneListGroup&&(s=this.buildObjectNode(s,o,a,e)),r+=s}else if(this.options.attributesGroupName&&o===this.options.attributesGroupName){const e=Object.keys(t[o]),n=e.length;for(let r=0;r<n;r++)i+=this.buildAttrPairStr(e[r],""+t[o][e[r]])}else r+=this.processTextOrObjNode(t[o],o,e,n);return{attrStr:i,val:r}},gt.prototype.buildAttrPairStr=function(t,e){return e=this.options.attributeValueProcessor(t,""+e),e=this.replaceEntitiesValue(e),this.options.suppressBooleanAttributes&&"true"===e?" "+t:" "+t+'="'+e+'"'},gt.prototype.buildObjectNode=function(t,e,n,i){if(""===t)return"?"===e[0]?this.indentate(i)+"<"+e+n+"?"+this.tagEndChar:this.indentate(i)+"<"+e+n+this.closeTag(e)+this.tagEndChar;{let r="</"+e+this.tagEndChar,s="";return"?"===e[0]&&(s="?",r=""),!n&&""!==n||-1!==t.indexOf("<")?!1!==this.options.commentPropName&&e===this.options.commentPropName&&0===s.length?this.indentate(i)+`\x3c!--${t}--\x3e`+this.newLine:this.indentate(i)+"<"+e+n+s+this.tagEndChar+t+this.indentate(i)+r:this.indentate(i)+"<"+e+n+s+">"+t+r}},gt.prototype.closeTag=function(t){let e="";return-1!==this.options.unpairedTags.indexOf(t)?this.options.suppressUnpairedNode||(e="/"):e=this.options.suppressEmptyNode?"/":`></${t}`,e},gt.prototype.buildTextValNode=function(t,e,n,i){if(!1!==this.options.cdataPropName&&e===this.options.cdataPropName)return this.indentate(i)+`<![CDATA[${t}]]>`+this.newLine;if(!1!==this.options.commentPropName&&e===this.options.commentPropName)return this.indentate(i)+`\x3c!--${t}--\x3e`+this.newLine;if("?"===e[0])return this.indentate(i)+"<"+e+n+"?"+this.tagEndChar;{let r=this.options.tagValueProcessor(e,t);return r=this.replaceEntitiesValue(r),""===r?this.indentate(i)+"<"+e+n+this.closeTag(e)+this.tagEndChar:this.indentate(i)+"<"+e+n+">"+r+"</"+e+this.tagEndChar}},gt.prototype.replaceEntitiesValue=function(t){if(t&&t.length>0&&this.options.processEntities)for(let e=0;e<this.options.entities.length;e++){const n=this.options.entities[e];t=t.replace(n.regex,n.val)}return t};const Nt={validate:a};module.exports=e})();
 
 /***/ }),
 
