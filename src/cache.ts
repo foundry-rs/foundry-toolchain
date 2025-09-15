@@ -1,10 +1,12 @@
-const core = require("@actions/core");
-const cache = require("@actions/cache");
-const github = require("@actions/github");
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
-const { State } = require("./constants.js");
+import fs from "fs";
+import os from "os";
+import path from "path";
+
+import core from "@actions/core";
+import cache from "@actions/cache";
+import github from "@actions/github";
+
+import { State } from "./constants.js";
 
 // Define constants for cache paths and prefix
 const HOME = os.homedir();
@@ -17,7 +19,7 @@ const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
  * @param {string} customKeyInput - The custom part of the key provided by the user.
  * @returns {string} The complete primary key for the cache.
  */
-function getPrimaryKey(customKeyInput) {
+function getPrimaryKey(customKeyInput: string) {
   if (!customKeyInput) {
     return `${CACHE_PREFIX}${github.context.sha}`;
   }
@@ -29,7 +31,7 @@ function getPrimaryKey(customKeyInput) {
  * @param {string} customRestoreKeysInput - Newline-separated string of custom restore keys.
  * @returns {string[]} An array of restore keys for the cache.
  */
-function getRestoreKeys(customRestoreKeysInput) {
+function getRestoreKeys(customRestoreKeysInput: string) {
   const defaultRestoreKeys = [CACHE_PREFIX];
   if (!customRestoreKeysInput) {
     return defaultRestoreKeys;
@@ -45,7 +47,7 @@ function getRestoreKeys(customRestoreKeysInput) {
 /**
  * Restores the RPC cache using the provided keys.
  */
-async function restoreRPCCache() {
+export async function restoreRPCCache() {
   const customKeyInput = core.getInput("cache-key");
   const primaryKey = getPrimaryKey(customKeyInput);
   core.info(`Primary key: ${primaryKey}`);
@@ -69,7 +71,7 @@ async function restoreRPCCache() {
  * Saves the RPC cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
-async function saveCache() {
+export async function saveCache() {
   const primaryKey = core.getState(State.CachePrimaryKey);
   const matchedKey = core.getState(State.CacheMatchedKey);
 
@@ -100,8 +102,3 @@ async function saveCache() {
 
   core.info(`Cache saved with the key: ${primaryKey}`);
 }
-
-module.exports = {
-  restoreRPCCache,
-  saveCache,
-};

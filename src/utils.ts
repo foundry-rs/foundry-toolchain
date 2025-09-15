@@ -1,10 +1,13 @@
-const os = require("os");
+import * as os from "os";
 
-function normalizeVersionName(version) {
+/**
+ * Collapse nightly tags like `nightly-<commit-sha>` into just `nightly`.
+ */
+function normalizeNightlyTag(version: string) {
   return version.replace(/^nightly-[0-9a-f]{40}$/, "nightly");
 }
 
-function mapArch(arch) {
+function mapArch(arch: string) {
   const mappings = {
     x32: "386",
     x64: "amd64",
@@ -13,9 +16,9 @@ function mapArch(arch) {
   return mappings[arch] || arch;
 }
 
-function getDownloadObject(version) {
+export function getDownloadObject(version: string) {
   const platform = os.platform();
-  const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
+  const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${mapArch(os.arch())}`;
   const extension = platform === "win32" ? "zip" : "tar.gz";
   const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
 
@@ -24,7 +27,3 @@ function getDownloadObject(version) {
     binPath: ".",
   };
 }
-
-module.exports = {
-  getDownloadObject,
-};

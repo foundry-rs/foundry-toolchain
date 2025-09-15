@@ -1,9 +1,9 @@
-const core = require("@actions/core");
-const toolCache = require("@actions/tool-cache");
-const path = require("path");
+import * as core from "@actions/core";
+import * as toolCache from "@actions/tool-cache";
+import path from "path";
 
-const { restoreRPCCache } = require("./cache");
-const { getDownloadObject } = require("./utils");
+import { restoreRPCCache } from "./cache";
+import { getDownloadObject } from "./utils";
 
 async function main() {
   try {

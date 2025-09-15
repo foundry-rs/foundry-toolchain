@@ -1,5 +1,6 @@
-const { saveCache } = require("./cache.js");
-const core = require("@actions/core");
+import * as core from "@actions/core";
+
+import { saveCache } from "./cache";
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
@@ -12,7 +13,7 @@ process.on("uncaughtException", (e) => {
 // Added early exit to resolve issue with slow post action step:
 // - https://github.com/actions/setup-node/issues/878
 // https://github.com/actions/cache/pull/1217
-async function run(earlyExit) {
+async function run(earlyExit: boolean) {
   try {
     const cacheInput = core.getBooleanInput("cache");
     if (cacheInput) {
