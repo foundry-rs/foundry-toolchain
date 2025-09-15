@@ -1,10 +1,10 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 
-import core from "@actions/core";
-import cache from "@actions/cache";
-import github from "@actions/github";
+import * as core from "@actions/core";
+import * as cache from "@actions/cache";
+import * as github from "@actions/github";
 
 import { State } from "./constants.js";
 

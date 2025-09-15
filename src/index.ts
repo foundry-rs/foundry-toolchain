@@ -1,7 +1,7 @@
-import path from "path";
+import * as path from "path";
 
-import core from "@actions/core";
-import toolCache from "@actions/tool-cache";
+import * as core from "@actions/core";
+import * as toolCache from "@actions/tool-cache";
 
 import { restoreRPCCache } from "./cache";
 import { getDownloadObject } from "./utils";

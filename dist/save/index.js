@@ -69370,23 +69370,53 @@ function wrappy (fn, cb) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.restoreRPCCache = restoreRPCCache;
 exports.saveCache = saveCache;
-const fs_1 = __importDefault(__nccwpck_require__(9896));
-const os_1 = __importDefault(__nccwpck_require__(857));
-const path_1 = __importDefault(__nccwpck_require__(6928));
-const core_1 = __importDefault(__nccwpck_require__(7484));
-const cache_1 = __importDefault(__nccwpck_require__(5116));
-const github_1 = __importDefault(__nccwpck_require__(3228));
+const fs = __importStar(__nccwpck_require__(9896));
+const os = __importStar(__nccwpck_require__(857));
+const path = __importStar(__nccwpck_require__(6928));
+const core = __importStar(__nccwpck_require__(7484));
+const cache = __importStar(__nccwpck_require__(5116));
+const github = __importStar(__nccwpck_require__(3228));
 const constants_js_1 = __nccwpck_require__(7242);
 // Define constants for cache paths and prefix
-const HOME = os_1.default.homedir();
-const PLATFORM = os_1.default.platform();
-const CACHE_PATHS = [path_1.default.join(HOME, ".foundry/cache/rpc")];
+const HOME = os.homedir();
+const PLATFORM = os.platform();
+const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 /**
  * Constructs the primary key for the cache using a custom key input.
@@ -69395,7 +69425,7 @@ const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
  */
 function getPrimaryKey(customKeyInput) {
     if (!customKeyInput) {
-        return `${CACHE_PREFIX}${github_1.default.context.sha}`;
+        return `${CACHE_PREFIX}${github.context.sha}`;
     }
     return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
@@ -69420,49 +69450,49 @@ function getRestoreKeys(customRestoreKeysInput) {
  * Restores the RPC cache using the provided keys.
  */
 async function restoreRPCCache() {
-    const customKeyInput = core_1.default.getInput("cache-key");
+    const customKeyInput = core.getInput("cache-key");
     const primaryKey = getPrimaryKey(customKeyInput);
-    core_1.default.info(`Primary key: ${primaryKey}`);
-    core_1.default.saveState(constants_js_1.State.CachePrimaryKey, primaryKey);
-    const customRestoreKeysInput = core_1.default.getInput("cache-restore-keys");
+    core.info(`Primary key: ${primaryKey}`);
+    core.saveState(constants_js_1.State.CachePrimaryKey, primaryKey);
+    const customRestoreKeysInput = core.getInput("cache-restore-keys");
     const restoreKeys = getRestoreKeys(customRestoreKeysInput);
-    core_1.default.info(`Restore keys: ${restoreKeys.join(", ")}`);
-    const matchedKey = await cache_1.default.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+    core.info(`Restore keys: ${restoreKeys.join(", ")}`);
+    const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
     if (!matchedKey) {
-        core_1.default.info("Cache not found");
+        core.info("Cache not found");
         return;
     }
-    core_1.default.saveState(constants_js_1.State.CacheMatchedKey, matchedKey);
-    core_1.default.info(`Cache restored from key: ${matchedKey}`);
+    core.saveState(constants_js_1.State.CacheMatchedKey, matchedKey);
+    core.info(`Cache restored from key: ${matchedKey}`);
 }
 /**
  * Saves the RPC cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
 async function saveCache() {
-    const primaryKey = core_1.default.getState(constants_js_1.State.CachePrimaryKey);
-    const matchedKey = core_1.default.getState(constants_js_1.State.CacheMatchedKey);
+    const primaryKey = core.getState(constants_js_1.State.CachePrimaryKey);
+    const matchedKey = core.getState(constants_js_1.State.CacheMatchedKey);
     // If the cache path does not exist, do not save the cache
-    if (!fs_1.default.existsSync(CACHE_PATHS[0])) {
-        core_1.default.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
+    if (!fs.existsSync(CACHE_PATHS[0])) {
+        core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
         return;
     }
     // If the primary key is not generated, do not save the cache
     if (!primaryKey) {
-        core_1.default.info("Primary key was not generated. Please check the log messages above for more errors or information");
+        core.info("Primary key was not generated. Please check the log messages above for more errors or information");
         return;
     }
     // If the primary key and the matched key are the same, this means the cache was already saved
     if (primaryKey === matchedKey) {
-        core_1.default.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
+        core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
         return;
     }
-    const cacheId = await cache_1.default.saveCache(CACHE_PATHS, primaryKey);
+    const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
     // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
     if (cacheId === -1) {
         return;
     }
-    core_1.default.info(`Cache saved with the key: ${primaryKey}`);
+    core.info(`Cache saved with the key: ${primaryKey}`);
 }
 
 
@@ -69492,12 +69522,42 @@ var State;
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
-const core_1 = __importDefault(__nccwpck_require__(7484));
+const core = __importStar(__nccwpck_require__(7484));
 const cache_1 = __nccwpck_require__(7377);
 /**
  * Catch and log unhandled exceptions that can bubble up from chunked uploads.
@@ -69505,7 +69565,7 @@ const cache_1 = __nccwpck_require__(7377);
  */
 process.on("uncaughtException", (e) => {
     const warningPrefix = "[warning]";
-    core_1.default.info(`${warningPrefix}${e.message}`);
+    core.info(`${warningPrefix}${e.message}`);
 });
 /**
  * Post step for saving cache.
@@ -69514,12 +69574,12 @@ process.on("uncaughtException", (e) => {
  */
 async function run(earlyExit = true) {
     try {
-        const cacheInput = core_1.default.getBooleanInput("cache");
+        const cacheInput = core.getBooleanInput("cache");
         if (cacheInput) {
             await (0, cache_1.saveCache)();
         }
         else {
-            core_1.default.info("Cache not requested, not saving cache");
+            core.info("Cache not requested, not saving cache");
         }
         if (earlyExit) {
             process.exit(0);
@@ -69533,7 +69593,7 @@ async function run(earlyExit = true) {
         if (typeof error === "string") {
             message = error;
         }
-        core_1.default.warning(message);
+        core.warning(message);
     }
 }
 exports["default"] = run;
