@@ -35,7 +35,11 @@ async function main() {
     // Restore the RPC cache
     await restoreRPCCache();
   } catch (err) {
-    core.setFailed(err);
+    if (err instanceof Error) {
+      core.setFailed(err);
+    } else {
+      core.setFailed(String(err));
+    }
   }
 }
 

@@ -8,7 +8,7 @@ function normalizeNightlyTag(version: string) {
 }
 
 function mapArch(arch: string) {
-  const mappings = {
+  const mappings: Record<string, string> = {
     x32: "386",
     x64: "amd64",
   };

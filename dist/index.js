@@ -70459,7 +70459,12 @@ async function main() {
         await (0, cache_1.restoreRPCCache)();
     }
     catch (err) {
-        core.setFailed(err);
+        if (err instanceof Error) {
+            core.setFailed(err);
+        }
+        else {
+            core.setFailed(String(err));
+        }
     }
 }
 module.exports = main;
@@ -70511,7 +70516,10 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getDownloadObject = getDownloadObject;
 const os = __importStar(__nccwpck_require__(857));
-function normalizeVersionName(version) {
+/**
+ * Collapse nightly tags like `nightly-<commit-sha>` into just `nightly`.
+ */
+function normalizeNightlyTag(version) {
     return version.replace(/^nightly-[0-9a-f]{40}$/, "nightly");
 }
 function mapArch(arch) {
@@ -70523,7 +70531,7 @@ function mapArch(arch) {
 }
 function getDownloadObject(version) {
     const platform = os.platform();
-    const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
+    const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${mapArch(os.arch())}`;
     const extension = platform === "win32" ? "zip" : "tar.gz";
     const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
     return {
