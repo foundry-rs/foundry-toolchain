@@ -31,6 +31,11 @@ function normalizeArch(arch: string): string {
   return mappings[arch] || arch;
 }
 
+/**
+ * Constructs the download object for a specific version of Foundry.
+ * @param version The version of Foundry to download.
+ * @returns The download object containing the URL and binary path.
+ */
 export function getDownloadObject(version: string): Download {
   const platform = os.platform();
   const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${normalizeArch(os.arch())}`;
