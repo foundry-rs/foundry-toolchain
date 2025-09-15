@@ -1,5 +1,8 @@
 name: nodejs
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     branches:
@@ -15,6 +18,8 @@ on:
 jobs:
   check-dist:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
       - uses: actions/checkout@v5
