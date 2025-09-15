@@ -69475,6 +69475,9 @@ async function saveCache() {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.State = void 0;
+/**
+ * State keys for caching, used to save and retrieve state in GitHub Actions.
+ */
 var State;
 (function (State) {
     State["CachePrimaryKey"] = "CACHE_KEY";
@@ -69523,19 +69526,23 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = run;
 const core = __importStar(__nccwpck_require__(7484));
 const cache_1 = __nccwpck_require__(7377);
-// Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
-// @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
-// throw an uncaught exception.  Instead of failing this action, just warn.
+/**
+ * Catch and log unhandled exceptions that can bubble up from chunked uploads.
+ * We deliberately log as "info" with a `[warning]` prefix to avoid failing the action.
+ */
 process.on("uncaughtException", (e) => {
     const warningPrefix = "[warning]";
     core.info(`${warningPrefix}${e.message}`);
 });
-// Added early exit to resolve issue with slow post action step:
-// - https://github.com/actions/setup-node/issues/878
-// https://github.com/actions/cache/pull/1217
-async function run(earlyExit) {
+/**
+ * Post step for saving cache.
+ * @param {boolean} earlyExit When true, exit the process after handling to work around slow post-action steps.
+ *                  See: https://github.com/actions/setup-node/issues/878
+ */
+async function run(earlyExit = true) {
     try {
         const cacheInput = core.getBooleanInput("cache");
         if (cacheInput) {
@@ -69559,6 +69566,7 @@ async function run(earlyExit) {
         core.warning(message);
     }
 }
+exports["default"] = run;
 if (require.main === require.cache[eval('__filename')]) {
     run(true);
 }

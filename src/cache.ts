@@ -19,10 +19,11 @@ const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
  * @param {string} customKeyInput - The custom part of the key provided by the user.
  * @returns {string} The complete primary key for the cache.
  */
-function getPrimaryKey(customKeyInput: string) {
+function getPrimaryKey(customKeyInput: string): string {
   if (!customKeyInput) {
     return `${CACHE_PREFIX}${github.context.sha}`;
   }
+
   return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
 
@@ -31,23 +32,26 @@ function getPrimaryKey(customKeyInput: string) {
  * @param {string} customRestoreKeysInput - Newline-separated string of custom restore keys.
  * @returns {string[]} An array of restore keys for the cache.
  */
-function getRestoreKeys(customRestoreKeysInput: string) {
+function getRestoreKeys(customRestoreKeysInput: string): string[] {
   const defaultRestoreKeys = [CACHE_PREFIX];
+
   if (!customRestoreKeysInput) {
     return defaultRestoreKeys;
   }
+
   const restoreKeys = customRestoreKeysInput
     .split(/[\r\n]/)
     .map((input) => input.trim())
     .filter((input) => input !== "")
     .map((input) => `${CACHE_PREFIX}${input}`);
+
   return restoreKeys;
 }
 
 /**
  * Restores the RPC cache using the provided keys.
  */
-export async function restoreRPCCache() {
+export async function restoreRPCCache(): Promise<void> {
   const customKeyInput = core.getInput("cache-key");
   const primaryKey = getPrimaryKey(customKeyInput);
   core.info(`Primary key: ${primaryKey}`);
@@ -71,7 +75,7 @@ export async function restoreRPCCache() {
  * Saves the RPC cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
-export async function saveCache() {
+export async function saveCache(): Promise<void> {
   const primaryKey = core.getState(State.CachePrimaryKey);
   const matchedKey = core.getState(State.CacheMatchedKey);
 

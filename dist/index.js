@@ -70378,6 +70378,9 @@ async function saveCache() {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.State = void 0;
+/**
+ * State keys for caching, used to save and retrieve state in GitHub Actions.
+ */
 var State;
 (function (State) {
     State["CachePrimaryKey"] = "CACHE_KEY";
@@ -70388,7 +70391,7 @@ var State;
 /***/ }),
 
 /***/ 9407:
-/***/ (function(module, exports, __nccwpck_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -70429,33 +70432,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.main = main;
+const path_1 = __importDefault(__nccwpck_require__(6928));
 const core = __importStar(__nccwpck_require__(7484));
 const toolCache = __importStar(__nccwpck_require__(3472));
-const path_1 = __importDefault(__nccwpck_require__(6928));
 const cache_1 = __nccwpck_require__(7377);
 const utils_1 = __nccwpck_require__(1798);
 async function main() {
     try {
-        // Get version input
+        // Get version input.
         const version = core.getInput("version");
-        // Download the archive containing the binaries
+        // Download the archive containing the binaries.
         const download = (0, utils_1.getDownloadObject)(version);
         core.info(`Downloading Foundry '${version}' from: ${download.url}`);
         const pathToArchive = await toolCache.downloadTool(download.url);
-        // Extract the archive onto host runner
+        // Extract the archive onto host runner.
         core.debug(`Extracting ${pathToArchive}`);
         const extract = download.url.endsWith(".zip") ? toolCache.extractZip : toolCache.extractTar;
         const pathToCLI = await extract(pathToArchive);
-        // Expose the tool
+        // Expose the tool.
         core.addPath(path_1.default.join(pathToCLI, download.binPath));
-        // Get cache input
+        // Get cache input.
         const cache = core.getBooleanInput("cache");
-        // If cache input is false, skip restoring cache
+        // If cache input is false, skip restoring cache.
         if (!cache) {
             core.info("Cache not requested, not restoring cache");
             return;
         }
-        // Restore the RPC cache
+        // Restore the RPC cache.
         await (0, cache_1.restoreRPCCache)();
     }
     catch (err) {
@@ -70467,7 +70471,7 @@ async function main() {
         }
     }
 }
-module.exports = main;
+exports["default"] = main;
 if (require.main === require.cache[eval('__filename')]) {
     main();
 }
@@ -70518,11 +70522,18 @@ exports.getDownloadObject = getDownloadObject;
 const os = __importStar(__nccwpck_require__(857));
 /**
  * Collapse nightly tags like `nightly-<commit-sha>` into just `nightly`.
+ * @param version The version string to normalize.
+ * @return The normalized version string.
  */
 function normalizeNightlyTag(version) {
     return version.replace(/^nightly-[0-9a-f]{40}$/, "nightly");
 }
-function mapArch(arch) {
+/**
+ * Map Node.js `os.arch()` values to Foundry's expected architecture strings.
+ * @param arch The architecture string from `os.arch()`.
+ * @returns The normalized architecture string.
+ */
+function normalizeArch(arch) {
     const mappings = {
         x32: "386",
         x64: "amd64",
@@ -70531,7 +70542,7 @@ function mapArch(arch) {
 }
 function getDownloadObject(version) {
     const platform = os.platform();
-    const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${mapArch(os.arch())}`;
+    const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${normalizeArch(os.arch())}`;
     const extension = platform === "win32" ? "zip" : "tar.gz";
     const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
     return {
