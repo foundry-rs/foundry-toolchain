@@ -1,4 +1,4 @@
-name: nodejs
+name: ci
 
 permissions:
   contents: read
@@ -15,12 +15,13 @@ on:
     paths-ignore:
       - "**.md"
 
-jobs:
-  check-dist:
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
+jobs:
+  match:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
@@ -31,7 +32,7 @@ jobs:
           node-version: 24.x
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Rebuild dist/
         run: npm run build
