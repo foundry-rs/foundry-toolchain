@@ -42452,7 +42452,7 @@ function save(namespaces) {
 function load() {
 	let r;
 	try {
-		r = exports.storage.getItem('debug');
+		r = exports.storage.getItem('debug') || exports.storage.getItem('DEBUG') ;
 	} catch (error) {
 		// Swallow
 		// XXX (@Qix-) should we be logging these?
@@ -42680,7 +42680,7 @@ function setup(env) {
 
 		const split = (typeof namespaces === 'string' ? namespaces : '')
 			.trim()
-			.replace(' ', ',')
+			.replace(/\s+/g, ',')
 			.split(',')
 			.filter(Boolean);
 
@@ -69492,42 +69492,12 @@ var State;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
-const core = __importStar(__nccwpck_require__(7484));
+const core_1 = __importDefault(__nccwpck_require__(7484));
 const cache_1 = __nccwpck_require__(7377);
 /**
  * Catch and log unhandled exceptions that can bubble up from chunked uploads.
@@ -69535,7 +69505,7 @@ const cache_1 = __nccwpck_require__(7377);
  */
 process.on("uncaughtException", (e) => {
     const warningPrefix = "[warning]";
-    core.info(`${warningPrefix}${e.message}`);
+    core_1.default.info(`${warningPrefix}${e.message}`);
 });
 /**
  * Post step for saving cache.
@@ -69544,12 +69514,12 @@ process.on("uncaughtException", (e) => {
  */
 async function run(earlyExit = true) {
     try {
-        const cacheInput = core.getBooleanInput("cache");
+        const cacheInput = core_1.default.getBooleanInput("cache");
         if (cacheInput) {
             await (0, cache_1.saveCache)();
         }
         else {
-            core.info("Cache not requested, not saving cache");
+            core_1.default.info("Cache not requested, not saving cache");
         }
         if (earlyExit) {
             process.exit(0);
@@ -69563,7 +69533,7 @@ async function run(earlyExit = true) {
         if (typeof error === "string") {
             message = error;
         }
-        core.warning(message);
+        core_1.default.warning(message);
     }
 }
 exports["default"] = run;

@@ -43355,7 +43355,7 @@ function save(namespaces) {
 function load() {
 	let r;
 	try {
-		r = exports.storage.getItem('debug');
+		r = exports.storage.getItem('debug') || exports.storage.getItem('DEBUG') ;
 	} catch (error) {
 		// Swallow
 		// XXX (@Qix-) should we be logging these?
@@ -43583,7 +43583,7 @@ function setup(env) {
 
 		const split = (typeof namespaces === 'string' ? namespaces : '')
 			.trim()
-			.replace(' ', ',')
+			.replace(/\s+/g, ',')
 			.split(',')
 			.filter(Boolean);
 
@@ -70395,68 +70395,35 @@ var State;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = main;
 const path_1 = __importDefault(__nccwpck_require__(6928));
-const core = __importStar(__nccwpck_require__(7484));
-const toolCache = __importStar(__nccwpck_require__(3472));
+const core_1 = __importDefault(__nccwpck_require__(7484));
+const tool_cache_1 = __importDefault(__nccwpck_require__(3472));
 const cache_1 = __nccwpck_require__(7377);
 const utils_1 = __nccwpck_require__(1798);
 async function main() {
     try {
         // Get version input.
-        const version = core.getInput("version");
+        const version = core_1.default.getInput("version");
         // Download the archive containing the binaries.
         const download = (0, utils_1.getDownloadObject)(version);
-        core.info(`Downloading Foundry '${version}' from: ${download.url}`);
-        const pathToArchive = await toolCache.downloadTool(download.url);
+        core_1.default.info(`Downloading Foundry '${version}' from: ${download.url}`);
+        const pathToArchive = await tool_cache_1.default.downloadTool(download.url);
         // Extract the archive onto host runner.
-        core.debug(`Extracting ${pathToArchive}`);
-        const extract = download.url.endsWith(".zip") ? toolCache.extractZip : toolCache.extractTar;
+        core_1.default.debug(`Extracting ${pathToArchive}`);
+        const extract = download.url.endsWith(".zip") ? tool_cache_1.default.extractZip : tool_cache_1.default.extractTar;
         const pathToCLI = await extract(pathToArchive);
         // Expose the tool.
-        core.addPath(path_1.default.join(pathToCLI, download.binPath));
+        core_1.default.addPath(path_1.default.join(pathToCLI, download.binPath));
         // Get cache input.
-        const cache = core.getBooleanInput("cache");
+        const cache = core_1.default.getBooleanInput("cache");
         // If cache input is false, skip restoring cache.
         if (!cache) {
-            core.info("Cache not requested, not restoring cache");
+            core_1.default.info("Cache not requested, not restoring cache");
             return;
         }
         // Restore the RPC cache.
@@ -70464,10 +70431,10 @@ async function main() {
     }
     catch (err) {
         if (err instanceof Error) {
-            core.setFailed(err);
+            core_1.default.setFailed(err);
         }
         else {
-            core.setFailed(String(err));
+            core_1.default.setFailed(String(err));
         }
     }
 }
@@ -70484,42 +70451,12 @@ if (require.main === require.cache[eval('__filename')]) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getDownloadObject = getDownloadObject;
-const os = __importStar(__nccwpck_require__(857));
+const os_1 = __importDefault(__nccwpck_require__(857));
 /**
  * Collapse nightly tags like `nightly-<commit-sha>` into just `nightly`.
  * @param version The version string to normalize.
@@ -70546,8 +70483,8 @@ function normalizeArch(arch) {
  * @returns The download object containing the URL and binary path.
  */
 function getDownloadObject(version) {
-    const platform = os.platform();
-    const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${normalizeArch(os.arch())}`;
+    const platform = os_1.default.platform();
+    const filename = `foundry_${normalizeNightlyTag(version)}_${platform}_${normalizeArch(os_1.default.arch())}`;
     const extension = platform === "win32" ? "zip" : "tar.gz";
     const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
     return {

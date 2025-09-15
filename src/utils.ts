@@ -1,4 +1,4 @@
-import * as os from "os";
+import os from "os";
 
 /**
  * Type representing a download object with URL and binary path.
