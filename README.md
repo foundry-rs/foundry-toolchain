@@ -128,9 +128,13 @@ for more information.
 
 When opening a PR, you must build the action exactly following the below steps for CI to pass:
 
+Install [nvm](https://github.com/nvm-sh/nvm).
+
 ```console
+$ nvm install 24.8.0
+$ nvm use
 $ npm ci
 $ npm run build
 ```
 
-You **have** to use Node.js 20.x.
+You **must** use the Node.js version `24.8.0` to build.
