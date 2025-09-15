@@ -1,28 +1,34 @@
 name: nodejs
 
-on: 
+permissions:
+  contents: read
+
+on:
   pull_request:
     branches:
       - master
     paths-ignore:
-      - '**.md'
+      - "**.md"
   push:
     branches:
       - master
     paths-ignore:
-      - '**.md'
+      - "**.md"
 
 jobs:
   check-dist:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v4.1.0
+      - uses: actions/checkout@v5
         with:
-          node-version: 20.x
+          persist-credentials: false
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.x
 
       - name: Install dependencies
         run: npm ci
