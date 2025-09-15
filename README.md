@@ -137,4 +137,4 @@ $ npm ci
 $ npm run build
 ```
 
-You **have** to use the Node.js version 24.8.0.
+You **must** use the Node.js version `24.8.0` to build.
