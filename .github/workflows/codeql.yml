@@ -1,5 +1,7 @@
 name: CodeQL
 
+permissions: {}
+
 on:
   push:
     branches: ["master"]
