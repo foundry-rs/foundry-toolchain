@@ -102,12 +102,69 @@ jobs:
         with:
           category: "/language:${{matrix.language}}"
 
+  test-action:
+    name: Test Action on ${{ matrix.config.os }} (${{ matrix.version }})
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - { os: ubuntu-latest, arch: x64 }
+          - { os: ubuntu-24.04-arm, arch: arm64 }
+          - { os: macos-latest, arch: arm64 }
+          - { os: macos-15-intel, arch: x64 }
+          - { os: windows-latest, arch: x64 }
+        version: [ stable, nightly ]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.x
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build action
+        run: npm run build
+
+      - name: Test action installation (${{ matrix.version }})
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          cache: false
+
+      - name: Verify Foundry installation
+        shell: bash
+        run: |
+          echo "Testing Foundry installation..."
+          forge --version
+          cast --version
+          anvil --version
+          chisel --version
+
+      - name: Test basic Foundry functionality
+        shell: bash
+        run: |
+          echo "Testing Foundry functionality..."
+          forge init test-project --force
+          cd test-project
+          echo "Building project..."
+          forge build
+          echo "Running tests..."
+          forge test -vv
+
   ci-success:
     runs-on: ubuntu-latest
     if: always()
     needs:
       - match
       - codeql
+      - test-action
     timeout-minutes: 30
     steps:
       - name: Decide whether the needed jobs succeeded or failed

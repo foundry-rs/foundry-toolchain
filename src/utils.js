@@ -8,6 +8,8 @@ function mapArch(arch) {
   const mappings = {
     x32: "386",
     x64: "amd64",
+    arm64: "arm64",
+    aarch64: "arm64",
   };
 
   return mappings[arch] || arch;
