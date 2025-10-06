@@ -19,6 +19,58 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        # Note: GitHub does not host Alpine runners, so we skip testing there for now.
+        config:
+          - { os: ubuntu-latest, arch: x64 } # foundry_v[ersion]_linux_amd64.tar.gz
+          - { os: ubuntu-24.04-arm, arch: arm64 } # foundry_v[ersion]_linux_arm64.tar.gz
+          - { os: macos-latest, arch: arm64 } # foundry_v[ersion]_darwin_arm64.tar.gz
+          - { os: macos-15-intel, arch: x64 } # foundry_v[ersion]_darwin_amd64.tar.gz
+          - { os: windows-latest, arch: x64 } # foundry_v[ersion]_windows_amd64.zip
+        version: [stable, nightly]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.x
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild dist/
+        run: npm run build
+
+      - name: Test action installation (${{ matrix.version }})
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          cache: false
+
+      - name: Verify Foundry installation
+        shell: bash
+        run: |
+          forge --version
+          cast --version
+          anvil --version
+          chisel --version
+
+      - name: Test basic Foundry functionality
+        shell: bash
+        run: |
+          forge init test-project --force
+          cd test-project
+          forge build
+          forge test -vvv
+
   match:
     runs-on: ubuntu-latest
     permissions:
@@ -27,6 +79,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+
       - name: Use Node.js 24.x
         uses: actions/setup-node@v5
         with:
@@ -106,6 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     needs:
+      - test
       - match
       - codeql
     timeout-minutes: 30
