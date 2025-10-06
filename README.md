@@ -47,12 +47,12 @@ jobs:
 
 ### Inputs
 
-| **Name**             | **Required** | **Default**                           | **Description**                                                 | **Type** |
-| -------------------- | ------------ | ------------------------------------- | --------------------------------------------------------------- | -------- |
-| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                          | bool     |
-| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or `v1.3.6`. | string   |
-| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                               | string   |
-| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                  | string[] |
+| **Name**             | **Required** | **Default**                           | **Description**                                                                                                               | **Type** |
+| -------------------- | ------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                                                                                        | bool     |
+| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or any [SemVer](https://semver.org/) tag prefixed with `v` (e.g. `v1.3.6`) | string   |
+| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                                             | string   |
+| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                                                | string[] |
 
 ### RPC Caching
 
