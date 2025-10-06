@@ -131,10 +131,10 @@ When opening a PR, you must build the action exactly following the below steps f
 Install [nvm](https://github.com/nvm-sh/nvm).
 
 ```console
-$ nvm install 24.8.0
+$ nvm install 24.9.0
 $ nvm use
-$ npm ci
+$ npm ci --ignore-scripts
 $ npm run build
 ```
 
-You **must** use the Node.js version `24.8.0` to build.
+You **must** use the Node.js version `24.9.0` to build.
