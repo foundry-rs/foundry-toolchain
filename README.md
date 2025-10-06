@@ -8,8 +8,7 @@ toolkit for Ethereum application development.
 ```yml
 name: CI
 
-permissions:
-  contents: read
+permissions: {}
 
 on:
   push:
@@ -23,6 +22,8 @@ jobs:
   check:
     name: Foundry project
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v5
         with:
