@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
 
       - name: Use Node.js 24.x
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
@@ -81,7 +81,7 @@ jobs:
           persist-credentials: false
 
       - name: Use Node.js 24.x
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
@@ -138,7 +138,7 @@ jobs:
 
       - name: Setup environment (JavaScript)
         if: matrix.language == 'javascript'
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
