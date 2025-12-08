@@ -24,7 +24,6 @@ function getDownloadObject(version, network) {
     case "tempo":
       repo = "tempoxyz/tempo-foundry";
       break;
-
     default:
       repo = "foundry-rs/foundry";
       break;

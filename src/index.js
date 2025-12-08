@@ -7,10 +7,8 @@ const { getDownloadObject } = require("./utils");
 
 async function main() {
   try {
-    // Get version input
+    // Get version and network input
     const version = core.getInput("version");
-
-    // Get network input
     const network = core.getInput("network");
 
     // Download the archive containing the binaries
