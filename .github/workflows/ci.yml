@@ -35,6 +35,8 @@ jobs:
         exclude:
           - network: tempo
             version: stable
+          - network: tempo
+            os: windows-latest
     permissions:
       contents: read
     steps:
