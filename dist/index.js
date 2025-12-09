@@ -45496,10 +45496,8 @@ const { getDownloadObject } = __nccwpck_require__(95804);
 
 async function main() {
   try {
-    // Get version input
+    // Get version and network input
     const version = core.getInput("version");
-
-    // Get network input
     const network = core.getInput("network");
 
     // Download the archive containing the binaries
@@ -45569,7 +45567,6 @@ function getDownloadObject(version, network) {
     case "tempo":
       repo = "tempoxyz/tempo-foundry";
       break;
-
     default:
       repo = "foundry-rs/foundry";
       break;
