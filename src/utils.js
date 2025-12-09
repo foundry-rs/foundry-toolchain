@@ -13,11 +13,23 @@ function mapArch(arch) {
   return mappings[arch] || arch;
 }
 
-function getDownloadObject(version) {
+function getDownloadObject(version, network) {
   const platform = os.platform();
   const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
   const extension = platform === "win32" ? "zip" : "tar.gz";
-  const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
+
+  let repo;
+
+  switch (network) {
+    case "tempo":
+      repo = "tempoxyz/tempo-foundry";
+      break;
+    default:
+      repo = "foundry-rs/foundry";
+      break;
+  }
+
+  const url = `https://github.com/${repo}/releases/download/${version}/${filename}.${extension}`;
 
   return {
     url,

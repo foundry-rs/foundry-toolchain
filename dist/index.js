@@ -45496,12 +45496,13 @@ const { getDownloadObject } = __nccwpck_require__(95804);
 
 async function main() {
   try {
-    // Get version input
+    // Get version and network input
     const version = core.getInput("version");
+    const network = core.getInput("network");
 
     // Download the archive containing the binaries
-    const download = getDownloadObject(version);
-    core.info(`Downloading Foundry '${version}' from: ${download.url}`);
+    const download = getDownloadObject(version, network);
+    core.info(`Downloading Foundry '${version}' (${network}) from: ${download.url}`);
     const pathToArchive = await toolCache.downloadTool(download.url);
 
     // Extract the archive onto host runner
@@ -45555,11 +45556,23 @@ function mapArch(arch) {
   return mappings[arch] || arch;
 }
 
-function getDownloadObject(version) {
+function getDownloadObject(version, network) {
   const platform = os.platform();
   const filename = `foundry_${normalizeVersionName(version)}_${platform}_${mapArch(os.arch())}`;
   const extension = platform === "win32" ? "zip" : "tar.gz";
-  const url = `https://github.com/foundry-rs/foundry/releases/download/${version}/${filename}.${extension}`;
+
+  let repo;
+
+  switch (network) {
+    case "tempo":
+      repo = "tempoxyz/tempo-foundry";
+      break;
+    default:
+      repo = "foundry-rs/foundry";
+      break;
+  }
+
+  const url = `https://github.com/${repo}/releases/download/${version}/${filename}.${extension}`;
 
   return {
     url,

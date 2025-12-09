@@ -7,12 +7,13 @@ const { getDownloadObject } = require("./utils");
 
 async function main() {
   try {
-    // Get version input
+    // Get version and network input
     const version = core.getInput("version");
+    const network = core.getInput("network");
 
     // Download the archive containing the binaries
-    const download = getDownloadObject(version);
-    core.info(`Downloading Foundry '${version}' from: ${download.url}`);
+    const download = getDownloadObject(version, network);
+    core.info(`Downloading Foundry '${version}' (${network}) from: ${download.url}`);
     const pathToArchive = await toolCache.downloadTool(download.url);
 
     // Extract the archive onto host runner

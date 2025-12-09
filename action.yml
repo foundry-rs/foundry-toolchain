@@ -6,6 +6,21 @@ branding:
   icon: "play-circle"
 
 inputs:
+  version:
+    default: "stable"
+    description: |
+      Foundry version.
+
+      This version number has to match a released version of Foundry.
+      The default value is `stable`, which will pull the latest stable build.
+    required: false
+  network:
+    default: "ethereum"
+    description: |
+      Network to install Foundry for.
+
+      This can be either `ethereum` or `tempo`. The default value is `ethereum`.
+    required: false
   cache:
     default: "true"
     description: |
@@ -27,14 +42,6 @@ inputs:
       Custom cache restore keys to use.
 
       This key is used to identify the cache to restore. If not provided, a default key consisting of the job id is used.
-    required: false
-  version:
-    default: "stable"
-    description: |
-      Foundry version.
-
-      This version number has to match a released version of Foundry.
-      The default value is `stable`, which will pull the latest stable build.
     required: false
 
 runs:
