@@ -44632,8 +44632,13 @@ async function download(url, dest, retries = 3) {
 
 function buildFoundryupArgs() {
   const args = [];
-  const version = core.getInput("version");
+  let version = core.getInput("version");
   const network = core.getInput("network");
+
+  // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6")
+  if (version && version.startsWith("v")) {
+    version = version.slice(1);
+  }
 
   if (version && version !== "stable") args.push("--install", version);
   if (network && network !== "ethereum") args.push("--network", network);
@@ -44692,6 +44697,7 @@ async function main() {
     // Print installed versions
     for (const bin of FOUNDRY_TOOLS) {
       try {
+        core.info(`Running: ${bin} --version`);
         execSync(`${bin} --version`, { stdio: "inherit" });
       } catch {}
     }
