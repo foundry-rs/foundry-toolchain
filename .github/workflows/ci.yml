@@ -32,9 +32,23 @@ jobs:
           - { os: windows-latest, arch: x64 } # foundry_v[ersion]_windows_amd64.zip
         version: [stable, nightly]
         network: [ethereum, tempo]
+        include:
+          # Both with and without `v` prefix.
+          - network: ethereum
+            version: 1.5.0
+            config:
+              os: ubuntu-latest
+              arch: x64
+          - network: ethereum
+            version: v1.5.0
+            config:
+              os: ubuntu-latest
+              arch: x64
         exclude:
           - network: tempo
             version: stable
+          - network: tempo
+            version: v1.5.0
     permissions:
       contents: read
     steps:
