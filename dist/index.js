@@ -44594,7 +44594,7 @@ const FOUNDRYUP_INSTALLER_URL = "https://raw.githubusercontent.com/foundry-rs/fo
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
 const FOUNDRY_BIN = path.join(FOUNDRY_DIR, "bin");
 
-function download(url, dest) {
+function downloadOnce(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     const handleResponse = (res) => {
@@ -44615,6 +44615,18 @@ function download(url, dest) {
     };
     https.get(url, handleResponse).on("error", reject);
   });
+}
+
+async function download(url, dest, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await downloadOnce(url, dest);
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      core.warning(`Download failed (attempt ${i + 1}/${retries}): ${err.message}`);
+      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+    }
+  }
 }
 
 function buildFoundryupArgs() {
