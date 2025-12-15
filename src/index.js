@@ -41,12 +41,26 @@ function buildFoundryupArgs() {
 
   if (version && version !== "stable") args.push("--install", version);
   if (network && network !== "ethereum") args.push("--network", network);
+  // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files
+  if (os.platform() === "win32") args.push("--force");
 
   return args;
 }
 
-function run(cmd) {
-  execSync(cmd, { stdio: "inherit", env: { ...process.env, FOUNDRY_DIR } });
+function run(cmd, ignoreShellError = false) {
+  try {
+    execSync(cmd, { stdio: "pipe", env: { ...process.env, FOUNDRY_DIR } });
+  } catch (err) {
+    const output = [err.stdout, err.stderr, err.message].map((b) => b?.toString() || "").join("\n");
+    if (ignoreShellError && output.includes("could not detect shell")) {
+      core.info("Shell detection failed (expected in CI), continuing...");
+      return;
+    }
+    // Log captured output before throwing
+    if (err.stdout) core.info(err.stdout.toString());
+    if (err.stderr) core.error(err.stderr.toString());
+    throw err;
+  }
 }
 
 async function main() {
@@ -61,12 +75,13 @@ async function main() {
     await download(FOUNDRYUP_INSTALLER_URL, installer);
 
     core.info("Running foundryup installer...");
-    run(`bash "${installer}"`);
+    run(`bash "${installer}"`, true);
 
-    // Run foundryup to install binaries
+    // Run foundryup to install binaries (use bash since foundryup is a shell script)
+    const foundryup = path.join(FOUNDRY_BIN, "foundryup");
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
-    run(`"${path.join(FOUNDRY_BIN, "foundryup")}" ${args.join(" ")}`);
+    run(`bash "${foundryup}" ${args.join(" ")}`);
 
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
