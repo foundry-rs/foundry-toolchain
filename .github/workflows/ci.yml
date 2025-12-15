@@ -47,8 +47,6 @@ jobs:
         exclude:
           - network: tempo
             version: stable
-          - network: tempo
-            version: v1.5.0
     permissions:
       contents: read
     steps:

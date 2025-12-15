@@ -44593,6 +44593,7 @@ const { restoreRPCCache } = __nccwpck_require__(42351);
 const FOUNDRYUP_INSTALLER_URL = "https://raw.githubusercontent.com/foundry-rs/foundry/HEAD/foundryup/install";
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
 const FOUNDRY_BIN = path.join(FOUNDRY_DIR, "bin");
+const FOUNDRY_TOOLS = ["forge", "cast", "anvil", "chisel"];
 
 function downloadOnce(url, dest) {
   return new Promise((resolve, reject) => {
@@ -44691,6 +44692,14 @@ async function main() {
       await restoreRPCCache();
     } else {
       core.info("Cache not requested, not restoring cache");
+    }
+
+    // Print installed versions
+    for (const bin of FOUNDRY_TOOLS) {
+      try {
+        core.info(`Running: ${bin} --version`);
+        execSync(`${bin} --version`, { stdio: "inherit" });
+      } catch {}
     }
   } catch (err) {
     core.setFailed(err);
