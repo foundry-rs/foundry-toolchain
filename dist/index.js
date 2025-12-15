@@ -44691,7 +44691,9 @@ async function main() {
 
     // Print installed versions
     for (const bin of FOUNDRY_TOOLS) {
-      execSync(`${bin} --version`, { stdio: "inherit" });
+      try {
+        execSync(`${bin} --version`, { stdio: "inherit" });
+      } catch {}
     }
   } catch (err) {
     core.setFailed(err);
