@@ -109,6 +109,7 @@ async function main() {
     // Print installed versions
     for (const bin of FOUNDRY_TOOLS) {
       try {
+        core.info(`Running: ${bin} --version`);
         execSync(`${bin} --version`, { stdio: "inherit" });
       } catch {}
     }
