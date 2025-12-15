@@ -13,14 +13,13 @@ No test framework configured.
 
 ## Architecture
 
-GitHub Action that installs Foundry (Ethereum development toolkit) and caches RPC responses.
+GitHub Action that installs Foundry (Ethereum development toolkit) via foundryup and caches RPC responses.
 
-- `src/index.js` - Main entry: downloads Foundry archive, extracts, adds to PATH, restores cache
+- `src/index.js` - Main entry: downloads foundryup installer, runs it, restores RPC cache
 - `src/save.js` - Post-action: saves RPC cache
 - `src/cache.js` - Cache logic using @actions/cache
-- `src/utils.js` - Platform detection, download URL construction
 - `src/constants.js` - State key constants
-- `action.yml` - Action definition with inputs (version, network, cache, cache-key)
+- `action.yml` - Action definition with inputs (version, network, cache, cache-key, cache-restore-keys)
 - `dist/` - Compiled output (committed)
 
 ## Code Style
@@ -28,5 +27,4 @@ GitHub Action that installs Foundry (Ethereum development toolkit) and caches RP
 - JavaScript (CommonJS with `require`/`module.exports`)
 - Prettier: 2 spaces, double quotes, trailing commas, 120 char line width
 - Use `@actions/*` packages for GitHub Actions APIs
-- JSDoc comments for functions
 - Error handling: wrap main in try/catch, call `core.setFailed(err)` on failure
