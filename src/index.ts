@@ -54,12 +54,14 @@ function buildFoundryupArgs(): string[] {
   let version = core.getInput("version");
   const network = core.getInput("network");
 
+  // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6").
   if (version && version.startsWith("v")) {
     version = version.slice(1);
   }
 
   if (version && version !== "stable") args.push("--install", version);
   if (network && network !== "ethereum") args.push("--network", network);
+  // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files.
   if (os.platform() === "win32") args.push("--force");
 
   return args;
@@ -75,6 +77,7 @@ function run(cmd: string, ignoreShellError = false): void {
       core.info("Shell detection failed (expected in CI), continuing...");
       return;
     }
+    // Log captured output before throwing.
     if (execErr.stdout) core.info(execErr.stdout.toString());
     if (execErr.stderr) core.error(execErr.stderr.toString());
     throw err;
@@ -87,6 +90,7 @@ async function main(): Promise<void> {
     const network = core.getInput("network") || "ethereum";
     core.info(`Installing Foundry (version: ${version}, network: ${network})`);
 
+    // Download and run the installer.
     const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
     core.info("Downloading foundryup installer...");
     await download(FOUNDRYUP_INSTALLER_URL, installer);
@@ -94,6 +98,7 @@ async function main(): Promise<void> {
     core.info("Running foundryup installer...");
     run(`bash "${installer}"`, true);
 
+    // Run foundryup to install binaries (use bash since foundryup is a shell script).
     const foundryup = path.join(FOUNDRY_BIN, "foundryup");
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
@@ -102,12 +107,14 @@ async function main(): Promise<void> {
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
 
+    // Restore RPC cache.
     if (core.getBooleanInput("cache")) {
       await restoreRPCCache();
     } else {
       core.info("Cache not requested, not restoring cache");
     }
 
+    // Print installed versions.
     for (const bin of FOUNDRY_TOOLS) {
       try {
         core.info(`Running: ${bin} --version`);

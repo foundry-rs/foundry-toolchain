@@ -44497,18 +44497,29 @@ const github = __importStar(__nccwpck_require__(93228));
 const fs = __importStar(__nccwpck_require__(79896));
 const os = __importStar(__nccwpck_require__(70857));
 const path = __importStar(__nccwpck_require__(16928));
+// Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
 const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
+/**
+ * Constructs the primary key for the cache using a custom key input.
+ * @param customKeyInput - The custom part of the key provided by the user.
+ * @returns The complete primary key for the cache.
+ */
 function getPrimaryKey(customKeyInput) {
     if (!customKeyInput) {
         return `${CACHE_PREFIX}${github.context.sha}`;
     }
     return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
+/**
+ * Constructs an array of restore keys based on user input and a default prefix.
+ * @param customRestoreKeysInput - Newline-separated string of custom restore keys.
+ * @returns An array of restore keys for the cache.
+ */
 function getRestoreKeys(customRestoreKeysInput) {
     const defaultRestoreKeys = [CACHE_PREFIX];
     if (!customRestoreKeysInput) {
@@ -44521,6 +44532,7 @@ function getRestoreKeys(customRestoreKeysInput) {
         .map((input) => `${CACHE_PREFIX}${input}`);
     return restoreKeys;
 }
+/** Restores the RPC cache using the provided keys. */
 async function restoreRPCCache() {
     const customKeyInput = core.getInput("cache-key");
     const primaryKey = getPrimaryKey(customKeyInput);
@@ -44537,22 +44549,30 @@ async function restoreRPCCache() {
     core.saveState(STATE_CACHE_MATCHED_KEY, matchedKey);
     core.info(`Cache restored from key: ${matchedKey}`);
 }
+/**
+ * Saves the RPC cache using the primary key saved in the state.
+ * If the cache was already saved with the primary key, it will not save it again.
+ */
 async function saveCache() {
     const primaryKey = core.getState(STATE_CACHE_PRIMARY_KEY);
     const matchedKey = core.getState(STATE_CACHE_MATCHED_KEY);
+    // If the cache path does not exist, do not save the cache.
     if (!fs.existsSync(CACHE_PATHS[0])) {
         core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
         return;
     }
+    // If the primary key is not generated, do not save the cache.
     if (!primaryKey) {
         core.info("Primary key was not generated. Please check the log messages above for more errors or information");
         return;
     }
+    // If the primary key and the matched key are the same, this means the cache was already saved.
     if (primaryKey === matchedKey) {
         core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
         return;
     }
     const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+    // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
     if (cacheId === -1) {
         return;
     }
@@ -44603,10 +44623,16 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(37484));
 const cache_js_1 = __nccwpck_require__(97377);
+// Catch and log any unhandled exceptions. These exceptions can leak out of the uploadChunk method in
+// @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
+// throw an uncaught exception. Instead of failing this action, just warn.
 process.on("uncaughtException", (e) => {
     const warningPrefix = "[warning]";
     core.info(`${warningPrefix}${e.message}`);
 });
+// Added early exit to resolve issue with slow post action step:
+// - https://github.com/actions/setup-node/issues/878
+// - https://github.com/actions/cache/pull/1217
 async function run(earlyExit) {
     try {
         const cacheInput = core.getBooleanInput("cache");

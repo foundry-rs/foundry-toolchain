@@ -44497,18 +44497,29 @@ const github = __importStar(__nccwpck_require__(93228));
 const fs = __importStar(__nccwpck_require__(79896));
 const os = __importStar(__nccwpck_require__(70857));
 const path = __importStar(__nccwpck_require__(16928));
+// Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
 const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
+/**
+ * Constructs the primary key for the cache using a custom key input.
+ * @param customKeyInput - The custom part of the key provided by the user.
+ * @returns The complete primary key for the cache.
+ */
 function getPrimaryKey(customKeyInput) {
     if (!customKeyInput) {
         return `${CACHE_PREFIX}${github.context.sha}`;
     }
     return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
+/**
+ * Constructs an array of restore keys based on user input and a default prefix.
+ * @param customRestoreKeysInput - Newline-separated string of custom restore keys.
+ * @returns An array of restore keys for the cache.
+ */
 function getRestoreKeys(customRestoreKeysInput) {
     const defaultRestoreKeys = [CACHE_PREFIX];
     if (!customRestoreKeysInput) {
@@ -44521,6 +44532,7 @@ function getRestoreKeys(customRestoreKeysInput) {
         .map((input) => `${CACHE_PREFIX}${input}`);
     return restoreKeys;
 }
+/** Restores the RPC cache using the provided keys. */
 async function restoreRPCCache() {
     const customKeyInput = core.getInput("cache-key");
     const primaryKey = getPrimaryKey(customKeyInput);
@@ -44537,22 +44549,30 @@ async function restoreRPCCache() {
     core.saveState(STATE_CACHE_MATCHED_KEY, matchedKey);
     core.info(`Cache restored from key: ${matchedKey}`);
 }
+/**
+ * Saves the RPC cache using the primary key saved in the state.
+ * If the cache was already saved with the primary key, it will not save it again.
+ */
 async function saveCache() {
     const primaryKey = core.getState(STATE_CACHE_PRIMARY_KEY);
     const matchedKey = core.getState(STATE_CACHE_MATCHED_KEY);
+    // If the cache path does not exist, do not save the cache.
     if (!fs.existsSync(CACHE_PATHS[0])) {
         core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
         return;
     }
+    // If the primary key is not generated, do not save the cache.
     if (!primaryKey) {
         core.info("Primary key was not generated. Please check the log messages above for more errors or information");
         return;
     }
+    // If the primary key and the matched key are the same, this means the cache was already saved.
     if (primaryKey === matchedKey) {
         core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
         return;
     }
     const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+    // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
     if (cacheId === -1) {
         return;
     }
@@ -44652,6 +44672,7 @@ function buildFoundryupArgs() {
     const args = [];
     let version = core.getInput("version");
     const network = core.getInput("network");
+    // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6").
     if (version && version.startsWith("v")) {
         version = version.slice(1);
     }
@@ -44659,6 +44680,7 @@ function buildFoundryupArgs() {
         args.push("--install", version);
     if (network && network !== "ethereum")
         args.push("--network", network);
+    // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files.
     if (os.platform() === "win32")
         args.push("--force");
     return args;
@@ -44674,6 +44696,7 @@ function run(cmd, ignoreShellError = false) {
             core.info("Shell detection failed (expected in CI), continuing...");
             return;
         }
+        // Log captured output before throwing.
         if (execErr.stdout)
             core.info(execErr.stdout.toString());
         if (execErr.stderr)
@@ -44686,23 +44709,27 @@ async function main() {
         const version = core.getInput("version") || "stable";
         const network = core.getInput("network") || "ethereum";
         core.info(`Installing Foundry (version: ${version}, network: ${network})`);
+        // Download and run the installer.
         const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
         core.info("Downloading foundryup installer...");
         await download(FOUNDRYUP_INSTALLER_URL, installer);
         core.info("Running foundryup installer...");
         run(`bash "${installer}"`, true);
+        // Run foundryup to install binaries (use bash since foundryup is a shell script).
         const foundryup = path.join(FOUNDRY_BIN, "foundryup");
         const args = buildFoundryupArgs();
         core.info(`Running: foundryup ${args.join(" ")}`);
         run(`bash "${foundryup}" ${args.join(" ")}`);
         core.addPath(FOUNDRY_BIN);
         core.info(`Added ${FOUNDRY_BIN} to PATH`);
+        // Restore RPC cache.
         if (core.getBooleanInput("cache")) {
             await (0, cache_js_1.restoreRPCCache)();
         }
         else {
             core.info("Cache not requested, not restoring cache");
         }
+        // Print installed versions.
         for (const bin of FOUNDRY_TOOLS) {
             try {
                 core.info(`Running: ${bin} --version`);

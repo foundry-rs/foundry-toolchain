@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
+// Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
@@ -13,6 +14,11 @@ const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
 const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
 
+/**
+ * Constructs the primary key for the cache using a custom key input.
+ * @param customKeyInput - The custom part of the key provided by the user.
+ * @returns The complete primary key for the cache.
+ */
 function getPrimaryKey(customKeyInput: string): string {
   if (!customKeyInput) {
     return `${CACHE_PREFIX}${github.context.sha}`;
@@ -20,6 +26,11 @@ function getPrimaryKey(customKeyInput: string): string {
   return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
 
+/**
+ * Constructs an array of restore keys based on user input and a default prefix.
+ * @param customRestoreKeysInput - Newline-separated string of custom restore keys.
+ * @returns An array of restore keys for the cache.
+ */
 function getRestoreKeys(customRestoreKeysInput: string): string[] {
   const defaultRestoreKeys = [CACHE_PREFIX];
   if (!customRestoreKeysInput) {
@@ -33,6 +44,7 @@ function getRestoreKeys(customRestoreKeysInput: string): string[] {
   return restoreKeys;
 }
 
+/** Restores the RPC cache using the provided keys. */
 export async function restoreRPCCache(): Promise<void> {
   const customKeyInput = core.getInput("cache-key");
   const primaryKey = getPrimaryKey(customKeyInput);
@@ -53,20 +65,27 @@ export async function restoreRPCCache(): Promise<void> {
   core.info(`Cache restored from key: ${matchedKey}`);
 }
 
+/**
+ * Saves the RPC cache using the primary key saved in the state.
+ * If the cache was already saved with the primary key, it will not save it again.
+ */
 export async function saveCache(): Promise<void> {
   const primaryKey = core.getState(STATE_CACHE_PRIMARY_KEY);
   const matchedKey = core.getState(STATE_CACHE_MATCHED_KEY);
 
+  // If the cache path does not exist, do not save the cache.
   if (!fs.existsSync(CACHE_PATHS[0])) {
     core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
     return;
   }
 
+  // If the primary key is not generated, do not save the cache.
   if (!primaryKey) {
     core.info("Primary key was not generated. Please check the log messages above for more errors or information");
     return;
   }
 
+  // If the primary key and the matched key are the same, this means the cache was already saved.
   if (primaryKey === matchedKey) {
     core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
     return;
@@ -74,6 +93,7 @@ export async function saveCache(): Promise<void> {
 
   const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
 
+  // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
   if (cacheId === -1) {
     return;
   }
