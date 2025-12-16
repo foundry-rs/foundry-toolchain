@@ -6,7 +6,7 @@ import * as os from "os";
 import * as path from "path";
 import type { IncomingMessage } from "http";
 
-import { restoreRPCCache } from "./cache.js";
+import { restoreCache } from "./cache.js";
 
 const FOUNDRYUP_INSTALLER_URL = "https://raw.githubusercontent.com/foundry-rs/foundry/HEAD/foundryup/install";
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
@@ -107,9 +107,9 @@ async function main(): Promise<void> {
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
 
-    // Restore RPC cache.
+    // Restore cache.
     if (core.getBooleanInput("cache")) {
-      await restoreRPCCache();
+      await restoreCache();
     } else {
       core.info("Cache not requested, not restoring cache");
     }
