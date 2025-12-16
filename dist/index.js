@@ -44489,7 +44489,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.restoreRPCCache = restoreRPCCache;
+exports.restoreCache = restoreCache;
 exports.saveCache = saveCache;
 const core = __importStar(__nccwpck_require__(37484));
 const cache = __importStar(__nccwpck_require__(5116));
@@ -44500,7 +44500,7 @@ const path = __importStar(__nccwpck_require__(16928));
 // Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
-const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
+const CACHE_PATHS = [path.join(HOME, ".foundry/cache")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
 const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
@@ -44532,8 +44532,8 @@ function getRestoreKeys(customRestoreKeysInput) {
         .map((input) => `${CACHE_PREFIX}${input}`);
     return restoreKeys;
 }
-/** Restores the RPC cache using the provided keys. */
-async function restoreRPCCache() {
+/** Restores the cache using the provided keys. */
+async function restoreCache() {
     const customKeyInput = core.getInput("cache-key");
     const primaryKey = getPrimaryKey(customKeyInput);
     core.info(`Primary key: ${primaryKey}`);
@@ -44550,7 +44550,7 @@ async function restoreRPCCache() {
     core.info(`Cache restored from key: ${matchedKey}`);
 }
 /**
- * Saves the RPC cache using the primary key saved in the state.
+ * Saves the cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
 async function saveCache() {
@@ -44722,9 +44722,9 @@ async function main() {
         run(`bash "${foundryup}" ${args.join(" ")}`);
         core.addPath(FOUNDRY_BIN);
         core.info(`Added ${FOUNDRY_BIN} to PATH`);
-        // Restore RPC cache.
+        // Restore cache.
         if (core.getBooleanInput("cache")) {
-            await (0, cache_js_1.restoreRPCCache)();
+            await (0, cache_js_1.restoreCache)();
         }
         else {
             core.info("Cache not requested, not restoring cache");
