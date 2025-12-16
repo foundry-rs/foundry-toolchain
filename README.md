@@ -48,13 +48,13 @@ jobs:
 
 ### Inputs
 
-| **Name**             | **Required** | **Default**                           | **Description**                                                                                                               | **Type** |
-| -------------------- | ------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or any [SemVer](https://semver.org/) tag prefixed with `v` (e.g. `v1.3.6`) | string   |
-| `network`            | No           | `ethereum`                            | Network version to install, e.g. `ethereum`, `tempo`.                                                                         | string   |
-| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                                                                                        | bool     |
-| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                                             | string   |
-| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                                                | string[] |
+| **Name**             | **Required** | **Default**                           | **Description**                                                                                                                                       | **Type** |
+| -------------------- | ------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or any [SemVer](https://semver.org/) version with or without `v` prefix (e.g. `v1.5.0` or `1.5.0`) | string   |
+| `network`            | No           | `ethereum`                            | Network version to install, e.g. `ethereum`, `tempo`.                                                                                                 | string   |
+| `cache`              | No           | `true`                                | Whether to cache RPC responses or not.                                                                                                                | bool     |
+| `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                                                                     | string   |
+| `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                                                                        | string[] |
 
 ### RPC Caching
 

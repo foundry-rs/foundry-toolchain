@@ -44450,130 +44450,188 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 42351:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ 97377:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-const core = __nccwpck_require__(37484);
-const cache = __nccwpck_require__(5116);
-const github = __nccwpck_require__(93228);
-const fs = __nccwpck_require__(79896);
-const os = __nccwpck_require__(70857);
-const path = __nccwpck_require__(16928);
-const { State } = __nccwpck_require__(19992);
+"use strict";
 
-// Define constants for cache paths and prefix
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.restoreRPCCache = restoreRPCCache;
+exports.saveCache = saveCache;
+const core = __importStar(__nccwpck_require__(37484));
+const cache = __importStar(__nccwpck_require__(5116));
+const github = __importStar(__nccwpck_require__(93228));
+const fs = __importStar(__nccwpck_require__(79896));
+const os = __importStar(__nccwpck_require__(70857));
+const path = __importStar(__nccwpck_require__(16928));
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
-
-/**
- * Constructs the primary key for the cache using a custom key input.
- * @param {string} customKeyInput - The custom part of the key provided by the user.
- * @returns {string} The complete primary key for the cache.
- */
+const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
+const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
 function getPrimaryKey(customKeyInput) {
-  if (!customKeyInput) {
-    return `${CACHE_PREFIX}${github.context.sha}`;
-  }
-  return `${CACHE_PREFIX}${customKeyInput.trim()}`;
+    if (!customKeyInput) {
+        return `${CACHE_PREFIX}${github.context.sha}`;
+    }
+    return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
-
-/**
- * Constructs an array of restore keys based on user input and a default prefix.
- * @param {string} customRestoreKeysInput - Newline-separated string of custom restore keys.
- * @returns {string[]} An array of restore keys for the cache.
- */
 function getRestoreKeys(customRestoreKeysInput) {
-  const defaultRestoreKeys = [CACHE_PREFIX];
-  if (!customRestoreKeysInput) {
-    return defaultRestoreKeys;
-  }
-  const restoreKeys = customRestoreKeysInput
-    .split(/[\r\n]/)
-    .map((input) => input.trim())
-    .filter((input) => input !== "")
-    .map((input) => `${CACHE_PREFIX}${input}`);
-  return restoreKeys;
+    const defaultRestoreKeys = [CACHE_PREFIX];
+    if (!customRestoreKeysInput) {
+        return defaultRestoreKeys;
+    }
+    const restoreKeys = customRestoreKeysInput
+        .split(/[\r\n]/)
+        .map((input) => input.trim())
+        .filter((input) => input !== "")
+        .map((input) => `${CACHE_PREFIX}${input}`);
+    return restoreKeys;
 }
-
-/**
- * Restores the RPC cache using the provided keys.
- */
 async function restoreRPCCache() {
-  const customKeyInput = core.getInput("cache-key");
-  const primaryKey = getPrimaryKey(customKeyInput);
-  core.info(`Primary key: ${primaryKey}`);
-  core.saveState(State.CachePrimaryKey, primaryKey);
-
-  const customRestoreKeysInput = core.getInput("cache-restore-keys");
-  const restoreKeys = getRestoreKeys(customRestoreKeysInput);
-  core.info(`Restore keys: ${restoreKeys.join(", ")}`);
-  const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
-
-  if (!matchedKey) {
-    core.info("Cache not found");
-    return;
-  }
-
-  core.saveState(State.CacheMatchedKey, matchedKey);
-  core.info(`Cache restored from key: ${matchedKey}`);
+    const customKeyInput = core.getInput("cache-key");
+    const primaryKey = getPrimaryKey(customKeyInput);
+    core.info(`Primary key: ${primaryKey}`);
+    core.saveState(STATE_CACHE_PRIMARY_KEY, primaryKey);
+    const customRestoreKeysInput = core.getInput("cache-restore-keys");
+    const restoreKeys = getRestoreKeys(customRestoreKeysInput);
+    core.info(`Restore keys: ${restoreKeys.join(", ")}`);
+    const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+    if (!matchedKey) {
+        core.info("Cache not found");
+        return;
+    }
+    core.saveState(STATE_CACHE_MATCHED_KEY, matchedKey);
+    core.info(`Cache restored from key: ${matchedKey}`);
 }
-
-/**
- * Saves the RPC cache using the primary key saved in the state.
- * If the cache was already saved with the primary key, it will not save it again.
- */
 async function saveCache() {
-  const primaryKey = core.getState(State.CachePrimaryKey);
-  const matchedKey = core.getState(State.CacheMatchedKey);
-
-  // If the cache path does not exist, do not save the cache
-  if (!fs.existsSync(CACHE_PATHS[0])) {
-    core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
-    return;
-  }
-
-  // If the primary key is not generated, do not save the cache
-  if (!primaryKey) {
-    core.info("Primary key was not generated. Please check the log messages above for more errors or information");
-    return;
-  }
-
-  // If the primary key and the matched key are the same, this means the cache was already saved
-  if (primaryKey === matchedKey) {
-    core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
-    return;
-  }
-
-  const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
-
-  // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
-  if (cacheId === -1) {
-    return;
-  }
-
-  core.info(`Cache saved with the key: ${primaryKey}`);
+    const primaryKey = core.getState(STATE_CACHE_PRIMARY_KEY);
+    const matchedKey = core.getState(STATE_CACHE_MATCHED_KEY);
+    if (!fs.existsSync(CACHE_PATHS[0])) {
+        core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
+        return;
+    }
+    if (!primaryKey) {
+        core.info("Primary key was not generated. Please check the log messages above for more errors or information");
+        return;
+    }
+    if (primaryKey === matchedKey) {
+        core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
+        return;
+    }
+    const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+    if (cacheId === -1) {
+        return;
+    }
+    core.info(`Cache saved with the key: ${primaryKey}`);
 }
-
-module.exports = {
-  restoreRPCCache,
-  saveCache,
-};
 
 
 /***/ }),
 
-/***/ 19992:
-/***/ ((module) => {
+/***/ 90198:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-// Enum for the cache primary key and result key.
-const State = {
-  CachePrimaryKey: "CACHE_KEY",
-  CacheMatchedKey: "CACHE_RESULT",
-};
+"use strict";
 
-module.exports = { State };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(37484));
+const cache_js_1 = __nccwpck_require__(97377);
+process.on("uncaughtException", (e) => {
+    const warningPrefix = "[warning]";
+    core.info(`${warningPrefix}${e.message}`);
+});
+async function run(earlyExit) {
+    try {
+        const cacheInput = core.getBooleanInput("cache");
+        if (cacheInput) {
+            await (0, cache_js_1.saveCache)();
+        }
+        else {
+            core.info("Cache not requested, not saving cache");
+        }
+        if (earlyExit) {
+            process.exit(0);
+        }
+    }
+    catch (error) {
+        let message = "Unknown error!";
+        if (error instanceof Error) {
+            message = error.message;
+        }
+        if (typeof error === "string") {
+            message = error;
+        }
+        core.warning(message);
+    }
+}
+run(true);
 
 
 /***/ }),
@@ -87503,50 +87561,13 @@ module.exports = /*#__PURE__*/JSON.parse('{"name":"@actions/cache","version":"4.
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-const { saveCache } = __nccwpck_require__(42351);
-const core = __nccwpck_require__(37484);
-
-// Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
-// @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
-// throw an uncaught exception.  Instead of failing this action, just warn.
-process.on("uncaughtException", (e) => {
-  const warningPrefix = "[warning]";
-  core.info(`${warningPrefix}${e.message}`);
-});
-
-// Added early exit to resolve issue with slow post action step:
-// - https://github.com/actions/setup-node/issues/878
-// https://github.com/actions/cache/pull/1217
-async function run(earlyExit) {
-  try {
-    const cacheInput = core.getBooleanInput("cache");
-    if (cacheInput) {
-      await saveCache();
-    } else {
-      core.info("Cache not requested, not saving cache");
-    }
-
-    if (earlyExit) {
-      process.exit(0);
-    }
-  } catch (error) {
-    let message = "Unknown error!";
-    if (error instanceof Error) {
-      message = error.message;
-    }
-    if (typeof error === "string") {
-      message = error;
-    }
-    core.warning(message);
-  }
-}
-
-if (require.main === require.cache[eval('__filename')]) {
-  run(true);
-}
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(90198);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

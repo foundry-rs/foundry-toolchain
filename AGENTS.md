@@ -15,14 +15,6 @@ No test framework configured.
 
 GitHub Action that installs Foundry (Ethereum development toolkit) and caches RPC responses.
 
-- `src/index.js` - Main entry: downloads Foundry archive, extracts, adds to PATH, restores cache
-- `src/save.js` - Post-action: saves RPC cache
-- `src/cache.js` - Cache logic using @actions/cache
-- `src/utils.js` - Platform detection, download URL construction
-- `src/constants.js` - State key constants
-- `action.yml` - Action definition with inputs (version, network, cache, cache-key)
-- `dist/` - Compiled output (committed)
-
 ## Code Style
 
 - JavaScript (CommonJS with `require`/`module.exports`)
