@@ -58,7 +58,7 @@ jobs:
 
 ### Caching
 
-By default, this action matches Forge's behavior and caches all RPC responses, Etherscan queries, and other data in the `~/.foundry/cache/rpc` directory.
+By default, this action matches Forge's behavior and caches all RPC responses, Etherscan queries, and other data in the `~/.foundry/cache` directory.
 This is done to speed up the tests and avoid hitting the rate limit of your RPC provider.
 
 The logic of the caching is as follows:
