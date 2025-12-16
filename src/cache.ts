@@ -8,7 +8,7 @@ import * as path from "path";
 // Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
-const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
+const CACHE_PATHS = [path.join(HOME, ".foundry/cache")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
 
 const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
@@ -44,8 +44,8 @@ function getRestoreKeys(customRestoreKeysInput: string): string[] {
   return restoreKeys;
 }
 
-/** Restores the RPC cache using the provided keys. */
-export async function restoreRPCCache(): Promise<void> {
+/** Restores the cache using the provided keys. */
+export async function restoreCache(): Promise<void> {
   const customKeyInput = core.getInput("cache-key");
   const primaryKey = getPrimaryKey(customKeyInput);
   core.info(`Primary key: ${primaryKey}`);
@@ -66,7 +66,7 @@ export async function restoreRPCCache(): Promise<void> {
 }
 
 /**
- * Saves the RPC cache using the primary key saved in the state.
+ * Saves the cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
 export async function saveCache(): Promise<void> {

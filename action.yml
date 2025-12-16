@@ -25,7 +25,7 @@ inputs:
   cache:
     default: "true"
     description: |
-      Whether to cache RPC responses or not.
+      Whether to cache Foundry data or not.
 
       Caching is activated by default.
     required: false

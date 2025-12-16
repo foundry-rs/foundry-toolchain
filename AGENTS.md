@@ -13,7 +13,7 @@ No test framework configured.
 
 ## Architecture
 
-GitHub Action that installs Foundry (Ethereum development toolkit) and caches RPC responses.
+GitHub Action that installs Foundry (Ethereum development toolkit) and caches Foundry data.
 
 ## Code Style
 
