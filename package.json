@@ -14,7 +14,8 @@
     "dapptools"
   ],
   "scripts": {
-    "build": "ncc build src/index.js -o dist --source-map && ncc build src/save.js -o dist/save --source-map"
+    "build": "ncc build src/index.ts -o dist --source-map && ncc build src/save.ts -o dist/save --source-map",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@actions/cache": "^4.1.0",
@@ -23,7 +24,9 @@
     "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@vercel/ncc": "^0.38.4",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "typescript": "^5.7.2"
   }
 }

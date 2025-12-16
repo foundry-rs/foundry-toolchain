@@ -44450,267 +44450,300 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 42351:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ 97377:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-const core = __nccwpck_require__(37484);
-const cache = __nccwpck_require__(5116);
-const github = __nccwpck_require__(93228);
-const fs = __nccwpck_require__(79896);
-const os = __nccwpck_require__(70857);
-const path = __nccwpck_require__(16928);
-const { State } = __nccwpck_require__(19992);
+"use strict";
 
-// Define constants for cache paths and prefix
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.restoreRPCCache = restoreRPCCache;
+exports.saveCache = saveCache;
+const core = __importStar(__nccwpck_require__(37484));
+const cache = __importStar(__nccwpck_require__(5116));
+const github = __importStar(__nccwpck_require__(93228));
+const fs = __importStar(__nccwpck_require__(79896));
+const os = __importStar(__nccwpck_require__(70857));
+const path = __importStar(__nccwpck_require__(16928));
+// Define constants for cache paths and prefix.
 const HOME = os.homedir();
 const PLATFORM = os.platform();
 const CACHE_PATHS = [path.join(HOME, ".foundry/cache/rpc")];
 const CACHE_PREFIX = `${PLATFORM}-foundry-chain-fork-`;
-
+const STATE_CACHE_PRIMARY_KEY = "CACHE_KEY";
+const STATE_CACHE_MATCHED_KEY = "CACHE_RESULT";
 /**
  * Constructs the primary key for the cache using a custom key input.
- * @param {string} customKeyInput - The custom part of the key provided by the user.
- * @returns {string} The complete primary key for the cache.
+ * @param customKeyInput - The custom part of the key provided by the user.
+ * @returns The complete primary key for the cache.
  */
 function getPrimaryKey(customKeyInput) {
-  if (!customKeyInput) {
-    return `${CACHE_PREFIX}${github.context.sha}`;
-  }
-  return `${CACHE_PREFIX}${customKeyInput.trim()}`;
+    if (!customKeyInput) {
+        return `${CACHE_PREFIX}${github.context.sha}`;
+    }
+    return `${CACHE_PREFIX}${customKeyInput.trim()}`;
 }
-
 /**
  * Constructs an array of restore keys based on user input and a default prefix.
- * @param {string} customRestoreKeysInput - Newline-separated string of custom restore keys.
- * @returns {string[]} An array of restore keys for the cache.
+ * @param customRestoreKeysInput - Newline-separated string of custom restore keys.
+ * @returns An array of restore keys for the cache.
  */
 function getRestoreKeys(customRestoreKeysInput) {
-  const defaultRestoreKeys = [CACHE_PREFIX];
-  if (!customRestoreKeysInput) {
-    return defaultRestoreKeys;
-  }
-  const restoreKeys = customRestoreKeysInput
-    .split(/[\r\n]/)
-    .map((input) => input.trim())
-    .filter((input) => input !== "")
-    .map((input) => `${CACHE_PREFIX}${input}`);
-  return restoreKeys;
+    const defaultRestoreKeys = [CACHE_PREFIX];
+    if (!customRestoreKeysInput) {
+        return defaultRestoreKeys;
+    }
+    const restoreKeys = customRestoreKeysInput
+        .split(/[\r\n]/)
+        .map((input) => input.trim())
+        .filter((input) => input !== "")
+        .map((input) => `${CACHE_PREFIX}${input}`);
+    return restoreKeys;
 }
-
-/**
- * Restores the RPC cache using the provided keys.
- */
+/** Restores the RPC cache using the provided keys. */
 async function restoreRPCCache() {
-  const customKeyInput = core.getInput("cache-key");
-  const primaryKey = getPrimaryKey(customKeyInput);
-  core.info(`Primary key: ${primaryKey}`);
-  core.saveState(State.CachePrimaryKey, primaryKey);
-
-  const customRestoreKeysInput = core.getInput("cache-restore-keys");
-  const restoreKeys = getRestoreKeys(customRestoreKeysInput);
-  core.info(`Restore keys: ${restoreKeys.join(", ")}`);
-  const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
-
-  if (!matchedKey) {
-    core.info("Cache not found");
-    return;
-  }
-
-  core.saveState(State.CacheMatchedKey, matchedKey);
-  core.info(`Cache restored from key: ${matchedKey}`);
+    const customKeyInput = core.getInput("cache-key");
+    const primaryKey = getPrimaryKey(customKeyInput);
+    core.info(`Primary key: ${primaryKey}`);
+    core.saveState(STATE_CACHE_PRIMARY_KEY, primaryKey);
+    const customRestoreKeysInput = core.getInput("cache-restore-keys");
+    const restoreKeys = getRestoreKeys(customRestoreKeysInput);
+    core.info(`Restore keys: ${restoreKeys.join(", ")}`);
+    const matchedKey = await cache.restoreCache(CACHE_PATHS, primaryKey, restoreKeys);
+    if (!matchedKey) {
+        core.info("Cache not found");
+        return;
+    }
+    core.saveState(STATE_CACHE_MATCHED_KEY, matchedKey);
+    core.info(`Cache restored from key: ${matchedKey}`);
 }
-
 /**
  * Saves the RPC cache using the primary key saved in the state.
  * If the cache was already saved with the primary key, it will not save it again.
  */
 async function saveCache() {
-  const primaryKey = core.getState(State.CachePrimaryKey);
-  const matchedKey = core.getState(State.CacheMatchedKey);
-
-  // If the cache path does not exist, do not save the cache
-  if (!fs.existsSync(CACHE_PATHS[0])) {
-    core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
-    return;
-  }
-
-  // If the primary key is not generated, do not save the cache
-  if (!primaryKey) {
-    core.info("Primary key was not generated. Please check the log messages above for more errors or information");
-    return;
-  }
-
-  // If the primary key and the matched key are the same, this means the cache was already saved
-  if (primaryKey === matchedKey) {
-    core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
-    return;
-  }
-
-  const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
-
-  // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
-  if (cacheId === -1) {
-    return;
-  }
-
-  core.info(`Cache saved with the key: ${primaryKey}`);
+    const primaryKey = core.getState(STATE_CACHE_PRIMARY_KEY);
+    const matchedKey = core.getState(STATE_CACHE_MATCHED_KEY);
+    // If the cache path does not exist, do not save the cache.
+    if (!fs.existsSync(CACHE_PATHS[0])) {
+        core.info(`Cache path does not exist, not saving cache: ${CACHE_PATHS[0]}`);
+        return;
+    }
+    // If the primary key is not generated, do not save the cache.
+    if (!primaryKey) {
+        core.info("Primary key was not generated. Please check the log messages above for more errors or information");
+        return;
+    }
+    // If the primary key and the matched key are the same, this means the cache was already saved.
+    if (primaryKey === matchedKey) {
+        core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
+        return;
+    }
+    const cacheId = await cache.saveCache(CACHE_PATHS, primaryKey);
+    // If the cacheId is -1, the saving failed with an error message log. No additional logging is needed.
+    if (cacheId === -1) {
+        return;
+    }
+    core.info(`Cache saved with the key: ${primaryKey}`);
 }
 
-module.exports = {
-  restoreRPCCache,
-  saveCache,
-};
-
 
 /***/ }),
 
-/***/ 19992:
-/***/ ((module) => {
+/***/ 79407:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-// Enum for the cache primary key and result key.
-const State = {
-  CachePrimaryKey: "CACHE_KEY",
-  CacheMatchedKey: "CACHE_RESULT",
-};
+"use strict";
 
-module.exports = { State };
-
-
-/***/ }),
-
-/***/ 5105:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const core = __nccwpck_require__(37484);
-const { execSync } = __nccwpck_require__(35317);
-const fs = __nccwpck_require__(79896);
-const https = __nccwpck_require__(65692);
-const os = __nccwpck_require__(70857);
-const path = __nccwpck_require__(16928);
-
-const { restoreRPCCache } = __nccwpck_require__(42351);
-
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(37484));
+const child_process_1 = __nccwpck_require__(35317);
+const fs = __importStar(__nccwpck_require__(79896));
+const https = __importStar(__nccwpck_require__(65692));
+const os = __importStar(__nccwpck_require__(70857));
+const path = __importStar(__nccwpck_require__(16928));
+const cache_js_1 = __nccwpck_require__(97377);
 const FOUNDRYUP_INSTALLER_URL = "https://raw.githubusercontent.com/foundry-rs/foundry/HEAD/foundryup/install";
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
 const FOUNDRY_BIN = path.join(FOUNDRY_DIR, "bin");
 const FOUNDRY_TOOLS = ["forge", "cast", "anvil", "chisel"];
-
 function downloadOnce(url, dest) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    const handleResponse = (res) => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        https.get(res.headers.location, handleResponse).on("error", reject);
-        return;
-      }
-      if (res.statusCode !== 200) {
-        reject(new Error(`HTTP ${res.statusCode}`));
-        return;
-      }
-      res.pipe(file);
-      file.on("finish", () => {
-        file.close();
-        fs.chmodSync(dest, 0o755);
-        resolve();
-      });
-    };
-    https.get(url, handleResponse).on("error", reject);
-  });
+    return new Promise((resolve, reject) => {
+        const file = fs.createWriteStream(dest);
+        const handleResponse = (res) => {
+            if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+                https.get(res.headers.location, handleResponse).on("error", reject);
+                return;
+            }
+            if (res.statusCode !== 200) {
+                reject(new Error(`HTTP ${res.statusCode}`));
+                return;
+            }
+            res.pipe(file);
+            file.on("finish", () => {
+                file.close();
+                fs.chmodSync(dest, 0o755);
+                resolve();
+            });
+        };
+        https.get(url, handleResponse).on("error", reject);
+    });
 }
-
 async function download(url, dest, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await downloadOnce(url, dest);
-    } catch (err) {
-      if (i === retries - 1) throw err;
-      core.warning(`Download failed (attempt ${i + 1}/${retries}): ${err.message}`);
-      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await downloadOnce(url, dest);
+        }
+        catch (err) {
+            if (i === retries - 1)
+                throw err;
+            const message = err instanceof Error ? err.message : String(err);
+            core.warning(`Download failed (attempt ${i + 1}/${retries}): ${message}`);
+            await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+        }
     }
-  }
 }
-
 function buildFoundryupArgs() {
-  const args = [];
-  let version = core.getInput("version");
-  const network = core.getInput("network");
-
-  // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6")
-  if (version && version.startsWith("v")) {
-    version = version.slice(1);
-  }
-
-  if (version && version !== "stable") args.push("--install", version);
-  if (network && network !== "ethereum") args.push("--network", network);
-  // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files
-  if (os.platform() === "win32") args.push("--force");
-
-  return args;
+    const args = [];
+    let version = core.getInput("version");
+    const network = core.getInput("network");
+    // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6").
+    if (version && version.startsWith("v")) {
+        version = version.slice(1);
+    }
+    if (version && version !== "stable")
+        args.push("--install", version);
+    if (network && network !== "ethereum")
+        args.push("--network", network);
+    // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files.
+    if (os.platform() === "win32")
+        args.push("--force");
+    return args;
 }
-
 function run(cmd, ignoreShellError = false) {
-  try {
-    execSync(cmd, { stdio: "pipe", env: { ...process.env, FOUNDRY_DIR } });
-  } catch (err) {
-    const output = [err.stdout, err.stderr, err.message].map((b) => b?.toString() || "").join("\n");
-    if (ignoreShellError && output.includes("could not detect shell")) {
-      core.info("Shell detection failed (expected in CI), continuing...");
-      return;
+    try {
+        (0, child_process_1.execSync)(cmd, { stdio: "pipe", env: { ...process.env, FOUNDRY_DIR } });
     }
-    // Log captured output before throwing
-    if (err.stdout) core.info(err.stdout.toString());
-    if (err.stderr) core.error(err.stderr.toString());
-    throw err;
-  }
+    catch (err) {
+        const execErr = err;
+        const output = [execErr.stdout, execErr.stderr, execErr.message].map((b) => b?.toString() || "").join("\n");
+        if (ignoreShellError && output.includes("could not detect shell")) {
+            core.info("Shell detection failed (expected in CI), continuing...");
+            return;
+        }
+        // Log captured output before throwing.
+        if (execErr.stdout)
+            core.info(execErr.stdout.toString());
+        if (execErr.stderr)
+            core.error(execErr.stderr.toString());
+        throw err;
+    }
 }
-
 async function main() {
-  try {
-    const version = core.getInput("version") || "stable";
-    const network = core.getInput("network") || "ethereum";
-    core.info(`Installing Foundry (version: ${version}, network: ${network})`);
-
-    // Download and run the installer
-    const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
-    core.info("Downloading foundryup installer...");
-    await download(FOUNDRYUP_INSTALLER_URL, installer);
-
-    core.info("Running foundryup installer...");
-    run(`bash "${installer}"`, true);
-
-    // Run foundryup to install binaries (use bash since foundryup is a shell script)
-    const foundryup = path.join(FOUNDRY_BIN, "foundryup");
-    const args = buildFoundryupArgs();
-    core.info(`Running: foundryup ${args.join(" ")}`);
-    run(`bash "${foundryup}" ${args.join(" ")}`);
-
-    core.addPath(FOUNDRY_BIN);
-    core.info(`Added ${FOUNDRY_BIN} to PATH`);
-
-    // Restore RPC cache
-    if (core.getBooleanInput("cache")) {
-      await restoreRPCCache();
-    } else {
-      core.info("Cache not requested, not restoring cache");
+    try {
+        const version = core.getInput("version") || "stable";
+        const network = core.getInput("network") || "ethereum";
+        core.info(`Installing Foundry (version: ${version}, network: ${network})`);
+        // Download and run the installer.
+        const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
+        core.info("Downloading foundryup installer...");
+        await download(FOUNDRYUP_INSTALLER_URL, installer);
+        core.info("Running foundryup installer...");
+        run(`bash "${installer}"`, true);
+        // Run foundryup to install binaries (use bash since foundryup is a shell script).
+        const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+        const args = buildFoundryupArgs();
+        core.info(`Running: foundryup ${args.join(" ")}`);
+        run(`bash "${foundryup}" ${args.join(" ")}`);
+        core.addPath(FOUNDRY_BIN);
+        core.info(`Added ${FOUNDRY_BIN} to PATH`);
+        // Restore RPC cache.
+        if (core.getBooleanInput("cache")) {
+            await (0, cache_js_1.restoreRPCCache)();
+        }
+        else {
+            core.info("Cache not requested, not restoring cache");
+        }
+        // Print installed versions.
+        for (const bin of FOUNDRY_TOOLS) {
+            try {
+                core.info(`Running: ${bin} --version`);
+                (0, child_process_1.execSync)(`${bin} --version`, { stdio: "inherit" });
+            }
+            catch { }
+        }
     }
-
-    // Print installed versions
-    for (const bin of FOUNDRY_TOOLS) {
-      try {
-        core.info(`Running: ${bin} --version`);
-        execSync(`${bin} --version`, { stdio: "inherit" });
-      } catch {}
+    catch (err) {
+        core.setFailed(err instanceof Error ? err : String(err));
     }
-  } catch (err) {
-    core.setFailed(err);
-  }
 }
-
-module.exports = main;
-
-if (require.main === require.cache[eval('__filename')]) {
-  main();
-}
+exports["default"] = main;
+main();
 
 
 /***/ }),
@@ -87644,7 +87677,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"name":"@actions/cache","version":"4.
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(5105);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(79407);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
