@@ -61,8 +61,6 @@ function buildFoundryupArgs(): string[] {
 
   if (version && version !== "stable") args.push("--install", version);
   if (network && network !== "ethereum") args.push("--network", network);
-  // Skip SHA verification on Windows due to sha256sum outputting backslash prefix for binary files.
-  if (os.platform() === "win32") args.push("--force");
 
   return args;
 }
@@ -74,7 +72,7 @@ function run(cmd: string, ignoreShellError = false): void {
     const execErr = err as { stdout?: Buffer; stderr?: Buffer; message?: string };
     const output = [execErr.stdout, execErr.stderr, execErr.message].map((b) => b?.toString() || "").join("\n");
     if (ignoreShellError && output.includes("could not detect shell")) {
-      core.info("Shell detection failed (expected in CI), continuing...");
+      core.debug("Shell detection failed (expected in CI), continuing...");
       return;
     }
     // Log captured output before throwing.
