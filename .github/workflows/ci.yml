@@ -22,6 +22,7 @@ jobs:
   test:
     runs-on: ${{ matrix.config.os }}
     strategy:
+      fail-fast: false
       matrix:
         # Note: GitHub does not host Alpine runners, so we skip testing there for now.
         config:
