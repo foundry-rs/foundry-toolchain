@@ -149,9 +149,9 @@ When opening a PR, you must build the action exactly following the below steps f
 Install [nvm](https://github.com/nvm-sh/nvm).
 
 ```console
-$ nvm install 24.9.0
 $ nvm use
 $ npm ci --ignore-scripts
+$ npm run typecheck
 $ npm run build
 ```
 
