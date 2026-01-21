@@ -52,14 +52,14 @@ jobs:
 | -------------------- | ------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or any [SemVer](https://semver.org/) version with or without `v` prefix (e.g. `v1.5.0` or `1.5.0`) | string   |
 | `network`            | No           | `ethereum`                            | Network version to install, e.g. `ethereum`, `tempo`.                                                                                                 | string   |
-| `cache`              | No           | `true`                                | Whether to cache Foundry data or not.                                                                                                                | bool     |
+| `cache`              | No           | `true`                                | Whether to cache Foundry data or not.                                                                                                                 | bool     |
 | `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                                                                     | string   |
 | `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                                                                        | string[] |
 
 ### Caching
 
-By default, this action matches Forge's behavior and caches all RPC responses, Etherscan queries, and other data in the `~/.foundry/cache` directory.
-This is done to speed up the tests and avoid hitting the rate limit of your RPC provider.
+By default, this action matches Forge's behavior and caches all RPC responses, Etherscan queries, and other data in the
+`~/.foundry/cache` directory. This is done to speed up the tests and avoid hitting the rate limit of your RPC provider.
 
 The logic of the caching is as follows:
 
@@ -149,10 +149,11 @@ When opening a PR, you must build the action exactly following the below steps f
 Install [nvm](https://github.com/nvm-sh/nvm).
 
 ```console
+$ nvm install
 $ nvm use
 $ npm ci --ignore-scripts
 $ npm run typecheck
 $ npm run build
 ```
 
-You **must** use the Node.js version `24.9.0` to build.
+You **must** use the Node.js version `24.13.0` to build.
