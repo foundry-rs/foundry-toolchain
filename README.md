@@ -156,4 +156,4 @@ $ npm run typecheck
 $ npm run build
 ```
 
-You **must** use the Node.js version `24.9.0` to build.
+You **must** use the Node.js version `24.13.0` to build.
