@@ -52,6 +52,7 @@ async function download(url: string, dest: string, retries = 3): Promise<void> {
 function buildFoundryupArgs(): string[] {
   const args: string[] = [];
   let version = core.getInput("version");
+  const network = core.getInput("network");
 
   // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6").
   if (version && version.startsWith("v")) {
@@ -59,6 +60,12 @@ function buildFoundryupArgs(): string[] {
   }
 
   if (version && version !== "stable") args.push("--install", version);
+  if (network && network !== "ethereum") {
+    core.warning(
+      `The "network" input is deprecated. Tempo is now part of main Foundry. This input will be removed in a future release.`,
+    );
+    args.push("--network", network);
+  }
 
   return args;
 }

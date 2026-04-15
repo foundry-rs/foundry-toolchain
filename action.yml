@@ -15,6 +15,13 @@ inputs:
       The default value is `stable`, which will pull the latest stable build.
       Other options include `nightly`, `rc`, or a specific version like `v1.3.6`.
     required: false
+  network:
+    default: "ethereum"
+    description: |
+      **Deprecated.** Tempo is now part of main Foundry; this input will be removed in a future release.
+
+      Network to install Foundry for. Passed to `foundryup --network <network>`.
+    required: false
   cache:
     default: "true"
     description: |
