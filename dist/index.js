@@ -48408,15 +48408,12 @@ async function download(url, dest, retries = 3) {
 function buildFoundryupArgs() {
     const args = [];
     let version = core.getInput("version");
-    const network = core.getInput("network");
     // Strip 'v' prefix from version if present (e.g., "v1.3.6" -> "1.3.6").
     if (version && version.startsWith("v")) {
         version = version.slice(1);
     }
     if (version && version !== "stable")
         args.push("--install", version);
-    if (network && network !== "ethereum")
-        args.push("--network", network);
     return args;
 }
 function run(cmd, ignoreShellError = false) {
@@ -48441,8 +48438,7 @@ function run(cmd, ignoreShellError = false) {
 async function main() {
     try {
         const version = core.getInput("version") || "stable";
-        const network = core.getInput("network") || "ethereum";
-        core.info(`Installing Foundry (version: ${version}, network: ${network})`);
+        core.info(`Installing Foundry (version: ${version})`);
         // Download and run the installer.
         const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
         core.info("Downloading foundryup installer...");

@@ -32,22 +32,16 @@ jobs:
           - { os: macos-15-intel, arch: x64 } # foundry_v[ersion]_darwin_amd64.tar.gz
           - { os: windows-latest, arch: x64 } # foundry_v[ersion]_windows_amd64.zip
         version: [stable, nightly]
-        network: [ethereum, tempo]
         include:
           # Both with and without `v` prefix.
-          - network: ethereum
-            version: 1.5.0
+          - version: 1.5.0
             config:
               os: ubuntu-latest
               arch: x64
-          - network: ethereum
-            version: v1.5.0
+          - version: v1.5.0
             config:
               os: ubuntu-latest
               arch: x64
-        exclude:
-          - network: tempo
-            version: stable
     permissions:
       contents: read
     steps:
@@ -69,32 +63,21 @@ jobs:
       - name: Test action installation (${{ matrix.version }})
         uses: ./
         with:
-          network: ${{ matrix.network }}
           version: ${{ matrix.version }}
           cache: false
 
-      - name: Verify Foundry installation (${{ matrix.network }})
+      - name: Verify Foundry installation
         shell: bash
         run: |
-          if [[ "${{ matrix.network }}" == "tempo" ]]; then
-            forge --version
-            cast --version
-          else
-            forge --version
-            cast --version
-            anvil --version
-            chisel --version
-          fi
+          forge --version
+          cast --version
+          anvil --version
+          chisel --version
 
-      - name: Test basic Foundry functionality (${{ matrix.network }})
+      - name: Test basic Foundry functionality
         shell: bash
         run: |
-          if [[ "${{ matrix.network }}" == "tempo" ]]; then
-            forge init -n tempo test-project --force
-          else
-            forge init test-project --force
-          fi
-
+          forge init test-project --force
           cd test-project
           forge build
           forge test -vvv

@@ -15,13 +15,6 @@ inputs:
       The default value is `stable`, which will pull the latest stable build.
       Other options include `nightly`, `rc`, or a specific version like `v1.3.6`.
     required: false
-  network:
-    default: "ethereum"
-    description: |
-      Network to install Foundry for. Passed to `foundryup --network <network>`.
-
-      This can be either `ethereum` or `tempo`. The default value is `ethereum`.
-    required: false
   cache:
     default: "true"
     description: |
