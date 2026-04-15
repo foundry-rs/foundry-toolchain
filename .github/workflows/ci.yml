@@ -83,6 +83,7 @@ jobs:
           forge test -vvv
 
       - name: Test basic Foundry functionality (tempo)
+        if: matrix.version == 'nightly'
         shell: bash
         run: |
           forge init test-project-tempo -n tempo --force
