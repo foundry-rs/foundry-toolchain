@@ -74,11 +74,19 @@ jobs:
           anvil --version
           chisel --version
 
-      - name: Test basic Foundry functionality
+      - name: Test basic Foundry functionality (default)
         shell: bash
         run: |
           forge init test-project --force
           cd test-project
+          forge build
+          forge test -vvv
+
+      - name: Test basic Foundry functionality (tempo)
+        shell: bash
+        run: |
+          forge init test-project-tempo -n tempo --force
+          cd test-project-tempo
           forge build
           forge test -vvv
 
