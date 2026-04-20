@@ -2,6 +2,7 @@
   "name": "@foundry-rs/foundry-toolchain",
   "version": "1.5.0",
   "license": "SEE LICENSE IN LICENSE",
+  "packageManager": "pnpm@10.33.0",
   "main": "dist/index.js",
   "keywords": [
     "foundry",
@@ -14,19 +15,21 @@
     "dapptools"
   ],
   "scripts": {
-    "build": "ncc build src/index.ts -o dist --source-map && ncc build src/save.ts -o dist/save --source-map",
+    "build": "ncc build src/index.ts -o dist --source-map --minify && ncc build src/save.ts -o dist/save --source-map --minify",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@actions/cache": "^5.0.3",
-    "@actions/core": "^2.0.2",
-    "@actions/github": "^7.0.0",
-    "@actions/tool-cache": "^3.0.0"
+    "@actions/cache": "5.0.3",
+    "@actions/core": "2.0.2",
+    "@actions/github": "7.0.0",
+    "@actions/tool-cache": "3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^25.0.9",
-    "@vercel/ncc": "^0.38.4",
-    "prettier": "^3.8.0",
-    "typescript": "^5.9.3"
+    "@types/node": "25.0.9",
+    "@vercel/ncc": "0.38.4",
+    "prettier": "3.8.0",
+    "typescript": "5.9.3"
   }
 }
