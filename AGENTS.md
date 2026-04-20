@@ -4,9 +4,10 @@
 
 ```bash
 nvm use                   # Use correct Node version (see .nvmrc)
-npm run build             # Build with ncc to dist/
-npx prettier --check .    # Check formatting
-npx prettier --write .    # Fix formatting
+pnpm install --frozen-lockfile # Install dependencies
+pnpm run build            # Build with ncc to dist/
+pnpm run fmt:check        # Check formatting
+pnpm run fmt              # Fix formatting
 ```
 
 No test framework configured.
