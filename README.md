@@ -145,14 +145,14 @@ for more information.
 
 When opening a PR, you must build the action exactly following the below steps for CI to pass:
 
-Install [nvm](https://github.com/nvm-sh/nvm).
+Install [nvm](https://github.com/nvm-sh/nvm) and [pnpm](https://pnpm.io/).
 
 ```console
 $ nvm install
 $ nvm use
-$ npm ci --ignore-scripts
-$ npm run typecheck
-$ npm run build
+$ pnpm install --frozen-lockfile
+$ pnpm run typecheck
+$ pnpm run build
 ```
 
 You **must** use the Node.js version `24.13.0` to build.
