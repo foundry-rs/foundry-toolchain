@@ -18,9 +18,9 @@ inputs:
   network:
     default: "ethereum"
     description: |
-      Network to install Foundry for. Passed to `foundryup --network <network>`.
+      **Deprecated.** Tempo is now part of main Foundry; this input will be removed in a future release.
 
-      This can be either `ethereum` or `tempo`. The default value is `ethereum`.
+      Network to install Foundry for. Passed to `foundryup --network <network>`.
     required: false
   cache:
     default: "true"
