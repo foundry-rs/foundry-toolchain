@@ -13,7 +13,7 @@ inputs:
 
       This version number has to match a released version of Foundry.
       The default value is `stable`, which will pull the latest stable build.
-      Other options include `nightly`, `rc`, or a specific version like `v1.3.6`.
+      Other options include `nightly` or a specific version like `v1.3.6`.
     required: false
   network:
     default: "ethereum"
