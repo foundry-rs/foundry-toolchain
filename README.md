@@ -50,7 +50,7 @@ jobs:
 
 | **Name**             | **Required** | **Default**                           | **Description**                                                                                                                                       | **Type** |
 | -------------------- | ------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `rc`, `nightly` or any [SemVer](https://semver.org/) version with or without `v` prefix (e.g. `v1.5.0` or `1.5.0`) | string   |
+| `version`            | No           | `stable`                              | Version to install, e.g. `stable`, `nightly` or any [SemVer](https://semver.org/) version with or without `v` prefix (e.g. `v1.5.0` or `1.5.0`)       | string   |
 | `cache`              | No           | `true`                                | Whether to cache Foundry data or not.                                                                                                                 | bool     |
 | `cache-key`          | No           | `${{ github.job }}-${{ github.sha }}` | The cache key to use for caching.                                                                                                                     | string   |
 | `cache-restore-keys` | No           | `[${{ github.job }}-]`                | The cache keys to use for restoring the cache.                                                                                                        | string[] |
