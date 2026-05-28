@@ -21,13 +21,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@actions/cache": "5.0.3",
+    "@actions/cache": "5.0.5",
     "@actions/core": "2.0.2",
     "@actions/github": "7.0.0",
     "@actions/tool-cache": "3.0.0"
   },
   "devDependencies": {
-    "@types/node": "25.6.0",
+    "@types/node": "25.9.1",
     "@vercel/ncc": "0.38.4",
     "prettier": "3.8.3",
     "typescript": "5.9.3"
