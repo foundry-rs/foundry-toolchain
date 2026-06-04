@@ -15,6 +15,19 @@ inputs:
       The default value is `stable`, which will pull the latest stable build.
       Other options include `nightly` or a specific version like `v1.3.6`.
     required: false
+  foundryup-version:
+    default: "HEAD"
+    description: |
+      Git ref (commit SHA, tag, or branch) of `foundry-rs/foundry` from which to
+      download the foundryup installer. Defaults to `HEAD`.
+
+      Pin to a full commit SHA for a reproducible, supply-chain-bounded install:
+      ```yaml
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          foundryup-version: "abc123..."
+      ```
+    required: false
   network:
     default: "ethereum"
     description: |
