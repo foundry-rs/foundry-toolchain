@@ -70,6 +70,31 @@ function buildFoundryupArgs(): string[] {
   return args;
 }
 
+/**
+ * Builds the Rust `foundryup` from source at the given git ref and installs it into
+ * `~/.foundry/bin`. Returns the path to the built binary.
+ *
+ * Testing/canary helper: lets CI exercise an unreleased `foundryup` (e.g. on a draft
+ * PR) without depending on any published release. Requires `git` and `cargo`.
+ */
+function installFoundryupFromSource(repo: string, rev: string): string {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-src-"));
+  const url = `https://github.com/${repo}`;
+  core.info(`Building foundryup from ${repo}@${rev}...`);
+
+  execFileSync("git", ["clone", url, workdir], { stdio: "inherit" });
+  execFileSync("git", ["checkout", rev], { stdio: "inherit", cwd: workdir });
+  execFileSync("cargo", ["build", "--release"], { stdio: "inherit", cwd: workdir });
+
+  const exe = os.platform() === "win32" ? ".exe" : "";
+  const built = path.join(workdir, "target", "release", `foundryup${exe}`);
+  fs.mkdirSync(FOUNDRY_BIN, { recursive: true });
+  const dest = path.join(FOUNDRY_BIN, `foundryup${exe}`);
+  fs.copyFileSync(built, dest);
+  fs.chmodSync(dest, 0o755);
+  return dest;
+}
+
 function run(file: string, args: string[], ignoreShellError = false): void {
   try {
     execFileSync(file, args, { stdio: "pipe", env: { ...process.env, FOUNDRY_DIR } });
@@ -92,19 +117,29 @@ async function main(): Promise<void> {
     const version = core.getInput("version") || "stable";
     core.info(`Installing Foundry (version: ${version})`);
 
-    // Download and run the installer.
-    const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
-    core.info("Downloading foundryup installer...");
-    await download(FOUNDRYUP_INSTALLER_URL, installer);
-
-    core.info("Running foundryup installer...");
-    run("bash", [installer], true);
-
-    // Run foundryup to install binaries (use bash since foundryup is a shell script).
-    const foundryup = path.join(FOUNDRY_BIN, "foundryup");
     const args = buildFoundryupArgs();
-    core.info(`Running: foundryup ${args.join(" ")}`);
-    run("bash", [foundryup, ...args]);
+    const foundryupRev = core.getInput("foundryup-rev");
+
+    if (foundryupRev) {
+      // Testing/canary path: build the Rust foundryup from source and run it directly.
+      const foundryupRepo = core.getInput("foundryup-repo") || "foundry-rs/foundryup";
+      const foundryup = installFoundryupFromSource(foundryupRepo, foundryupRev);
+      core.info(`Running: foundryup ${args.join(" ")}`);
+      run(foundryup, args);
+    } else {
+      // Default path: download and run the bash installer, then run the bash foundryup.
+      const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
+      core.info("Downloading foundryup installer...");
+      await download(FOUNDRYUP_INSTALLER_URL, installer);
+
+      core.info("Running foundryup installer...");
+      run("bash", [installer], true);
+
+      // Run foundryup to install binaries (use bash since foundryup is a shell script).
+      const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+      core.info(`Running: foundryup ${args.join(" ")}`);
+      run("bash", [foundryup, ...args]);
+    }
 
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);

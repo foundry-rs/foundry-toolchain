@@ -22,6 +22,18 @@ inputs:
 
       Network to install Foundry for. Passed to `foundryup --network <network>`.
     required: false
+  foundryup-rev:
+    description: |
+      **Testing/canary only.** Build the Rust `foundryup` from source at this git ref
+      (branch, tag, or commit) and use it instead of the released bash installer.
+
+      Requires `cargo` and `git` on the runner. Leave empty for the default install path.
+    required: false
+  foundryup-repo:
+    default: "foundry-rs/foundryup"
+    description: |
+      Repository to build the Rust `foundryup` from when `foundryup-rev` is set.
+    required: false
   cache:
     default: "true"
     description: |
