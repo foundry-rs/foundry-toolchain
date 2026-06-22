@@ -70,12 +70,15 @@ function buildFoundryupArgs(): string[] {
   return args;
 }
 
+// Internal testing/canary mechanism (NOT a public action input): when FOUNDRYUP_CANARY_REV
+// is set, build the Rust `foundryup` from source and run it instead of the bash installer.
+// Kept out of action.yml so it never becomes a supported public API.
+const CANARY_REV = process.env.FOUNDRYUP_CANARY_REV?.trim() ?? "";
+const CANARY_REPO = process.env.FOUNDRYUP_CANARY_REPO?.trim() || "foundry-rs/foundryup";
+
 /**
  * Builds the Rust `foundryup` from source at the given git ref and installs it into
- * `~/.foundry/bin`. Returns the path to the built binary.
- *
- * Testing/canary helper: lets CI exercise an unreleased `foundryup` (e.g. on a draft
- * PR) without depending on any published release. Requires `git` and `cargo`.
+ * `~/.foundry/bin`. Returns the path to the built binary. Requires `git` and `cargo`.
  */
 function installFoundryupFromSource(repo: string, rev: string): string {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-src-"));
@@ -118,12 +121,10 @@ async function main(): Promise<void> {
     core.info(`Installing Foundry (version: ${version})`);
 
     const args = buildFoundryupArgs();
-    const foundryupRev = core.getInput("foundryup-rev");
 
-    if (foundryupRev) {
-      // Testing/canary path: build the Rust foundryup from source and run it directly.
-      const foundryupRepo = core.getInput("foundryup-repo") || "foundry-rs/foundryup";
-      const foundryup = installFoundryupFromSource(foundryupRepo, foundryupRev);
+    if (CANARY_REV) {
+      // Internal testing/canary path: build the Rust foundryup from source and run it directly.
+      const foundryup = installFoundryupFromSource(CANARY_REPO, CANARY_REV);
       core.info(`Running: foundryup ${args.join(" ")}`);
       run(foundryup, args);
     } else {

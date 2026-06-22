@@ -95,8 +95,15 @@ jobs:
           forge build
           forge test -vvv
 
-  # Canary: exercise the Rust `foundryup` built from source (no release required).
-  # Runs on PRs (including drafts) so we can validate before any foundryup release.
+  # Canary (non-blocking, NOT part of ci-success): exercise the Rust `foundryup` rewrite
+  # built from source at a pinned commit, and assert it is behaviorally equivalent to the
+  # legacy bash `foundryup`. This is the de-risking step before any foundryup release.
+  #
+  # The Rust foundryup has no nightly/rolling prebuilt artifact (release.yml fires only on
+  # tags), so building from source is the only zero-release way to test unreleased master.
+  # The trigger is an internal env var (FOUNDRYUP_CANARY_REV), intentionally NOT a public
+  # action input, so the "clone + build + run arbitrary code" capability never becomes a
+  # supported public API.
   test-foundryup-rs:
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -108,6 +115,15 @@ jobs:
           - { os: macos-latest, arch: arm64 }
           - { os: macos-15-intel, arch: x64 }
           - { os: windows-latest, arch: x64 }
+        # Moving channels (stable/nightly) are compared leniently; the pinned version is
+        # compared strictly (see the compare step).
+        version: [stable, nightly]
+        include:
+          - version: "1.5.0"
+            config: { os: ubuntu-latest, arch: x64 }
+    env:
+      # Pinned foundryup commit to build from. Bump deliberately to test newer master.
+      FOUNDRYUP_REV: "7c39ace77886dc6f4c7f9b20071c98c25c7d8680"
     permissions:
       contents: read
     steps:
@@ -124,26 +140,74 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
+      # foundryup is edition 2024 / rust-version 1.85; don't trust the runner's default.
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+        with:
+          toolchain: stable
+
+      - name: Cache cargo build
+        uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
+        with:
+          key: foundryup-${{ env.FOUNDRYUP_REV }}
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Rebuild dist/
         run: pnpm run build
 
-      - name: Test action installation (foundryup from source)
+      # 1. Fresh install via the LEGACY bash foundryup.
+      - name: Install (legacy bash foundryup)
         uses: ./
         with:
-          foundryup-rev: master
-          version: stable
+          version: ${{ matrix.version }}
           cache: false
 
-      - name: Verify Foundry installation
+      - name: Capture legacy manifest + sanity build
         shell: bash
         run: |
-          forge --version
-          cast --version
-          anvil --version
-          chisel --version
+          bash .github/scripts/foundry-manifest.sh legacy.txt
+          forge init legacy-project --force
+          cd legacy-project && forge build && forge test -vvv
+
+      # 2. Install the Rust foundryup ON TOP of the legacy install (legacy -> Rust
+      #    migration on the same ~/.foundry, the highest-value real-world case).
+      - name: Install (Rust foundryup from source, migration on top of legacy)
+        uses: ./
+        env:
+          FOUNDRYUP_CANARY_REV: ${{ env.FOUNDRYUP_REV }}
+          FOUNDRYUP_CANARY_REPO: foundry-rs/foundryup
+        with:
+          version: ${{ matrix.version }}
+          cache: false
+
+      - name: Capture Rust manifest + post-migration build
+        shell: bash
+        run: |
+          bash .github/scripts/foundry-manifest.sh rust.txt
+          forge init rust-project --force
+          cd rust-project && forge build && forge test -vvv
+
+      # 3. Assert equivalence of the public contract (tool --version outputs).
+      - name: Compare legacy vs Rust foundryup
+        shell: bash
+        run: |
+          echo "::group::legacy manifest"; cat legacy.txt; echo "::endgroup::"
+          echo "::group::rust manifest";   cat rust.txt;   echo "::endgroup::"
+          if diff -u legacy.txt rust.txt; then
+            echo "Manifests match: Rust foundryup is equivalent for version '${{ matrix.version }}'."
+          else
+            case "${{ matrix.version }}" in
+              stable|nightly)
+                echo "::warning::Manifests differ for moving channel '${{ matrix.version }}' (a release may have landed mid-run); not failing."
+                ;;
+              *)
+                echo "::error::Rust foundryup produced a different result than legacy for pinned version '${{ matrix.version }}'."
+                exit 1
+                ;;
+            esac
+          fi
 
   match:
     runs-on: ubuntu-latest
