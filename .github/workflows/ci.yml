@@ -95,15 +95,10 @@ jobs:
           forge build
           forge test -vvv
 
-  # Canary (non-blocking, NOT part of ci-success): exercise the Rust `foundryup` rewrite
-  # built from source at a pinned commit, and assert it is behaviorally equivalent to the
-  # legacy bash `foundryup`. This is the de-risking step before any foundryup release.
-  #
-  # The Rust foundryup has no nightly/rolling prebuilt artifact (release.yml fires only on
-  # tags), so building from source is the only zero-release way to test unreleased master.
-  # The trigger is an internal env var (FOUNDRYUP_CANARY_REV), intentionally NOT a public
-  # action input, so the "clone + build + run arbitrary code" capability never becomes a
-  # supported public API.
+  # Canary (non-blocking, NOT part of ci-success): validate that the published Rust
+  # `foundryup` RELEASE ARTIFACT (installed via foundryup-init.sh) is behaviorally
+  # equivalent to the legacy bash `foundryup`. This is the pre-migration gate: it exercises
+  # the exact prebuilt binary + install path users will get, not a source build.
   test-foundryup-rs:
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -122,8 +117,9 @@ jobs:
           - version: "1.5.0"
             config: { os: ubuntu-latest, arch: x64 }
     env:
-      # Pinned foundryup commit to build from. Bump deliberately to test newer master.
-      FOUNDRYUP_REV: "7c39ace77886dc6f4c7f9b20071c98c25c7d8680"
+      # Pinned foundryup (installer) release to validate. Bump to test a newer release.
+      # NOTE: this is the foundryup version, NOT the foundry tool version (matrix.version).
+      FOUNDRYUP_RELEASE: "0.0.5"
     permissions:
       contents: read
     steps:
@@ -131,30 +127,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      # foundryup is edition 2024 / rust-version 1.85; don't trust the runner's default.
-      # (No rust-cache: foundryup is cloned to a tmpdir at runtime, so there is no Cargo
-      # project in the workspace to key a cache off, and the build dir is not reused.)
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
-        with:
-          toolchain: stable
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Rebuild dist/
-        run: pnpm run build
-
-      # 1. Fresh install via the LEGACY bash foundryup.
+      # 1. Fresh install via the LEGACY bash foundryup (the action's current default path).
       - name: Install (legacy bash foundryup)
         uses: ./
         with:
@@ -168,16 +141,17 @@ jobs:
           forge init legacy-project --force
           cd legacy-project && forge build && forge test -vvv
 
-      # 2. Install the Rust foundryup ON TOP of the legacy install (legacy -> Rust
-      #    migration on the same ~/.foundry, the highest-value real-world case).
-      - name: Install (Rust foundryup from source, migration on top of legacy)
-        uses: ./
-        env:
-          FOUNDRYUP_CANARY_REV: ${{ env.FOUNDRYUP_REV }}
-          FOUNDRYUP_CANARY_REPO: foundry-rs/foundryup
-        with:
-          version: ${{ matrix.version }}
-          cache: false
+      # 2. Install the Rust foundryup from the published release via foundryup-init.sh, ON
+      #    TOP of the legacy install (legacy -> Rust migration on the same ~/.foundry).
+      #    FOUNDRYUP_VERSION (installer pin) is scoped to the init call only: the foundryup
+      #    binary also reads it as the foundry tool version, which would conflict.
+      - name: Install (Rust foundryup release via foundryup-init.sh, on top of legacy)
+        shell: bash
+        run: |
+          curl -sSf -L "https://raw.githubusercontent.com/foundry-rs/foundryup/v${FOUNDRYUP_RELEASE}/foundryup-init.sh" -o foundryup-init.sh
+          FOUNDRYUP_VERSION="${FOUNDRYUP_RELEASE}" bash foundryup-init.sh -y
+          v="${{ matrix.version }}"
+          if [ "$v" = "stable" ]; then foundryup; else foundryup --install "${v#v}"; fi
 
       - name: Capture Rust manifest + post-migration build
         shell: bash
@@ -193,7 +167,7 @@ jobs:
           echo "::group::legacy manifest"; cat legacy.txt; echo "::endgroup::"
           echo "::group::rust manifest";   cat rust.txt;   echo "::endgroup::"
           if diff -u legacy.txt rust.txt; then
-            echo "Manifests match: Rust foundryup is equivalent for version '${{ matrix.version }}'."
+            echo "Manifests match: Rust foundryup release v${FOUNDRYUP_RELEASE} is equivalent for version '${{ matrix.version }}'."
           else
             case "${{ matrix.version }}" in
               stable|nightly)
