@@ -113,6 +113,15 @@ jobs:
         # Moving channels (stable/nightly) are compared leniently; the pinned version is
         # compared strictly (see the compare step).
         version: [stable, nightly]
+        exclude:
+          # macOS shared-runner IPs chronically hit GitHub API 403 rate limits when the
+          # LEGACY foundryup resolves the nightly tag (unauthenticated; legacy fetch ignores
+          # GITHUB_TOKEN). Not a real divergence; the Rust path uses release redirects and is
+          # unaffected. ubuntu/windows nightly still run.
+          - config: { os: macos-latest, arch: arm64 }
+            version: nightly
+          - config: { os: macos-15-intel, arch: x64 }
+            version: nightly
         include:
           - version: "1.5.0"
             config: { os: ubuntu-latest, arch: x64 }
