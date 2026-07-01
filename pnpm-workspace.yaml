@@ -4,3 +4,7 @@ minimumReleaseAge: 10080
 blockExoticSubdeps: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 525600
+overrides:
+  fast-xml-builder: 1.1.7
+  fast-xml-parser: 5.7.0
+  undici: 6.27.0
