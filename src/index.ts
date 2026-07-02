@@ -8,7 +8,8 @@ import type { IncomingMessage } from "http";
 
 import { restoreCache } from "./cache.js";
 
-const FOUNDRYUP_INSTALLER_URL = "https://raw.githubusercontent.com/foundry-rs/foundry/HEAD/foundryup/install";
+const FOUNDRYUP_INSTALLER_COMMIT = "e4d9917d4f5ef487fd432efc4706fb8ae74c58ab";
+const FOUNDRYUP_INSTALLER_URL = `https://raw.githubusercontent.com/foundry-rs/foundry/${FOUNDRYUP_INSTALLER_COMMIT}/foundryup/install`;
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
 const FOUNDRY_BIN = path.join(FOUNDRY_DIR, "bin");
 const FOUNDRY_TOOLS = ["forge", "cast", "anvil", "chisel"];
@@ -94,7 +95,7 @@ async function main(): Promise<void> {
 
     // Download and run the installer.
     const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
-    core.info("Downloading foundryup installer...");
+    core.info(`Downloading foundryup installer from foundry-rs/foundry@${FOUNDRYUP_INSTALLER_COMMIT}...`);
     await download(FOUNDRYUP_INSTALLER_URL, installer);
 
     core.info("Running foundryup installer...");
