@@ -8,8 +8,8 @@ import type { IncomingMessage } from "http";
 
 import { restoreCache } from "./cache.js";
 
-const FOUNDRYUP_INSTALLER_COMMIT = "e4d9917d4f5ef487fd432efc4706fb8ae74c58ab";
-const FOUNDRYUP_INSTALLER_URL = `https://raw.githubusercontent.com/foundry-rs/foundry/${FOUNDRYUP_INSTALLER_COMMIT}/foundryup/install`;
+const FOUNDRYUP_INSTALLER_COMMIT = "a27902ef04dcb43061fabf343365cb5afc95fc48";
+const FOUNDRYUP_INSTALLER_URL = `https://raw.githubusercontent.com/foundry-rs/foundryup/${FOUNDRYUP_INSTALLER_COMMIT}/foundryup-init.sh`;
 const FOUNDRY_DIR = path.join(os.homedir(), ".foundry");
 const FOUNDRY_BIN = path.join(FOUNDRY_DIR, "bin");
 const FOUNDRY_TOOLS = ["forge", "cast", "anvil", "chisel"];
@@ -88,6 +88,18 @@ function run(file: string, args: string[], ignoreShellError = false): void {
   }
 }
 
+function foundryupExecutable(): string {
+  const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+  if (process.platform !== "win32") return foundryup;
+
+  const foundryupExe = `${foundryup}.exe`;
+  if (fs.existsSync(foundryup) && !fs.existsSync(foundryupExe)) {
+    fs.copyFileSync(foundryup, foundryupExe);
+    fs.chmodSync(foundryupExe, 0o755);
+  }
+  return foundryupExe;
+}
+
 async function main(): Promise<void> {
   try {
     const version = core.getInput("version") || "stable";
@@ -95,17 +107,17 @@ async function main(): Promise<void> {
 
     // Download and run the installer.
     const installer = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "foundryup-")), "install");
-    core.info(`Downloading foundryup installer from foundry-rs/foundry@${FOUNDRYUP_INSTALLER_COMMIT}...`);
+    core.info(`Downloading foundryup installer from foundry-rs/foundryup@${FOUNDRYUP_INSTALLER_COMMIT}...`);
     await download(FOUNDRYUP_INSTALLER_URL, installer);
 
     core.info("Running foundryup installer...");
     run("bash", [installer], true);
 
-    // Run foundryup to install binaries (use bash since foundryup is a shell script).
-    const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+    // Run foundryup to install binaries.
+    const foundryup = foundryupExecutable();
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
-    run("bash", [foundryup, ...args]);
+    run(foundryup, args);
 
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
