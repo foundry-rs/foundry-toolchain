@@ -101,11 +101,11 @@ async function main(): Promise<void> {
     core.info("Running foundryup installer...");
     run("bash", [installer], true);
 
-    // Run foundryup to install binaries (use bash since foundryup is a shell script).
+    // Run foundryup to install binaries.
     const foundryup = path.join(FOUNDRY_BIN, "foundryup");
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
-    run("bash", [foundryup, ...args]);
+    run(foundryup, args);
 
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
