@@ -88,6 +88,18 @@ function run(file: string, args: string[], ignoreShellError = false): void {
   }
 }
 
+function foundryupExecutable(): string {
+  const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+  if (process.platform !== "win32") return foundryup;
+
+  const foundryupExe = `${foundryup}.exe`;
+  if (fs.existsSync(foundryup) && !fs.existsSync(foundryupExe)) {
+    fs.copyFileSync(foundryup, foundryupExe);
+    fs.chmodSync(foundryupExe, 0o755);
+  }
+  return foundryupExe;
+}
+
 async function main(): Promise<void> {
   try {
     const version = core.getInput("version") || "stable";
@@ -102,7 +114,7 @@ async function main(): Promise<void> {
     run("bash", [installer], true);
 
     // Run foundryup to install binaries.
-    const foundryup = path.join(FOUNDRY_BIN, "foundryup");
+    const foundryup = foundryupExecutable();
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
     run(foundryup, args);
