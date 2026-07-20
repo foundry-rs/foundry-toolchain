@@ -16,7 +16,7 @@
     "dapptools"
   ],
   "scripts": {
-    "build": "ncc build src/index.ts -o dist --source-map --minify && ncc build src/save.ts -o dist/save --source-map --minify",
+    "build": "tsc && ncc build lib/index.js -o dist --source-map --minify && ncc build lib/save.js -o dist/save --source-map --minify && node -e \"require('node:fs').rmSync('lib', { recursive: true, force: true })\"",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "typecheck": "tsc --noEmit"
@@ -28,9 +28,9 @@
     "@actions/tool-cache": "4.0.0"
   },
   "devDependencies": {
-    "@types/node": "26.1.0",
+    "@types/node": "26.1.1",
     "@vercel/ncc": "0.44.1",
-    "prettier": "3.9.4",
-    "typescript": "6.0.3"
+    "prettier": "3.9.5",
+    "typescript": "7.0.2"
   }
 }
