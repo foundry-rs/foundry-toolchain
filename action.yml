@@ -22,6 +22,11 @@ inputs:
 
       Network to install Foundry for. Passed to `foundryup --network <network>`.
     required: false
+  github-token:
+    default: "${{ github.token }}"
+    description: |
+      GitHub token used by foundryup to resolve release versions.
+    required: false
   cache:
     default: "true"
     description: |

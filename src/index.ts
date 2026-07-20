@@ -71,9 +71,9 @@ function buildFoundryupArgs(): string[] {
   return args;
 }
 
-function run(file: string, args: string[], ignoreShellError = false): void {
+function run(file: string, args: string[], ignoreShellError = false, extraEnv: NodeJS.ProcessEnv = {}): void {
   try {
-    execFileSync(file, args, { stdio: "pipe", env: { ...process.env, FOUNDRY_DIR } });
+    execFileSync(file, args, { stdio: "pipe", env: { ...process.env, ...extraEnv, FOUNDRY_DIR } });
   } catch (err) {
     const execErr = err as { stdout?: Buffer; stderr?: Buffer; message?: string };
     const output = [execErr.stdout, execErr.stderr, execErr.message].map((b) => b?.toString() || "").join("\n");
@@ -102,6 +102,11 @@ function foundryupExecutable(): string {
 
 async function main(): Promise<void> {
   try {
+    const githubToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || core.getInput("github-token");
+    delete process.env.GITHUB_TOKEN;
+    delete process.env.GH_TOKEN;
+    delete process.env["INPUT_GITHUB-TOKEN"];
+
     const version = core.getInput("version") || "stable";
     core.info(`Installing Foundry (version: ${version})`);
 
@@ -117,7 +122,7 @@ async function main(): Promise<void> {
     const foundryup = foundryupExecutable();
     const args = buildFoundryupArgs();
     core.info(`Running: foundryup ${args.join(" ")}`);
-    run(foundryup, args);
+    run(foundryup, args, false, githubToken ? { GITHUB_TOKEN: githubToken } : {});
 
     core.addPath(FOUNDRY_BIN);
     core.info(`Added ${FOUNDRY_BIN} to PATH`);
