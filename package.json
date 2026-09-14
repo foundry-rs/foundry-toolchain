@@ -28,7 +28,7 @@
     "@actions/tool-cache": "4.0.0"
   },
   "devDependencies": {
-    "@types/node": "26.4.0",
+    "@types/node": "26.4.1",
     "@vercel/ncc": "0.45.0",
     "prettier": "3.9.6",
     "typescript": "7.0.2"
