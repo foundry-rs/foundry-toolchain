@@ -1,6 +1,6 @@
 name: dependabot dist
 
-on:
+on: # zizmor: ignore[dangerous-triggers] Restricted to same-repository Dependabot PRs below.
   pull_request_target:
     branches:
       - master
@@ -28,11 +28,11 @@ jobs:
       id-token: write
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@117919c943b804057be733b0c4034c5542e58959
+        uses: tempoxyz/gh-actions/actions/secure-runner@117919c943b804057be733b0c4034c5542e58959 # 2026-09-23T05-09-41Z-117919c9
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          persist-credentials: true
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Set up pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -52,6 +52,7 @@ jobs:
       - name: Commit dist/ update
         env:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           if git diff --quiet -- dist/; then
             exit 0
@@ -61,4 +62,6 @@ jobs:
           git config user.email "49699333+dependabot[bot]@users.noreply.github.com"
           git add dist/
           git commit -m "chore(deps): update dist"
-          git push origin "HEAD:$HEAD_REF"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w 0)
+          echo "::add-mask::$auth"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:$HEAD_REF"
