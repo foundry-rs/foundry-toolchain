@@ -1,0 +1,5 @@
+paths:
+  .github/workflows/ci.yml:
+    ignore:
+      # pnpm run build creates both entrypoints before the local action is tested.
+      - 'file "dist/(index|save/index)\.js" does not exist'
